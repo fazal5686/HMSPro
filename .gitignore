@@ -1,0 +1,26 @@
+# ==============================
+# HMSPro Git Ignore
+# ==============================
+
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+*.log
+
+# Uploads (patient/doctor images and documents)
+backend/uploads/
+
+# Frontend build files
+frontend/dist/
+
+# Editor files
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db

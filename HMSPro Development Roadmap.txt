@@ -1,0 +1,31 @@
+HMSPro
+│
+├── Phase 1
+│   ├── Authentication
+│   ├── Authorization
+│   ├── Role Management
+│   └── User Profile
+│
+├── Phase 2
+│   ├── Dashboard
+│   ├── Statistics
+│   └── Notifications
+│
+├── Phase 3
+│   ├── Patients
+│   ├── Doctors
+│   ├── Staff
+│   └── Departments
+│
+├── Phase 4
+│   ├── Appointments
+│   ├── Billing
+│   ├── Pharmacy
+│   ├── Laboratory
+│   └── Reports
+│
+└── Phase 5
+    ├── Settings
+    ├── Backup
+    ├── Audit Logs
+    └── Deployment

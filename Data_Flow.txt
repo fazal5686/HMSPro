@@ -1,0 +1,51 @@
+Phase 1 – Authentication Module
+User
+ │
+ │ Enter Email & Password
+ ▼
+Frontend (React)
+
+ │
+ │ POST /api/auth/login
+ ▼
+Backend Route
+
+ │
+ ▼
+Controller
+
+ │
+ ▼
+Service
+
+ │
+ ▼
+Repository
+
+ │
+ ▼
+MongoDB
+
+ │
+ ▲
+Compare Password
+
+ │
+ ▲
+Generate JWT
+
+ │
+ ▲
+Return Token + User Information
+
+ │
+ ▼
+Frontend
+
+ │
+Store JWT
+(localStorage)
+
+ │
+ ▼
+Dashboard
