@@ -10,7 +10,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 
 import authRoutes from "./routes/authRoutes.js";
-
+import doctorRoutes from "./routes/doctorRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -69,7 +69,9 @@ app.use(
     "/api/auth",
     authRoutes
 );
-
+app.use(
+    "/api/doctors",
+     doctorRoutes);
 
 // ============================================================
 // Default Route

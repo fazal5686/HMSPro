@@ -14,6 +14,7 @@ import {
 import validate from "../middleware/validate.js";
 
 import protect from "../middleware/protect.js";
+import { ROLES } from "../constants/roles.js";
 
 
 const router = express.Router();
@@ -41,7 +42,7 @@ router.get(
 router.get(
     "/patient-test",
     protect,
-    authorize("Patient"),
+    authorize(ROLES.PATIENT),
     (req, res) => {
 
         res.status(200).json({

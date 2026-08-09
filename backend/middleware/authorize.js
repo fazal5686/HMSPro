@@ -1,4 +1,4 @@
-// ============================================================
+ // ============================================================
 // File: middleware/authorize.js
 // Purpose: Controls access based on user roles.
 // Works together with protect.js.
@@ -6,61 +6,56 @@
 
 
 /**
- * Authorize users by role.
+ * ============================================================
+ * Authorize User By Role
+ * ============================================================
  *
- * Example:
+ * Usage:
+ * authorize(ROLES.ADMIN)
+ * authorize(ROLES.ADMIN, ROLES.SUPER_ADMIN)
  *
- * authorize("Admin", "SuperAdmin")
- *
+ * The protect middleware must run before authorize.
  */
-
 
 const authorize = (...allowedRoles) => {
 
-
     return (req, res, next) => {
 
+        // ========================================================
+        // Check Authentication
+        // ========================================================
 
-        // protect.js must run before this middleware.
         if (!req.user) {
 
             return res.status(401).json({
-
                 success: false,
-
-                message: "User authentication required."
-
+                message: "User authentication required.",
             });
 
         }
 
 
-
-        // Check whether user's role is allowed.
+        // ========================================================
+        // Check Authorization
+        // ========================================================
 
         if (!allowedRoles.includes(req.user.role)) {
 
-
             return res.status(403).json({
-
                 success: false,
-
-                message: "Access denied. Permission insufficient."
-
+                message: "Access denied. Permission insufficient.",
             });
-
 
         }
 
 
-
-        // User has permission.
+        // ========================================================
+        // Access Granted
+        // ========================================================
 
         next();
 
-
     };
-
 
 };
 

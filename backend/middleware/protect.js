@@ -3,11 +3,9 @@
 // Purpose: Protects private routes by verifying JWT tokens.
 // ============================================================
 
-
 import jwt from "jsonwebtoken";
 
 import { findUserById } from "../repositories/authRepository.js";
-
 
 
 // ============================================================
@@ -21,33 +19,39 @@ const protect = async (req, res, next) => {
         let token;
 
 
-        // Check Authorization header.
+        // ========================================================
+        // Get Token From Authorization Header
+        // ========================================================
+
+        const authHeader = req.headers.authorization;
+
         if (
-            req.headers.authorization &&
-            req.headers.authorization.startsWith("Bearer")
+            authHeader &&
+            authHeader.startsWith("Bearer ")
         ) {
 
-            token = req.headers.authorization.split(" ")[1];
+            token = authHeader.split(" ")[1];
 
         }
 
 
-        // If token does not exist.
+        // ========================================================
+        // Check Token
+        // ========================================================
+
         if (!token) {
 
             return res.status(401).json({
-
                 success: false,
-
-                message: "Not authorized. Token missing."
-
+                message: "Not authorized. Token missing.",
             });
 
         }
 
 
-
-        // Verify JWT token.
+        // ========================================================
+        // Verify JWT Token
+        // ========================================================
 
         const decoded = jwt.verify(
             token,
@@ -55,55 +59,46 @@ const protect = async (req, res, next) => {
         );
 
 
-
-        // Find user from database.
+        // ========================================================
+        // Find User
+        // ========================================================
 
         const user = await findUserById(decoded.id);
 
 
-
-        if (!user) {
+        if (!user || !user.isActive) {
 
             return res.status(401).json({
-
                 success: false,
-
-                message: "User no longer exists."
-
+                message: "User no longer exists.",
             });
 
         }
 
 
-
-        // Attach user to request object.
+        // ========================================================
+        // Attach User To Request
+        // ========================================================
 
         req.user = user;
 
 
-
-        // Continue to controller.
+        // ========================================================
+        // Continue
+        // ========================================================
 
         next();
 
-
-
     } catch (error) {
 
-
         return res.status(401).json({
-
             success: false,
-
-            message: "Invalid or expired token."
-
+            message: "Invalid or expired token.",
         });
-
 
     }
 
 };
-
 
 
 export default protect;
