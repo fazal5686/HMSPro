@@ -18,7 +18,9 @@ import authRoutes from "./routes/authRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
-
+import departmentRoutes from "./routes/departmentRoutes.js";
+import roomRoutes from "./routes/roomRoutes.js";
+import admissionRoutes from "./routes/admissionRoutes.js";
 // ============================================================
 // Load Environment Variables
 // ============================================================
@@ -128,6 +130,32 @@ app.use(
 app.use(
     "/api/appointments",
     appointmentRoutes
+);
+
+// ------------------------------------------------------------
+// Department Routes
+// Base URL:
+// /api/departments
+// ------------------------------------------------------------
+
+app.use(
+    "/api/departments",
+    departmentRoutes
+);
+
+// ------------------------------------------------------------
+// Room Routes
+// Base URL:
+// /api/rooms
+// ------------------------------------------------------------
+
+app.use(
+    "/api/rooms",
+    roomRoutes
+);
+app.use(
+    "/api/admissions",
+    admissionRoutes
 );
 
 // ============================================================
