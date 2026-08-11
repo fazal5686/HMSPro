@@ -1,59 +1,129 @@
+
 // ============================================================
 // File: repositories/patientRepository.js
 // Purpose: Database operations for Patient collection.
+// This layer ONLY communicates with MongoDB.
+// No business logic should be written here.
 // ============================================================
 
 import Patient from "../models/Patient.js";
 
 
-
-// Create patient profile
+// ============================================================
+// Create Patient Profile
+// ============================================================
 
 export const createPatient = async (patientData) => {
 
-    return await Patient.create(patientData);
+    return await Patient.create(
 
-};
+        patientData
 
-
-
-// Find patient by user ID
-
-export const findPatientByUserId = async (userId) => {
-
-    return await Patient.findOne({
-        userId
-    }).populate(
-        "userId",
-        "-password"
     );
 
 };
 
 
+// ============================================================
+// Find Patient By User ID
+// ============================================================
 
-// Update patient profile
+export const findPatientByUserId = async (userId) => {
+
+    return await Patient.findOne({
+
+        userId,
+
+    })
+
+    .populate({
+
+        path: "userId",
+
+        select: "fullName email phone role isActive",
+
+    });
+
+};
+
+
+// ============================================================
+// Find Patient By Patient ID
+// Used by Appointment module.
+// ============================================================
+
+export const findPatientById = async (patientId) => {
+
+    return await Patient.findById(
+
+        patientId
+
+    )
+
+    .populate({
+
+        path: "userId",
+
+        select: "fullName email phone role isActive",
+
+    });
+
+};
+
+
+// ============================================================
+// Update Patient Profile
+// ============================================================
 
 export const updatePatient = async (
+
     userId,
+
     patientData
+
 ) => {
 
     return await Patient.findOneAndUpdate(
 
         {
-            userId
+
+            userId,
+
         },
 
         patientData,
 
         {
-            new: true
+
+            new: true,
+
+            runValidators: true,
+
         }
 
-    ).populate(
-        "userId",
-        "-password"
-    );
+    )
+
+    .populate({
+
+        path: "userId",
+
+        select: "fullName email phone role isActive",
+
+    });
+
+};
+
+
+// ============================================================
+// Delete Patient Profile
+// ============================================================
+
+export const deletePatient = async (userId) => {
+
+    return await Patient.findOneAndDelete({
+
+        userId,
+
+    });
 
 };

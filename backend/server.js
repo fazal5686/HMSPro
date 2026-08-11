@@ -1,3 +1,4 @@
+
 // ============================================================
 // File: server.js
 // Purpose: HMSPro Backend Entry Point
@@ -10,26 +11,35 @@ import app from "./app.js";
 import connectDB from "./config/db.js";
 
 
-// Load environment variables
+// ============================================================
+// Load Environment Variables
+// ============================================================
 
 dotenv.config();
 
 
+// ============================================================
 // Connect Database
+// ============================================================
 
 connectDB();
 
 
+// ============================================================
 // Server Port
+// ============================================================
 
 const PORT = process.env.PORT || 5000;
 
 
-
+// ============================================================
 // Start Server
+// ============================================================
 
 app.listen(PORT, () => {
 
-    console.log(`HMSPro Server running on port ${PORT}`);
+    console.log(
+        `HMSPro Server running on port ${PORT}`
+    );
 
 });

@@ -1,7 +1,8 @@
+
 // ============================================================
 // File: app.js
 // Purpose: Express application configuration for HMSPro.
-// Handles middleware and API routes.
+// Handles middleware, static files, API routes, and 404 handling.
 // ============================================================
 
 import express from "express";
@@ -9,108 +10,167 @@ import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
 
-import authRoutes from "./routes/authRoutes.js";
-import doctorRoutes from "./routes/doctorRoutes.js";
+// ============================================================
+// Route Imports
+// ============================================================
 
-// Load environment variables
+import authRoutes from "./routes/authRoutes.js";
+import patientRoutes from "./routes/patientRoutes.js";
+import doctorRoutes from "./routes/doctorRoutes.js";
+import appointmentRoutes from "./routes/appointmentRoutes.js";
+
+// ============================================================
+// Load Environment Variables
+// ============================================================
+
 dotenv.config();
 
+// ============================================================
+// Create Express Application
+// ============================================================
 
-// Create Express application
 const app = express();
-
 
 // ============================================================
 // Global Middleware
 // ============================================================
 
-
+// ------------------------------------------------------------
 // Enable CORS
+// ------------------------------------------------------------
+
 app.use(
     cors()
 );
 
+// ------------------------------------------------------------
+// Request Logger
+// ------------------------------------------------------------
 
-// Request logger
 app.use(
     morgan("dev")
 );
 
+// ------------------------------------------------------------
+// Parse JSON Requests
+// ------------------------------------------------------------
 
-// Parse JSON requests
 app.use(
     express.json()
 );
 
+// ------------------------------------------------------------
+// Parse URL-encoded Form Data
+// ------------------------------------------------------------
 
-// Parse form data
 app.use(
     express.urlencoded({
-        extended: true
+        extended: true,
     })
 );
-
 
 // ============================================================
 // Static Files
 // ============================================================
+
+// Serve uploaded files
+// Example:
+// http://localhost:5000/uploads/filename.jpg
 
 app.use(
     "/uploads",
     express.static("uploads")
 );
 
-
 // ============================================================
 // API Routes
 // ============================================================
+
+// ------------------------------------------------------------
+// Authentication Routes
+// Base URL:
+// /api/auth
+// ------------------------------------------------------------
 
 app.use(
     "/api/auth",
     authRoutes
 );
+
+// ------------------------------------------------------------
+// Patient Routes
+// Base URL:
+// /api/patients
+// ------------------------------------------------------------
+
+app.use(
+    "/api/patients",
+    patientRoutes
+);
+
+// ------------------------------------------------------------
+// Doctor Routes
+// Base URL:
+// /api/doctors
+// ------------------------------------------------------------
+
 app.use(
     "/api/doctors",
-     doctorRoutes);
+    doctorRoutes
+);
+
+// ------------------------------------------------------------
+// Appointment Routes
+// Base URL:
+// /api/appointments
+// ------------------------------------------------------------
+
+app.use(
+    "/api/appointments",
+    appointmentRoutes
+);
 
 // ============================================================
-// Default Route
+// Default / Health Check Route
+// GET /
 // ============================================================
 
 app.get(
     "/",
     (req, res) => {
 
-        res.status(200).json({
+        return res.status(200).json({
 
             success: true,
 
-            message: "HMSPro Backend Running"
+            message: "HMSPro Backend Running",
 
         });
 
     }
 );
 
-
 // ============================================================
-// 404 Handler
+// 404 Route Handler
+// Must remain AFTER all API routes.
 // ============================================================
 
 app.use(
     (req, res) => {
 
-        res.status(404).json({
+        return res.status(404).json({
 
             success: false,
 
-            message: "Route not found"
+            message: "Route not found",
 
         });
 
     }
 );
 
+// ============================================================
+// Export Application
+// ============================================================
 
-// Export app
 export default app;
