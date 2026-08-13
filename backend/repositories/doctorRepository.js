@@ -30,7 +30,7 @@ export const findDoctorByUserId = async (userId) => {
     })
         .populate({
             path: "userId",
-            select: "fullName email phone role",
+            select: "fullName email phone role isActive",
         });
 
 };
@@ -47,7 +47,7 @@ export const findDoctorById = async (doctorId) => {
     )
         .populate({
             path: "userId",
-            select: "fullName email phone role",
+            select: "fullName email phone role isActive",
         });
 
 };
@@ -62,7 +62,7 @@ export const findAllDoctors = async () => {
     return await Doctor.find()
         .populate({
             path: "userId",
-            select: "fullName email phone role",
+            select: "fullName email phone role isActive",
         })
         .sort({
             createdAt: -1,

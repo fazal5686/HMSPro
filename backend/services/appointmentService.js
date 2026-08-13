@@ -21,54 +21,81 @@ import {
     findDoctorById,
 } from "../repositories/doctorRepository.js";
 
-// ============================================================
-// Helper: Convert MongoDB ID / populated ID to string
-// ============================================================
-
-const getIdString = (value) => {
-
-    if (!value) {
-        return null;
-    }
-
-    if (value._id) {
-        return value._id.toString();
-    }
-
-    return value.toString();
-};
 
 // ============================================================
-// Helper: Check whether two IDs are equal
+// Helper: Check Patient Ownership
 // ============================================================
 
-const isSameId = (firstId, secondId) => {
+const isPatientOwner = (
+    user,
+    patient
+) => {
 
-    const first = getIdString(firstId);
-    const second = getIdString(secondId);
+    if (!user || !patient || !patient.userId) {
 
-    if (!first || !second) {
         return false;
+
     }
 
-    return first === second;
+    return (
+        user.role === "Patient" &&
+        patient.userId._id.toString() ===
+        user._id.toString()
+    );
+
 };
+
+
+// ============================================================
+// Helper: Check Doctor Ownership
+// ============================================================
+
+const isDoctorOwner = (
+    user,
+    doctor
+) => {
+
+    if (!user || !doctor || !doctor.userId) {
+
+        return false;
+
+    }
+
+    return (
+        user.role === "Doctor" &&
+        doctor.userId._id.toString() ===
+        user._id.toString()
+    );
+
+};
+
 
 // ============================================================
 // Create Appointment
+// POST /api/appointments
 // ============================================================
 
 export const createAppointmentService = async (
-    appointmentData
+    appointmentData,
+    user
 ) => {
 
+    const {
+        patientId,
+        doctorId,
+        appointmentDate,
+    } = appointmentData;
+
+
     // --------------------------------------------------------
-    // Check Patient
+    // Validate Patient
     // --------------------------------------------------------
 
-    const patient = await findPatientById(
-        appointmentData.patientId
-    );
+    const patient =
+        await findPatientById(
+            patientId
+        );
+
 
     if (!patient) {
 
@@ -78,13 +105,14 @@ export const createAppointmentService = async (
 
     }
 
+
     // --------------------------------------------------------
     // Check Patient User Account
     // --------------------------------------------------------
 
     if (
         !patient.userId ||
-        !patient.userId.isActive
+        patient.userId.isActive !== true
     ) {
 
         throw new Error(
@@ -93,13 +121,33 @@ export const createAppointmentService = async (
 
     }
 
+
     // --------------------------------------------------------
-    // Check Doctor
+    // Patient Can Only Book For Own Profile
     // --------------------------------------------------------
 
-    const doctor = await findDoctorById(
-        appointmentData.doctorId
-    );
+    if (
+        user &&
+        user.role === "Patient" &&
+        !isPatientOwner(user, patient)
+    ) {
+
+        throw new Error(
+            "Patients can only create appointments for themselves."
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Validate Doctor
+    // --------------------------------------------------------
+
+    const doctor =
+        await findDoctorById(
+            doctorId
+        );
+
 
     if (!doctor) {
 
@@ -109,11 +157,15 @@ export const createAppointmentService = async (
 
     }
 
+
     // --------------------------------------------------------
-    // Check Doctor Status
+    // Check Doctor User Account
     // --------------------------------------------------------
 
-    if (!doctor.isActive) {
+    if (
+        !doctor.userId ||
+        doctor.userId.isActive !== true
+    ) {
 
         throw new Error(
             "Doctor account is inactive."
@@ -121,11 +173,29 @@ export const createAppointmentService = async (
 
     }
 
+
+    // --------------------------------------------------------
+    // Check Doctor Profile Status
+    // --------------------------------------------------------
+
+    if (
+        doctor.isActive !== true
+    ) {
+
+        throw new Error(
+            "Doctor profile is inactive."
+        );
+
+    }
+
+
     // --------------------------------------------------------
     // Check Doctor Availability
     // --------------------------------------------------------
 
-    if (!doctor.availability) {
+    if (
+        doctor.availability !== true
+    ) {
 
         throw new Error(
             "Doctor is currently unavailable."
@@ -133,17 +203,20 @@ export const createAppointmentService = async (
 
     }
 
+
     // --------------------------------------------------------
-    // Check Appointment Date
+    // Validate Appointment Date
     // --------------------------------------------------------
 
-    const appointmentDate = new Date(
-        appointmentData.appointmentDate
-    );
+    const appointmentTime =
+        new Date(
+            appointmentDate
+        );
+
 
     if (
         Number.isNaN(
-            appointmentDate.getTime()
+            appointmentTime.getTime()
         )
     ) {
 
@@ -153,12 +226,13 @@ export const createAppointmentService = async (
 
     }
 
+
     // --------------------------------------------------------
-    // Prevent Appointment In The Past
+    // Appointment Must Be In Future
     // --------------------------------------------------------
 
     if (
-        appointmentDate <= new Date()
+        appointmentTime <= new Date()
     ) {
 
         throw new Error(
@@ -167,813 +241,44 @@ export const createAppointmentService = async (
 
     }
 
+
     // --------------------------------------------------------
     // Prevent Doctor Double Booking
     // --------------------------------------------------------
 
     const doctorAppointments =
         await findAppointmentsByDoctor(
-            appointmentData.doctorId
-        );
-
-    const conflictingAppointment =
-        doctorAppointments.find(
-            (appointment) => {
-
-                const existingDate =
-                    new Date(
-                        appointment.appointmentDate
-                    );
-
-                const sameTime =
-                    existingDate.getTime() ===
-                    appointmentDate.getTime();
-
-                const activeStatus =
-                    ![
-                        "Cancelled",
-                        "No Show",
-                    ].includes(
-                        appointment.status
-                    );
-
-                return (
-                    sameTime &&
-                    activeStatus
-                );
-
-            }
-        );
-
-    if (conflictingAppointment) {
-
-        throw new Error(
-            "Doctor already has an appointment at this time."
-        );
-
-    }
-
-    // --------------------------------------------------------
-    // Save Appointment
-    // --------------------------------------------------------
-
-    return await createAppointment({
-
-        ...appointmentData,
-
-        appointmentDate,
-
-    });
-
-};
-
-// ============================================================
-// Get Appointment By ID
-// GET /api/appointments/:id
-//
-// Security:
-// Admin / SuperAdmin / Receptionist / Staff
-//     -> Can access appointment.
-//
-// Doctor
-//     -> Can access only their own appointments.
-//
-// Patient
-//     -> Can access only their own appointments.
-// ============================================================
-
-export const getAppointmentByIdService = async (
-    appointmentId,
-    currentUser
-) => {
-
-    // --------------------------------------------------------
-    // Check Current User
-    // --------------------------------------------------------
-
-    if (!currentUser) {
-
-        const error = new Error(
-            "Not authorized."
-        );
-
-        error.statusCode = 401;
-
-        throw error;
-
-    }
-
-    // --------------------------------------------------------
-    // Check Appointment
-    // --------------------------------------------------------
-
-    // --------------------------------------------------------
-// Check Appointment
-// --------------------------------------------------------
-
-const appointment =
-await findAppointmentById(
-    appointmentId
-);
-
-// --------------------------------------------------------
-// Temporary Security Debug
-// --------------------------------------------------------
-
-console.log(
-"========== APPOINTMENT DEBUG =========="
-);
-
-console.log(
-"Current User ID:",
-currentUser._id.toString()
-);
-
-console.log(
-"Current User Role:",
-currentUser.role
-);
-
-console.log(
-"Appointment Patient ID:",
-appointment?.patientId?._id?.toString()
-);
-
-console.log(
-"Appointment Patient User ID:",
-appointment?.patientId?.userId?._id?.toString()
-);
-
-console.log(
-"Comparison:",
-appointment?.patientId?.userId?._id?.toString() ===
-currentUser._id.toString()
-);
-
-console.log(
-"======================================="
-);
-
-// --------------------------------------------------------
-// Appointment Not Found
-// --------------------------------------------------------
-
-if (!appointment) {
-
-const error = new Error(
-    "Appointment not found."
-);
-
-error.statusCode = 404;
-
-throw error;
-
-}
-
-    // --------------------------------------------------------
-    // Privileged Roles
-    // --------------------------------------------------------
-
-    const privilegedRoles = [
-
-        "SuperAdmin",
-        "Admin",
-        "Receptionist",
-        "Nurse",
-        "LabTechnician",
-        "Pharmacist",
-        "Accountant",
-
-    ];
-
-    if (
-        privilegedRoles.includes(
-            currentUser.role
-        )
-    ) {
-
-        return appointment;
-
-    }
-
-    // --------------------------------------------------------
-    // Patient Ownership Check
-    // --------------------------------------------------------
-
-    if (
-        currentUser.role === "Patient"
-    ) {
-
-        if (
-            !appointment.patientId ||
-            !appointment.patientId.userId
-        ) {
-
-            const error = new Error(
-                "Patient ownership information not found."
-            );
-
-            error.statusCode = 403;
-
-            throw error;
-
-        }
-
-        const appointmentPatientUserId =
-            getIdString(
-                appointment.patientId.userId
-            );
-
-        if (
-            !isSameId(
-                appointmentPatientUserId,
-                currentUser._id
-            )
-        ) {
-
-            const error = new Error(
-                "You are not authorized to access this appointment."
-            );
-
-            error.statusCode = 403;
-
-            throw error;
-
-        }
-
-        return appointment;
-
-    }
-
-    // --------------------------------------------------------
-    // Doctor Ownership Check
-    // --------------------------------------------------------
-
-    if (
-        currentUser.role === "Doctor"
-    ) {
-
-        if (
-            !appointment.doctorId ||
-            !appointment.doctorId.userId
-        ) {
-
-            const error = new Error(
-                "Doctor ownership information not found."
-            );
-
-            error.statusCode = 403;
-
-            throw error;
-
-        }
-
-        const appointmentDoctorUserId =
-            getIdString(
-                appointment.doctorId.userId
-            );
-
-        if (
-            !isSameId(
-                appointmentDoctorUserId,
-                currentUser._id
-            )
-        ) {
-
-            const error = new Error(
-                "You are not authorized to access this appointment."
-            );
-
-            error.statusCode = 403;
-
-            throw error;
-
-        }
-
-        return appointment;
-
-    }
-
-    // --------------------------------------------------------
-    // Other Roles
-    // --------------------------------------------------------
-
-    const error = new Error(
-        "You are not authorized to access this appointment."
-    );
-
-    error.statusCode = 403;
-
-    throw error;
-
-};
-
-// ============================================================
-// Get All Appointments
-// ============================================================
-
-export const getAllAppointmentsService =
-    async () => {
-
-        return await findAllAppointments();
-
-    };
-
-// ============================================================
-// Get Patient Appointments
-// GET /api/appointments/patient/:patientId
-//
-// Security:
-// Admin / SuperAdmin / Receptionist
-//     -> Can access any patient.
-//
-// Patient
-//     -> Can access only their own appointments.
-// ============================================================
-
-export const getPatientAppointmentsService = async (
-    patientId,
-    currentUser
-) => {
-
-    // --------------------------------------------------------
-    // Check Current User
-    // --------------------------------------------------------
-
-    if (!currentUser) {
-
-        const error = new Error(
-            "Not authorized."
-        );
-
-        error.statusCode = 401;
-
-        throw error;
-
-    }
-
-    // --------------------------------------------------------
-    // Check Patient Profile
-    // --------------------------------------------------------
-
-    const patient =
-        await findPatientById(
-            patientId
-        );
-
-    if (!patient) {
-
-        const error = new Error(
-            "Patient profile not found."
-        );
-
-        error.statusCode = 404;
-
-        throw error;
-
-    }
-
-    // --------------------------------------------------------
-    // Patient Ownership Check
-    // --------------------------------------------------------
-
-    if (
-        currentUser.role === "Patient"
-    ) {
-
-        if (
-            !patient.userId
-        ) {
-
-            const error = new Error(
-                "Patient ownership information not found."
-            );
-
-            error.statusCode = 403;
-
-            throw error;
-
-        }
-
-        if (
-            !isSameId(
-                patient.userId,
-                currentUser._id
-            )
-        ) {
-
-            const error = new Error(
-                "You are not authorized to access these appointments."
-            );
-
-            error.statusCode = 403;
-
-            throw error;
-
-        }
-
-    }
-
-    // --------------------------------------------------------
-    // Return Patient Appointments
-    // --------------------------------------------------------
-
-    return await findAppointmentsByPatient(
-        patientId
-    );
-
-};
-
-// ============================================================
-// Get Doctor Appointments
-// GET /api/appointments/doctor/:doctorId
-//
-// Security:
-// Admin / SuperAdmin / Receptionist
-//     -> Can access any doctor.
-//
-// Doctor
-//     -> Can access only their own appointments.
-// ============================================================
-
-export const getDoctorAppointmentsService = async (
-    doctorId,
-    currentUser
-) => {
-
-    // --------------------------------------------------------
-    // Check Current User
-    // --------------------------------------------------------
-
-    if (!currentUser) {
-
-        const error = new Error(
-            "Not authorized."
-        );
-
-        error.statusCode = 401;
-
-        throw error;
-
-    }
-
-    // --------------------------------------------------------
-    // Check Doctor Profile
-    // --------------------------------------------------------
-
-    const doctor =
-        await findDoctorById(
             doctorId
         );
 
-    if (!doctor) {
-
-        const error = new Error(
-            "Doctor profile not found."
-        );
-
-        error.statusCode = 404;
-
-        throw error;
-
-    }
-
-    // --------------------------------------------------------
-    // Doctor Ownership Check
-    // --------------------------------------------------------
-
-    if (
-        currentUser.role === "Doctor"
-    ) {
-
-        if (
-            !doctor.userId
-        ) {
-
-            const error = new Error(
-                "Doctor ownership information not found."
-            );
-
-            error.statusCode = 403;
-
-            throw error;
-
-        }
-
-        if (
-            !isSameId(
-                doctor.userId,
-                currentUser._id
-            )
-        ) {
-
-            const error = new Error(
-                "You are not authorized to access these appointments."
-            );
-
-            error.statusCode = 403;
-
-            throw error;
-
-        }
-
-    }
-
-    // --------------------------------------------------------
-    // Return Doctor Appointments
-    // --------------------------------------------------------
-
-    return await findAppointmentsByDoctor(
-        doctorId
-    );
-
-};
-
-// ============================================================
-// Update Appointment
-// ============================================================
-
-export const updateAppointmentService = async (
-    appointmentId,
-    appointmentData
-) => {
-
-    // --------------------------------------------------------
-    // Check Appointment
-    // --------------------------------------------------------
-
-    const existingAppointment =
-        await findAppointmentById(
-            appointmentId
-        );
-
-    if (!existingAppointment) {
-
-        throw new Error(
-            "Appointment not found."
-        );
-
-    }
-
-    // --------------------------------------------------------
-    // Determine Effective Doctor
-    // --------------------------------------------------------
-
-    const effectiveDoctorId =
-        appointmentData.doctorId ||
-        getIdString(
-            existingAppointment.doctorId
-        );
-
-    // --------------------------------------------------------
-    // Determine Effective Patient
-    // --------------------------------------------------------
-
-    const effectivePatientId =
-        appointmentData.patientId ||
-        getIdString(
-            existingAppointment.patientId
-        );
-
-    // --------------------------------------------------------
-    // If Doctor Is Being Changed
-    // --------------------------------------------------------
-
-    if (
-        appointmentData.doctorId
-    ) {
-
-        const doctor =
-            await findDoctorById(
-                appointmentData.doctorId
-            );
-
-        if (!doctor) {
-
-            throw new Error(
-                "Doctor profile not found."
-            );
-
-        }
-
-        if (!doctor.isActive) {
-
-            throw new Error(
-                "Doctor account is inactive."
-            );
-
-        }
-
-        if (!doctor.availability) {
-
-            throw new Error(
-                "Doctor is currently unavailable."
-            );
-
-        }
-
-    }
-
-    // --------------------------------------------------------
-    // If Patient Is Being Changed
-    // --------------------------------------------------------
-
-    if (
-        appointmentData.patientId
-    ) {
-
-        const patient =
-            await findPatientById(
-                appointmentData.patientId
-            );
-
-        if (!patient) {
-
-            throw new Error(
-                "Patient profile not found."
-            );
-
-        }
-
-        if (
-            !patient.userId ||
-            !patient.userId.isActive
-        ) {
-
-            throw new Error(
-                "Patient account is inactive."
-            );
-
-        }
-
-    }
-
-    // --------------------------------------------------------
-    // Validate Effective Doctor
-    // --------------------------------------------------------
-
-    const effectiveDoctor =
-        await findDoctorById(
-            effectiveDoctorId
-        );
-
-    if (!effectiveDoctor) {
-
-        throw new Error(
-            "Doctor profile not found."
-        );
-
-    }
-
-    if (!effectiveDoctor.isActive) {
-
-        throw new Error(
-            "Doctor account is inactive."
-        );
-
-    }
-
-    if (!effectiveDoctor.availability) {
-
-        throw new Error(
-            "Doctor is currently unavailable."
-        );
-
-    }
-
-    // --------------------------------------------------------
-    // Validate Effective Patient
-    // --------------------------------------------------------
-
-    const effectivePatient =
-        await findPatientById(
-            effectivePatientId
-        );
-
-    if (!effectivePatient) {
-
-        throw new Error(
-            "Patient profile not found."
-        );
-
-    }
-
-    if (
-        !effectivePatient.userId ||
-        !effectivePatient.userId.isActive
-    ) {
-
-        throw new Error(
-            "Patient account is inactive."
-        );
-
-    }
-
-    // --------------------------------------------------------
-    // If Appointment Date Is Being Changed
-    // --------------------------------------------------------
-
-    let appointmentDate =
-        existingAppointment.appointmentDate;
-
-    if (
-        appointmentData.appointmentDate
-    ) {
-
-        appointmentDate =
-            new Date(
-                appointmentData.appointmentDate
-            );
-
-        if (
-            Number.isNaN(
-                appointmentDate.getTime()
-            )
-        ) {
-
-            throw new Error(
-                "Invalid appointment date."
-            );
-
-        }
-
-        if (
-            appointmentDate <= new Date()
-        ) {
-
-            throw new Error(
-                "Appointment date must be in the future."
-            );
-
-        }
-
-        appointmentData.appointmentDate =
-            appointmentDate;
-
-    }
-
-    // --------------------------------------------------------
-    // Prevent Doctor Double Booking During Update
-    // --------------------------------------------------------
-
-    const doctorAppointments =
-        await findAppointmentsByDoctor(
-            effectiveDoctorId
-        );
 
     const conflictingAppointment =
         doctorAppointments.find(
             (appointment) => {
 
-                // --------------------------------------------
-                // Ignore Current Appointment
-                // --------------------------------------------
-
-                if (
-                    isSameId(
-                        appointment._id,
-                        appointmentId
-                    )
-                ) {
-
-                    return false;
-
-                }
-
-                // --------------------------------------------
-                // Compare Appointment Time
-                // --------------------------------------------
-
-                const existingDate =
+                const existingTime =
                     new Date(
                         appointment.appointmentDate
                     );
 
-                const sameTime =
-                    existingDate.getTime() ===
-                    new Date(
-                        appointmentDate
-                    ).getTime();
 
-                // --------------------------------------------
-                // Ignore Cancelled / No Show
-                // --------------------------------------------
+                const inactiveStatus = [
+                    "Cancelled",
+                    "No Show",
+                ].includes(
+                    appointment.status
+                );
 
-                const activeStatus =
-                    ![
-                        "Cancelled",
-                        "No Show",
-                    ].includes(
-                        appointment.status
-                    );
 
                 return (
-                    sameTime &&
-                    activeStatus
+                    !inactiveStatus &&
+                    existingTime.getTime() ===
+                    appointmentTime.getTime()
                 );
 
             }
         );
+
 
     if (
         conflictingAppointment
@@ -985,27 +290,294 @@ export const updateAppointmentService = async (
 
     }
 
+
     // --------------------------------------------------------
-    // Update Appointment
+    // Create Appointment
     // --------------------------------------------------------
 
-    return await updateAppointment(
-        appointmentId,
-        appointmentData
+    return await createAppointment({
+
+        ...appointmentData,
+
+        appointmentDate:
+            appointmentTime,
+
+    });
+
+};
+
+
+// ============================================================
+// Get Appointment By ID
+// GET /api/appointments/:id
+// ============================================================
+
+export const getAppointmentByIdService = async (
+    appointmentId,
+    user
+) => {
+
+    const appointment =
+        await findAppointmentById(
+            appointmentId
+        );
+
+
+    if (!appointment) {
+
+        const error =
+            new Error(
+                "Appointment not found."
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Patient Ownership Check
+    // --------------------------------------------------------
+
+    if (
+        user &&
+        user.role === "Patient"
+    ) {
+
+        const patient =
+            appointment.patientId;
+
+
+        if (
+            !patient ||
+            !isPatientOwner(
+                user,
+                patient
+            )
+        ) {
+
+            const error =
+                new Error(
+                    "Access denied. This appointment does not belong to you."
+                );
+
+            error.statusCode = 403;
+
+            throw error;
+
+        }
+
+    }
+
+
+    // --------------------------------------------------------
+    // Doctor Ownership Check
+    // --------------------------------------------------------
+
+    if (
+        user &&
+        user.role === "Doctor"
+    ) {
+
+        const doctor =
+            appointment.doctorId;
+
+
+        if (
+            !doctor ||
+            !isDoctorOwner(
+                user,
+                doctor
+            )
+        ) {
+
+            const error =
+                new Error(
+                    "Access denied. This appointment does not belong to you."
+                );
+
+            error.statusCode = 403;
+
+            throw error;
+
+        }
+
+    }
+
+
+    return appointment;
+
+};
+
+
+// ============================================================
+// Get All Appointments
+// GET /api/appointments
+// ============================================================
+
+export const getAllAppointmentsService =
+    async () => {
+
+        return await findAllAppointments();
+
+    };
+
+
+// ============================================================
+// Get Appointments By Patient
+// GET /api/appointments/patient/:patientId
+// ============================================================
+
+export const getPatientAppointmentsService = async (
+    patientId,
+    user
+) => {
+
+    // --------------------------------------------------------
+    // Verify Patient
+    // --------------------------------------------------------
+
+    const patient =
+        await findPatientById(
+            patientId
+        );
+
+
+    if (!patient) {
+
+        const error =
+            new Error(
+                "Patient profile not found."
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Patient Ownership Check
+    // --------------------------------------------------------
+
+    if (
+        user &&
+        user.role === "Patient" &&
+        !isPatientOwner(
+            user,
+            patient
+        )
+    ) {
+
+        const error =
+            new Error(
+                "Access denied. You can only view your own appointments."
+            );
+
+        error.statusCode = 403;
+
+        throw error;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Get Patient Appointments
+    // --------------------------------------------------------
+
+    return await findAppointmentsByPatient(
+        patientId
     );
 
 };
 
+
 // ============================================================
-// Delete Appointment
+// Get Appointments By Doctor
+// GET /api/appointments/doctor/:doctorId
 // ============================================================
 
-export const deleteAppointmentService = async (
-    appointmentId
+export const getDoctorAppointmentsService = async (
+    doctorId,
+    user
 ) => {
 
     // --------------------------------------------------------
-    // Check Appointment
+    // Verify Doctor
+    // --------------------------------------------------------
+
+    const doctor =
+        await findDoctorById(
+            doctorId
+        );
+
+
+    if (!doctor) {
+
+        const error =
+            new Error(
+                "Doctor profile not found."
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Doctor Ownership Check
+    // --------------------------------------------------------
+
+    if (
+        user &&
+        user.role === "Doctor" &&
+        !isDoctorOwner(
+            user,
+            doctor
+        )
+    ) {
+
+        const error =
+            new Error(
+                "Access denied. You can only view your own appointments."
+            );
+
+        error.statusCode = 403;
+
+        throw error;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Get Doctor Appointments
+    // --------------------------------------------------------
+
+    return await findAppointmentsByDoctor(
+        doctorId
+    );
+
+};
+
+
+// ============================================================
+// Update Appointment
+// PUT /api/appointments/:id
+// ============================================================
+
+export const updateAppointmentService = async (
+    appointmentId,
+    appointmentData,
+    user
+) => {
+
+    // --------------------------------------------------------
+    // Find Existing Appointment
     // --------------------------------------------------------
 
     const existingAppointment =
@@ -1013,20 +585,393 @@ export const deleteAppointmentService = async (
             appointmentId
         );
 
+
     if (!existingAppointment) {
 
+        const error =
+            new Error(
+                "Appointment not found."
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Doctor Ownership Check
+    // --------------------------------------------------------
+
+    if (
+        user &&
+        user.role === "Doctor"
+    ) {
+
+        const existingDoctor =
+            existingAppointment.doctorId;
+
+
+        if (
+            !existingDoctor ||
+            !isDoctorOwner(
+                user,
+                existingDoctor
+            )
+        ) {
+
+            const error =
+                new Error(
+                    "Access denied. You can only update your own appointments."
+                );
+
+            error.statusCode = 403;
+
+            throw error;
+
+        }
+
+    }
+
+
+    // --------------------------------------------------------
+    // Determine Patient
+    // --------------------------------------------------------
+
+    const patientId =
+        appointmentData.patientId ||
+        existingAppointment.patientId._id;
+
+
+    const patient =
+        await findPatientById(
+            patientId
+        );
+
+
+    if (!patient) {
+
         throw new Error(
-            "Appointment not found."
+            "Patient profile not found."
         );
 
     }
+
+
+    // --------------------------------------------------------
+    // Check Patient Account
+    // --------------------------------------------------------
+
+    if (
+        !patient.userId ||
+        patient.userId.isActive !== true
+    ) {
+
+        throw new Error(
+            "Patient account is inactive."
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Determine Doctor
+    // --------------------------------------------------------
+
+    const doctorId =
+        appointmentData.doctorId ||
+        existingAppointment.doctorId._id;
+
+
+    const doctor =
+        await findDoctorById(
+            doctorId
+        );
+
+
+    if (!doctor) {
+
+        throw new Error(
+            "Doctor profile not found."
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Doctor Ownership Check For Changed Doctor
+    // --------------------------------------------------------
+
+    if (
+        user &&
+        user.role === "Doctor" &&
+        !isDoctorOwner(
+            user,
+            doctor
+        )
+    ) {
+
+        const error =
+            new Error(
+                "Doctors cannot assign appointments to another doctor."
+            );
+
+        error.statusCode = 403;
+
+        throw error;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Check Doctor User Account
+    // --------------------------------------------------------
+
+    if (
+        !doctor.userId ||
+        doctor.userId.isActive !== true
+    ) {
+
+        throw new Error(
+            "Doctor account is inactive."
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Check Doctor Profile Status
+    // --------------------------------------------------------
+
+    if (
+        doctor.isActive !== true
+    ) {
+
+        throw new Error(
+            "Doctor profile is inactive."
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Determine Appointment Date
+    // --------------------------------------------------------
+
+    const appointmentTime =
+        appointmentData.appointmentDate
+            ? new Date(
+                appointmentData.appointmentDate
+            )
+            : new Date(
+                existingAppointment.appointmentDate
+            );
+
+
+    // --------------------------------------------------------
+    // Validate Appointment Date
+    // --------------------------------------------------------
+
+    if (
+        Number.isNaN(
+            appointmentTime.getTime()
+        )
+    ) {
+
+        throw new Error(
+            "Invalid appointment date."
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Future Date Validation
+    // --------------------------------------------------------
+
+    if (
+        appointmentTime <= new Date()
+    ) {
+
+        throw new Error(
+            "Appointment date must be in the future."
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Check Doctor Availability
+    // Only required when changing/rescheduling appointment.
+    // --------------------------------------------------------
+
+    const changingDoctor =
+        appointmentData.doctorId &&
+        appointmentData.doctorId.toString() !==
+        existingAppointment.doctorId._id.toString();
+
+
+    const changingDate =
+        appointmentData.appointmentDate &&
+        appointmentTime.getTime() !==
+        new Date(
+            existingAppointment.appointmentDate
+        ).getTime();
+
+
+    if (
+        changingDoctor ||
+        changingDate
+    ) {
+
+        if (
+            doctor.availability !== true
+        ) {
+
+            throw new Error(
+                "Doctor is currently unavailable."
+            );
+
+        }
+
+    }
+
+
+    // --------------------------------------------------------
+    // Prevent Doctor Double Booking During Update
+    // --------------------------------------------------------
+
+    const doctorAppointments =
+        await findAppointmentsByDoctor(
+            doctorId
+        );
+
+
+    const conflictingAppointment =
+        doctorAppointments.find(
+            (appointment) => {
+
+                // Ignore current appointment.
+
+                if (
+                    appointment._id.toString() ===
+                    appointmentId.toString()
+                ) {
+
+                    return false;
+
+                }
+
+
+                const existingTime =
+                    new Date(
+                        appointment.appointmentDate
+                    );
+
+
+                const inactiveStatus = [
+                    "Cancelled",
+                    "No Show",
+                ].includes(
+                    appointment.status
+                );
+
+
+                return (
+                    !inactiveStatus &&
+                    existingTime.getTime() ===
+                    appointmentTime.getTime()
+                );
+
+            }
+        );
+
+
+    if (
+        conflictingAppointment
+    ) {
+
+        throw new Error(
+            "Doctor already has an appointment at this time."
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Update Appointment
+    // --------------------------------------------------------
+
+    return await updateAppointment(
+
+        appointmentId,
+
+        {
+
+            ...appointmentData,
+
+            patientId,
+
+            doctorId,
+
+            appointmentDate:
+                appointmentTime,
+
+        }
+
+    );
+
+};
+
+
+// ============================================================
+// Delete Appointment
+// DELETE /api/appointments/:id
+// ============================================================
+
+export const deleteAppointmentService = async (
+    appointmentId
+) => {
+
+    // --------------------------------------------------------
+    // Verify Appointment Exists
+    // --------------------------------------------------------
+
+    const appointment =
+        await findAppointmentById(
+            appointmentId
+        );
+
+
+    if (!appointment) {
+
+        const error =
+            new Error(
+                "Appointment not found."
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+
+    }
+
 
     // --------------------------------------------------------
     // Delete Appointment
     // --------------------------------------------------------
 
-    return await deleteAppointment(
+    await deleteAppointment(
         appointmentId
     );
+
+
+    return {
+
+        message:
+            "Appointment deleted successfully.",
+
+    };
 
 };

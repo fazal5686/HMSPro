@@ -39,8 +39,20 @@ export const createDepartment = async (req, res, next) => {
 
     } catch (error) {
 
+        if (error.message === "Department already exists.") {
+    
+            return res.status(400).json({
+    
+                success: false,
+    
+                message: "Department already exists.",
+    
+            });
+    
+        }
+    
         next(error);
-
+    
     }
 
 };
@@ -148,19 +160,32 @@ export const updateDepartment = async (req, res, next) => {
 
         // Department does not exist
         if (error.message === "Department not found.") {
-
+    
             return res.status(404).json({
-
+    
                 success: false,
-
+    
                 message: "Department not found.",
-
+    
             });
-
+    
         }
-
+    
+        // Duplicate department name
+        if (error.message === "Department already exists.") {
+    
+            return res.status(400).json({
+    
+                success: false,
+    
+                message: "Department already exists.",
+    
+            });
+    
+        }
+    
         next(error);
-
+    
     }
 
 };

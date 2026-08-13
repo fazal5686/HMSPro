@@ -13,6 +13,7 @@ import {
     deleteAppointmentService,
 } from "../services/appointmentService.js";
 
+
 // ============================================================
 // Create Appointment
 // POST /api/appointments
@@ -26,10 +27,16 @@ export const createAppointment = async (req, res) => {
             ...req.body,
         };
 
+
         const appointment =
             await createAppointmentService(
-                appointmentData
+
+                appointmentData,
+
+                req.user
+
             );
+
 
         return res.status(201).json({
 
@@ -45,7 +52,9 @@ export const createAppointment = async (req, res) => {
 
     catch (error) {
 
-        return res.status(400).json({
+        return res.status(
+            error.statusCode || 400
+        ).json({
 
             success: false,
 
@@ -56,6 +65,7 @@ export const createAppointment = async (req, res) => {
     }
 
 };
+
 
 // ============================================================
 // Get Appointment By ID
@@ -117,6 +127,7 @@ export const getAllAppointments = async (req, res) => {
         const appointments =
             await getAllAppointmentsService();
 
+
         return res.status(200).json({
 
             success: true,
@@ -143,6 +154,7 @@ export const getAllAppointments = async (req, res) => {
 
 };
 
+
 // ============================================================
 // Get Patient Appointments
 // GET /api/appointments/patient/:patientId
@@ -165,6 +177,7 @@ export const getPatientAppointments = async (req, res) => {
 
             );
 
+
         return res.status(200).json({
 
             success: true,
@@ -193,9 +206,14 @@ export const getPatientAppointments = async (req, res) => {
 
 };
 
+
 // ============================================================
 // Get Doctor Appointments
-// GET /api/appointments/:doctorId
+// GET /api/appointments/doctor/:doctorId
+//
+// Security:
+// req.user is passed to the service so that a Doctor
+// can access only their own appointments.
 // ============================================================
 
 export const getDoctorAppointments = async (req, res) => {
@@ -211,6 +229,7 @@ export const getDoctorAppointments = async (req, res) => {
 
             );
 
+
         return res.status(200).json({
 
             success: true,
@@ -239,6 +258,7 @@ export const getDoctorAppointments = async (req, res) => {
 
 };
 
+
 // ============================================================
 // Update Appointment
 // PUT /api/appointments/:id
@@ -252,14 +272,17 @@ export const updateAppointment = async (req, res) => {
             ...req.body,
         };
 
+
         const appointment =
-            await updateAppointmentService(
+    await updateAppointmentService(
 
-                req.params.id,
+        req.params.id,
 
-                appointmentData
+        appointmentData,
 
-            );
+        req.user
+
+    );
 
         return res.status(200).json({
 
@@ -275,7 +298,9 @@ export const updateAppointment = async (req, res) => {
 
     catch (error) {
 
-        return res.status(400).json({
+        return res.status(
+            error.statusCode || 400
+        ).json({
 
             success: false,
 
@@ -286,6 +311,7 @@ export const updateAppointment = async (req, res) => {
     }
 
 };
+
 
 // ============================================================
 // Delete Appointment
@@ -299,7 +325,7 @@ export const deleteAppointment = async (req, res) => {
         await deleteAppointmentService(
 
             req.params.id
-
+        
         );
 
         return res.status(200).json({
@@ -314,7 +340,9 @@ export const deleteAppointment = async (req, res) => {
 
     catch (error) {
 
-        return res.status(400).json({
+        return res.status(
+            error.statusCode || 400
+        ).json({
 
             success: false,
 
@@ -325,3 +353,8 @@ export const deleteAppointment = async (req, res) => {
     }
 
 };
+
+
+// ============================================================
+// End of Appointment Controller
+// ============================================================
