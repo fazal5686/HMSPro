@@ -1,4 +1,3 @@
-
 // ============================================================
 // File: routes/appointmentRoutes.js
 // Purpose: Appointment API routes for HMSPro.
@@ -7,19 +6,12 @@
 import express from "express";
 
 import {
-
     createAppointmentValidator,
-
     updateAppointmentValidator,
-
     appointmentIdValidator,
-
     patientIdValidator,
-
     doctorIdValidator,
-
 } from "../validators/appointmentValidator.js";
-
 
 import validateRequest from "../middleware/validateRequest.js";
 
@@ -29,32 +21,21 @@ import authorize from "../middleware/authorize.js";
 
 import { ROLES } from "../constants/roles.js";
 
-
 import {
-
     createAppointment,
-
     getAppointmentById,
-
     getAllAppointments,
-
     getPatientAppointments,
-
     getDoctorAppointments,
-
     updateAppointment,
-
     deleteAppointment,
-
 } from "../controllers/appointmentController.js";
-
 
 // ============================================================
 // Create Router
 // ============================================================
 
 const router = express.Router();
-
 
 // ============================================================
 // Create Appointment
@@ -71,19 +52,14 @@ const router = express.Router();
 // ============================================================
 
 router.post(
-
     "/",
 
     protect,
 
     authorize(
-
         ROLES.ADMIN,
-
         ROLES.RECEPTIONIST,
-
         ROLES.PATIENT
-
     ),
 
     createAppointmentValidator,
@@ -91,9 +67,7 @@ router.post(
     validateRequest,
 
     createAppointment
-
 );
-
 
 // ============================================================
 // Get All Appointments
@@ -103,28 +77,22 @@ router.post(
 // Admin
 // Receptionist
 //
-// Doctors and Patients should use their own appointment
-// endpoints instead of accessing every appointment.
+// Doctors and Patients cannot access all appointments.
+// They must use their own restricted endpoints.
 // ============================================================
 
 router.get(
-
     "/",
 
     protect,
 
     authorize(
-
         ROLES.ADMIN,
-
         ROLES.RECEPTIONIST
-
     ),
 
     getAllAppointments
-
 );
-
 
 // ============================================================
 // Get Patient Appointments
@@ -135,26 +103,21 @@ router.get(
 // Receptionist
 // Patient
 //
-// NOTE:
-// The controller currently accepts patientId from the URL.
-// Later we will add ownership checking so a Patient can only
-// access their own appointments.
+// Security:
+// Patient ownership is checked inside the service layer.
+// A Patient can only access appointments belonging to
+// their own patient profile.
 // ============================================================
 
 router.get(
-
     "/patient/:patientId",
 
     protect,
 
     authorize(
-
         ROLES.ADMIN,
-
         ROLES.RECEPTIONIST,
-
         ROLES.PATIENT
-
     ),
 
     patientIdValidator,
@@ -162,9 +125,7 @@ router.get(
     validateRequest,
 
     getPatientAppointments
-
 );
-
 
 // ============================================================
 // Get Doctor Appointments
@@ -174,22 +135,21 @@ router.get(
 // Admin
 // Receptionist
 // Doctor
+//
+// Security:
+// Doctor ownership checking can be enforced in the
+// service layer.
 // ============================================================
 
 router.get(
-
     "/doctor/:doctorId",
 
     protect,
 
     authorize(
-
         ROLES.ADMIN,
-
         ROLES.RECEPTIONIST,
-
         ROLES.DOCTOR
-
     ),
 
     doctorIdValidator,
@@ -197,9 +157,7 @@ router.get(
     validateRequest,
 
     getDoctorAppointments
-
 );
-
 
 // ============================================================
 // Get Appointment By ID
@@ -211,26 +169,30 @@ router.get(
 // Doctor
 // Patient
 //
-// Ownership checking will be strengthened in the service
-// layer as the Appointment module develops.
+// Security:
+// Authentication and role authorization are handled here.
+// Ownership checking is handled inside the service layer.
+//
+// Patient:
+// Can access only their own appointment.
+//
+// Doctor:
+// Can access only appointments belonging to them.
+//
+// Admin / Receptionist:
+// Can access appointments according to their role.
 // ============================================================
 
 router.get(
-
     "/:id",
 
     protect,
 
     authorize(
-
         ROLES.ADMIN,
-
         ROLES.RECEPTIONIST,
-
         ROLES.DOCTOR,
-
         ROLES.PATIENT
-
     ),
 
     appointmentIdValidator,
@@ -238,9 +200,7 @@ router.get(
     validateRequest,
 
     getAppointmentById
-
 );
-
 
 // ============================================================
 // Update Appointment
@@ -256,19 +216,14 @@ router.get(
 // ============================================================
 
 router.put(
-
     "/:id",
 
     protect,
 
     authorize(
-
         ROLES.ADMIN,
-
         ROLES.RECEPTIONIST,
-
         ROLES.DOCTOR
-
     ),
 
     updateAppointmentValidator,
@@ -276,9 +231,7 @@ router.put(
     validateRequest,
 
     updateAppointment
-
 );
-
 
 // ============================================================
 // Delete Appointment
@@ -289,15 +242,12 @@ router.put(
 // ============================================================
 
 router.delete(
-
     "/:id",
 
     protect,
 
     authorize(
-
         ROLES.ADMIN
-
     ),
 
     appointmentIdValidator,
@@ -305,9 +255,7 @@ router.delete(
     validateRequest,
 
     deleteAppointment
-
 );
-
 
 // ============================================================
 // Export Router

@@ -1,20 +1,13 @@
-
 // ============================================================
 // File: server.js
 // Purpose: HMSPro Backend Entry Point
 // ============================================================
 
-import dotenv from "dotenv";
+import "dotenv/config";
 
 import app from "./app.js";
 
 import connectDB from "./config/db.js";
-
-// ============================================================
-// Load Environment Variables
-// ============================================================
-
-dotenv.config();
 
 // ============================================================
 // Connect Database

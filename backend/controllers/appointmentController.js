@@ -1,27 +1,17 @@
-
 // ============================================================
 // File: controllers/appointmentController.js
 // Purpose: Handle HTTP requests for Appointment module.
 // ============================================================
 
 import {
-
     createAppointmentService,
-
     getAppointmentByIdService,
-
     getAllAppointmentsService,
-
     getPatientAppointmentsService,
-
     getDoctorAppointmentsService,
-
     updateAppointmentService,
-
     deleteAppointmentService,
-
 } from "../services/appointmentService.js";
-
 
 // ============================================================
 // Create Appointment
@@ -33,19 +23,13 @@ export const createAppointment = async (req, res) => {
     try {
 
         const appointmentData = {
-
             ...req.body,
-
         };
-
 
         const appointment =
             await createAppointmentService(
-
                 appointmentData
-
             );
-
 
         return res.status(201).json({
 
@@ -73,10 +57,13 @@ export const createAppointment = async (req, res) => {
 
 };
 
-
 // ============================================================
 // Get Appointment By ID
 // GET /api/appointments/:id
+//
+// Security:
+// req.user is passed to the service so that the service
+// can verify Patient / Doctor ownership.
 // ============================================================
 
 export const getAppointmentById = async (req, res) => {
@@ -86,10 +73,11 @@ export const getAppointmentById = async (req, res) => {
         const appointment =
             await getAppointmentByIdService(
 
-                req.params.id
+                req.params.id,
+
+                req.user
 
             );
-
 
         return res.status(200).json({
 
@@ -103,7 +91,9 @@ export const getAppointmentById = async (req, res) => {
 
     catch (error) {
 
-        return res.status(404).json({
+        return res.status(
+            error.statusCode || 404
+        ).json({
 
             success: false,
 
@@ -114,7 +104,6 @@ export const getAppointmentById = async (req, res) => {
     }
 
 };
-
 
 // ============================================================
 // Get All Appointments
@@ -127,7 +116,6 @@ export const getAllAppointments = async (req, res) => {
 
         const appointments =
             await getAllAppointmentsService();
-
 
         return res.status(200).json({
 
@@ -155,10 +143,13 @@ export const getAllAppointments = async (req, res) => {
 
 };
 
-
 // ============================================================
 // Get Patient Appointments
 // GET /api/appointments/patient/:patientId
+//
+// Security:
+// req.user is passed to the service so that a Patient
+// can access only their own appointments.
 // ============================================================
 
 export const getPatientAppointments = async (req, res) => {
@@ -168,10 +159,11 @@ export const getPatientAppointments = async (req, res) => {
         const appointments =
             await getPatientAppointmentsService(
 
-                req.params.patientId
+                req.params.patientId,
+
+                req.user
 
             );
-
 
         return res.status(200).json({
 
@@ -187,7 +179,9 @@ export const getPatientAppointments = async (req, res) => {
 
     catch (error) {
 
-        return res.status(404).json({
+        return res.status(
+            error.statusCode || 404
+        ).json({
 
             success: false,
 
@@ -199,10 +193,9 @@ export const getPatientAppointments = async (req, res) => {
 
 };
 
-
 // ============================================================
 // Get Doctor Appointments
-// GET /api/appointments/doctor/:doctorId
+// GET /api/appointments/:doctorId
 // ============================================================
 
 export const getDoctorAppointments = async (req, res) => {
@@ -212,10 +205,11 @@ export const getDoctorAppointments = async (req, res) => {
         const appointments =
             await getDoctorAppointmentsService(
 
-                req.params.doctorId
+                req.params.doctorId,
+
+                req.user
 
             );
-
 
         return res.status(200).json({
 
@@ -231,7 +225,9 @@ export const getDoctorAppointments = async (req, res) => {
 
     catch (error) {
 
-        return res.status(404).json({
+        return res.status(
+            error.statusCode || 404
+        ).json({
 
             success: false,
 
@@ -242,7 +238,6 @@ export const getDoctorAppointments = async (req, res) => {
     }
 
 };
-
 
 // ============================================================
 // Update Appointment
@@ -254,11 +249,8 @@ export const updateAppointment = async (req, res) => {
     try {
 
         const appointmentData = {
-
             ...req.body,
-
         };
-
 
         const appointment =
             await updateAppointmentService(
@@ -268,7 +260,6 @@ export const updateAppointment = async (req, res) => {
                 appointmentData
 
             );
-
 
         return res.status(200).json({
 
@@ -296,7 +287,6 @@ export const updateAppointment = async (req, res) => {
 
 };
 
-
 // ============================================================
 // Delete Appointment
 // DELETE /api/appointments/:id
@@ -311,7 +301,6 @@ export const deleteAppointment = async (req, res) => {
             req.params.id
 
         );
-
 
         return res.status(200).json({
 
