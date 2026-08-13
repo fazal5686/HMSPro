@@ -23,6 +23,7 @@ import roomRoutes from "./routes/roomRoutes.js";
 import admissionRoutes from "./routes/admissionRoutes.js";
 import medicineRoutes from "./routes/medicineRoutes.js";
 import billingRoutes from "./routes/billingRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
 // ============================================================
 // Load Environment Variables
 // ============================================================
@@ -163,6 +164,10 @@ app.use(
     "/api/medicines",
     medicineRoutes
 );
+app.use(
+    "/api/reports",
+     reportRoutes
+    );
 // ------------------------------------------------------------
 // Billing Routes
 // Base URL:

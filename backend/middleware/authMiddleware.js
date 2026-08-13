@@ -1,10 +1,10 @@
 // ============================================================
 // File: middleware/authMiddleware.js
-// Purpose: Verify JWT token and protect private routes
+// Purpose: Verify JWT token and protect private routes.
 // ============================================================
 
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 // ============================================================
 // Middleware: Protect Routes
@@ -13,10 +13,13 @@ const User = require("../models/User");
 // Attaches logged-in user to req.user
 // ============================================================
 
-const protect = async (req, res, next) => {
+export const protect = async (req, res, next) => {
     try {
 
+        // --------------------------------------------------------
         // Get token from Authorization header
+        // --------------------------------------------------------
+
         let token;
 
         if (
@@ -26,55 +29,66 @@ const protect = async (req, res, next) => {
             token = req.headers.authorization.split(" ")[1];
         }
 
+        // --------------------------------------------------------
+        // If token is missing
+        // --------------------------------------------------------
 
-        // If token missing
         if (!token) {
             return res.status(401).json({
                 success: false,
-                message: "Not authorized. Token missing."
+                message: "Not authorized. Token missing.",
             });
         }
 
+        // --------------------------------------------------------
+        // Verify JWT token
+        // --------------------------------------------------------
 
-        // Verify token
         const decoded = jwt.verify(
             token,
             process.env.JWT_SECRET
         );
 
+        // --------------------------------------------------------
+        // Find logged-in user
+        // --------------------------------------------------------
 
-        // Find user from decoded id
         const user = await User.findById(decoded.id)
             .select("-password");
 
+        // --------------------------------------------------------
+        // User not found
+        // --------------------------------------------------------
 
         if (!user) {
             return res.status(401).json({
                 success: false,
-                message: "User not found."
+                message: "User not found.",
             });
         }
 
+        // --------------------------------------------------------
+        // Attach user to request
+        // --------------------------------------------------------
 
-        // Attach user data
         req.user = user;
 
+        // --------------------------------------------------------
+        // Continue
+        // --------------------------------------------------------
 
-        // Continue to controller
         next();
-
 
     } catch (error) {
 
+        console.error(
+            "Authentication error:",
+            error.message
+        );
+
         return res.status(401).json({
             success: false,
-            message: "Invalid or expired token."
+            message: "Invalid or expired token.",
         });
-
     }
-};
-
-
-module.exports = {
-    protect
 };

@@ -38,6 +38,26 @@ export const createMedicine = async (req, res, next) => {
 
     } catch (error) {
 
+        // ----------------------------------------------------
+        // Duplicate Medicine
+        // ----------------------------------------------------
+
+        if (
+            error.message ===
+            "Medicine already exists."
+        ) {
+
+            return res.status(409).json({
+
+                success: false,
+
+                message:
+                    "Medicine already exists.",
+
+            });
+
+        }
+
         next(error);
 
     }
@@ -162,6 +182,26 @@ export const updateMedicine = async (req, res, next) => {
 
                 message:
                     "Medicine not found.",
+
+            });
+
+        }
+
+        // ----------------------------------------------------
+        // Duplicate Medicine Name
+        // ----------------------------------------------------
+
+        if (
+            error.message ===
+            "Medicine already exists."
+        ) {
+
+            return res.status(409).json({
+
+                success: false,
+
+                message:
+                    "Medicine already exists.",
 
             });
 
