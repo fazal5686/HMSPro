@@ -21,6 +21,7 @@ import appointmentRoutes from "./routes/appointmentRoutes.js";
 import departmentRoutes from "./routes/departmentRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
 import admissionRoutes from "./routes/admissionRoutes.js";
+import medicineRoutes from "./routes/medicineRoutes.js";
 // ============================================================
 // Load Environment Variables
 // ============================================================
@@ -156,6 +157,10 @@ app.use(
 app.use(
     "/api/admissions",
     admissionRoutes
+);
+app.use(
+    "/api/medicines",
+    medicineRoutes
 );
 
 // ============================================================
