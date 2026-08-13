@@ -22,6 +22,7 @@ import departmentRoutes from "./routes/departmentRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
 import admissionRoutes from "./routes/admissionRoutes.js";
 import medicineRoutes from "./routes/medicineRoutes.js";
+import billingRoutes from "./routes/billingRoutes.js";
 // ============================================================
 // Load Environment Variables
 // ============================================================
@@ -162,7 +163,16 @@ app.use(
     "/api/medicines",
     medicineRoutes
 );
+// ------------------------------------------------------------
+// Billing Routes
+// Base URL:
+// /api/billings
+// ------------------------------------------------------------
 
+app.use(
+    "/api/billings",
+    billingRoutes
+);
 // ============================================================
 // Default / Health Check Route
 // GET /
