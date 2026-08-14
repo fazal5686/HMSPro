@@ -26,6 +26,7 @@ import medicineRoutes from "./routes/medicineRoutes.js";
 import billingRoutes from "./routes/billingRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 // ============================================================
 // Load Environment Variables
@@ -203,7 +204,15 @@ app.use(
     "/api/settings",
     settingRoutes
 );
+// ------------------------------------------------------------
+// Dashboard
+// /api/dashboard
+// ------------------------------------------------------------
 
+app.use(
+    "/api/dashboard",
+    dashboardRoutes
+);
 // ============================================================
 // Default / Health Check Route
 // GET /
