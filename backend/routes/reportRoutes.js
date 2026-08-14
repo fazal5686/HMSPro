@@ -1,3 +1,4 @@
+
 // ============================================================
 // File: routes/reportRoutes.js
 // Purpose: Routes for HMSPro Reports module.
@@ -23,7 +24,7 @@ import {
 // Authentication Middleware
 // ============================================================
 
-import { protect } from "../middleware/authMiddleware.js";
+import protect from "../middleware/protect.js";
 
 // ============================================================
 // Router
