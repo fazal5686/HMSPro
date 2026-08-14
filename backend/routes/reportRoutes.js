@@ -1,9 +1,15 @@
 // ============================================================
 // File: routes/reportRoutes.js
 // Purpose: Routes for HMSPro Reports module.
+// Reports are statistical/analytical reports.
+// No CRUD Report records are created.
 // ============================================================
 
 import express from "express";
+
+// ============================================================
+// Controller Imports
+// ============================================================
 
 import {
     getDashboardReport,
@@ -12,6 +18,10 @@ import {
     getBillingReport,
     getMedicineInventoryReport,
 } from "../controllers/reportController.js";
+
+// ============================================================
+// Authentication Middleware
+// ============================================================
 
 import { protect } from "../middleware/authMiddleware.js";
 

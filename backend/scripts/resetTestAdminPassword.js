@@ -1,6 +1,7 @@
+
 // ============================================================
-// File: utils/resetAdminPassword.js
-// Purpose: Reset password for HMSPro Admin account.
+// File: utils/resetTestAdminPassword.js
+// Purpose: Reset password for HMSPro Test Admin account.
 // Temporary utility for development/testing.
 // ============================================================
 
@@ -19,23 +20,35 @@ import User from "../models/User.js";
 dotenv.config();
 
 // ============================================================
-// Admin Details
+// Test Admin Details
 // ============================================================
 
-const ADMIN_EMAIL = "admin@hmspro.com";
+const TEST_ADMIN_EMAIL = "admin@hmspro.com";
 
-// IMPORTANT:
-// Replace this with your NEW password.
-// Do not send the password to ChatGPT.
-const NEW_PASSWORD = "malakzabeehullahkhan";
+const NEW_PASSWORD =
+    process.env.TEST_ADMIN_PASSWORD;
 
 // ============================================================
-// Reset Admin Password
+// Reset Test Admin Password
 // ============================================================
 
-const resetAdminPassword = async () => {
+const resetTestAdminPassword = async () => {
 
     try {
+
+        // ----------------------------------------------------
+        // Check Test Password
+        // ----------------------------------------------------
+
+        if (!NEW_PASSWORD) {
+
+            console.log(
+                "TEST_ADMIN_PASSWORD is not configured in .env."
+            );
+
+            process.exit(1);
+
+        }
 
         // ----------------------------------------------------
         // Connect to MongoDB
@@ -44,19 +57,19 @@ const resetAdminPassword = async () => {
         await connectDB();
 
         // ----------------------------------------------------
-        // Find Admin
+        // Find Test Admin
         // ----------------------------------------------------
 
         const user = await User.findOne({
 
-            email: ADMIN_EMAIL
+            email: TEST_ADMIN_EMAIL
 
         });
 
         if (!user) {
 
             console.log(
-                "Admin user not found."
+                "Test Admin user not found."
             );
 
             process.exit(1);
@@ -71,6 +84,11 @@ const resetAdminPassword = async () => {
 
             console.log(
                 "User exists but is not an Admin."
+            );
+
+            console.log(
+                "Current role:",
+                user.role
             );
 
             process.exit(1);
@@ -108,12 +126,16 @@ const resetAdminPassword = async () => {
         );
 
         console.log(
-            "Admin password reset successfully."
+            "Test Admin password reset successfully."
         );
 
         console.log(
             "Email:",
-            ADMIN_EMAIL
+            TEST_ADMIN_EMAIL
+        );
+
+        console.log(
+            "Password synchronized with TEST_ADMIN_PASSWORD."
         );
 
         console.log(
@@ -132,7 +154,7 @@ const resetAdminPassword = async () => {
     catch (error) {
 
         console.error(
-            "Password reset failed:",
+            "Admin password reset failed:",
             error.message
         );
 
@@ -146,4 +168,4 @@ const resetAdminPassword = async () => {
 // Execute
 // ============================================================
 
-resetAdminPassword();
+resetTestAdminPassword();

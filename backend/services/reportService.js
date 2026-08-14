@@ -1,6 +1,7 @@
 // ============================================================
 // File: services/reportService.js
 // Purpose: Business logic for HMSPro Reports module.
+// This layer handles report-related business operations.
 // ============================================================
 
 import {
@@ -17,9 +18,8 @@ import {
 
 export const getDashboardReportService = async () => {
 
-    const report = await getDashboardReport();
+    return await getDashboardReport();
 
-    return report;
 };
 
 // ============================================================
@@ -28,9 +28,8 @@ export const getDashboardReportService = async () => {
 
 export const getAppointmentReportService = async () => {
 
-    const report = await getAppointmentReport();
+    return await getAppointmentReport();
 
-    return report;
 };
 
 // ============================================================
@@ -39,9 +38,8 @@ export const getAppointmentReportService = async () => {
 
 export const getAdmissionReportService = async () => {
 
-    const report = await getAdmissionReport();
+    return await getAdmissionReport();
 
-    return report;
 };
 
 // ============================================================
@@ -50,9 +48,8 @@ export const getAdmissionReportService = async () => {
 
 export const getBillingReportService = async () => {
 
-    const report = await getBillingReport();
+    return await getBillingReport();
 
-    return report;
 };
 
 // ============================================================
@@ -61,7 +58,6 @@ export const getBillingReportService = async () => {
 
 export const getMedicineInventoryReportService = async () => {
 
-    const report = await getMedicineInventoryReport();
+    return await getMedicineInventoryReport();
 
-    return report;
 };

@@ -1,229 +1,139 @@
 // ============================================================
 // File: validators/reportValidator.js
-// Purpose: Validation rules for Report module.
+// Purpose: Validation rules for HMSPro Reports module.
+//
+// IMPORTANT:
+// The HMSPro Reports module is a statistics/reporting module.
+// It does NOT create, update, or delete Report documents.
+//
+// Current report endpoints:
+//
+// GET /api/reports/dashboard
+// GET /api/reports/appointments
+// GET /api/reports/admissions
+// GET /api/reports/billing
+// GET /api/reports/medicines
+//
+// These endpoints currently do not require request body,
+// route parameter, or query parameter validation.
 // ============================================================
 
-import { body, param, query } from "express-validator";
+import { query } from "express-validator";
 
 // ============================================================
-// Common MongoDB ObjectId Validation
+// Dashboard Report Validator
+// GET /api/reports/dashboard
+//
+// No parameters are currently required.
 // ============================================================
 
-const mongoIdRegex = /^[0-9a-fA-F]{24}$/;
+export const dashboardReportValidator = [];
 
 // ============================================================
-// Create Report Validator
-// POST /api/reports
+// Appointment Report Validator
+// GET /api/reports/appointments
+//
+// No parameters are currently required.
 // ============================================================
 
-export const createReportValidator = [
-  body("reportType")
-    .trim()
-    .notEmpty()
-    .withMessage("Report type is required.")
-    .isLength({ max: 100 })
-    .withMessage("Report type cannot exceed 100 characters."),
+export const appointmentReportValidator = [];
 
-  body("title")
-    .trim()
-    .notEmpty()
-    .withMessage("Report title is required.")
-    .isLength({ max: 200 })
-    .withMessage("Report title cannot exceed 200 characters."),
+// ============================================================
+// Admission Report Validator
+// GET /api/reports/admissions
+//
+// No parameters are currently required.
+// ============================================================
 
-  body("description")
-    .optional()
-    .trim()
-    .isLength({ max: 1000 })
-    .withMessage("Description cannot exceed 1000 characters."),
+export const admissionReportValidator = [];
 
-  body("patientId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid patient ID."),
+// ============================================================
+// Billing Report Validator
+// GET /api/reports/billing
+//
+// No parameters are currently required.
+// ============================================================
 
-  body("doctorId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid doctor ID."),
+export const billingReportValidator = [];
 
-  body("admissionId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid admission ID."),
+// ============================================================
+// Medicine Inventory Report Validator
+// GET /api/reports/medicines
+//
+// No parameters are currently required.
+// ============================================================
 
-  body("appointmentId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid appointment ID."),
+export const medicineInventoryReportValidator = [];
 
-  body("reportDate")
-    .optional()
-    .isISO8601()
-    .withMessage("Report date must be a valid date."),
+// ============================================================
+// Optional Report Date Query Validator
+//
+// This validator is kept for future reporting features such as:
+//
+// GET /api/reports/appointments?startDate=2026-08-01
+// GET /api/reports/appointments?endDate=2026-08-31
+//
+// It is NOT required by the current Reports routes.
+// ============================================================
 
-  body("status")
-    .optional()
-    .trim()
-    .isIn(["Draft", "Pending", "Completed", "Cancelled"])
-    .withMessage(
-      "Status must be Draft, Pending, Completed, or Cancelled."
-    ),
+export const reportDateQueryValidator = [
+
+    query("startDate")
+
+        .optional()
+
+        .isISO8601()
+
+        .withMessage(
+            "Start date must be a valid date."
+        ),
+
+    query("endDate")
+
+        .optional()
+
+        .isISO8601()
+
+        .withMessage(
+            "End date must be a valid date."
+        ),
+
 ];
 
 // ============================================================
-// Update Report Validator
-// PUT /api/reports/:id
-// ============================================================
-
-export const updateReportValidator = [
-  param("id")
-    .matches(mongoIdRegex)
-    .withMessage("Invalid report ID."),
-
-  body("reportType")
-    .optional()
-    .trim()
-    .notEmpty()
-    .withMessage("Report type cannot be empty.")
-    .isLength({ max: 100 })
-    .withMessage("Report type cannot exceed 100 characters."),
-
-  body("title")
-    .optional()
-    .trim()
-    .notEmpty()
-    .withMessage("Report title cannot be empty.")
-    .isLength({ max: 200 })
-    .withMessage("Report title cannot exceed 200 characters."),
-
-  body("description")
-    .optional()
-    .trim()
-    .isLength({ max: 1000 })
-    .withMessage("Description cannot exceed 1000 characters."),
-
-  body("patientId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid patient ID."),
-
-  body("doctorId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid doctor ID."),
-
-  body("admissionId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid admission ID."),
-
-  body("appointmentId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid appointment ID."),
-
-  body("reportDate")
-    .optional()
-    .isISO8601()
-    .withMessage("Report date must be a valid date."),
-
-  body("status")
-    .optional()
-    .trim()
-    .isIn(["Draft", "Pending", "Completed", "Cancelled"])
-    .withMessage(
-      "Status must be Draft, Pending, Completed, or Cancelled."
-    ),
-];
-
-// ============================================================
-// Report ID Validator
-// GET /api/reports/:id
-// DELETE /api/reports/:id
-// ============================================================
-
-export const reportIdValidator = [
-  param("id")
-    .matches(mongoIdRegex)
-    .withMessage("Invalid report ID."),
-];
-
-// ============================================================
-// Patient ID Validator
-// GET /api/reports/patient/:patientId
-// ============================================================
-
-export const patientReportValidator = [
-  param("patientId")
-    .matches(mongoIdRegex)
-    .withMessage("Invalid patient ID."),
-];
-
-// ============================================================
-// Doctor ID Validator
-// GET /api/reports/doctor/:doctorId
-// ============================================================
-
-export const doctorReportValidator = [
-  param("doctorId")
-    .matches(mongoIdRegex)
-    .withMessage("Invalid doctor ID."),
-];
-
-// ============================================================
-// Report Query Validator
-// GET /api/reports
+// General Report Query Validator
+//
+// Reserved for future report filtering and date-range support.
+// Currently not required by the five active report endpoints.
 // ============================================================
 
 export const reportQueryValidator = [
-  query("status")
-    .optional()
-    .trim()
-    .isIn(["Draft", "Pending", "Completed", "Cancelled"])
-    .withMessage(
-      "Status must be Draft, Pending, Completed, or Cancelled."
-    ),
 
-  query("reportType")
-    .optional()
-    .trim()
-    .isLength({ max: 100 })
-    .withMessage("Report type cannot exceed 100 characters."),
+    query("startDate")
 
-  query("patientId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid patient ID."),
+        .optional()
 
-  query("doctorId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid doctor ID."),
+        .isISO8601()
 
-  query("admissionId")
-    .optional()
-    .trim()
-    .matches(mongoIdRegex)
-    .withMessage("Invalid admission ID."),
+        .withMessage(
+            "Start date must be a valid date."
+        ),
 
-  query("startDate")
-    .optional()
-    .isISO8601()
-    .withMessage("Start date must be a valid date."),
+    query("endDate")
 
-  query("endDate")
-    .optional()
-    .isISO8601()
-    .withMessage("End date must be a valid date."),
+        .optional()
+
+        .isISO8601()
+
+        .withMessage(
+            "End date must be a valid date."
+        ),
+
 ];
+
+// ============================================================
+// Export
+// ============================================================
+//
+// No default export is required.
+// ============================================================

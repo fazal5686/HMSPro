@@ -1,6 +1,8 @@
 // ============================================================
 // File: controllers/reportController.js
-// Purpose: Handle HTTP requests for HMSPro Reports module.
+// Purpose: HTTP controllers for HMSPro Reports module.
+// Handles report requests and passes errors to the global
+// error-handling middleware.
 // ============================================================
 
 import {
@@ -16,7 +18,11 @@ import {
 // GET /api/reports/dashboard
 // ============================================================
 
-export const getDashboardReport = async (req, res) => {
+export const getDashboardReport = async (
+    req,
+    res,
+    next
+) => {
 
     try {
 
@@ -27,7 +33,8 @@ export const getDashboardReport = async (req, res) => {
 
             success: true,
 
-            message: "Dashboard report retrieved successfully.",
+            message:
+                "Dashboard report retrieved successfully.",
 
             data: report,
 
@@ -35,20 +42,7 @@ export const getDashboardReport = async (req, res) => {
 
     } catch (error) {
 
-        console.error(
-            "Dashboard report error:",
-            error
-        );
-
-        return res.status(500).json({
-
-            success: false,
-
-            message: "Failed to retrieve dashboard report.",
-
-            error: error.message,
-
-        });
+        next(error);
 
     }
 
@@ -59,7 +53,11 @@ export const getDashboardReport = async (req, res) => {
 // GET /api/reports/appointments
 // ============================================================
 
-export const getAppointmentReport = async (req, res) => {
+export const getAppointmentReport = async (
+    req,
+    res,
+    next
+) => {
 
     try {
 
@@ -70,7 +68,8 @@ export const getAppointmentReport = async (req, res) => {
 
             success: true,
 
-            message: "Appointment report retrieved successfully.",
+            message:
+                "Appointment report retrieved successfully.",
 
             data: report,
 
@@ -78,20 +77,7 @@ export const getAppointmentReport = async (req, res) => {
 
     } catch (error) {
 
-        console.error(
-            "Appointment report error:",
-            error
-        );
-
-        return res.status(500).json({
-
-            success: false,
-
-            message: "Failed to retrieve appointment report.",
-
-            error: error.message,
-
-        });
+        next(error);
 
     }
 
@@ -102,7 +88,11 @@ export const getAppointmentReport = async (req, res) => {
 // GET /api/reports/admissions
 // ============================================================
 
-export const getAdmissionReport = async (req, res) => {
+export const getAdmissionReport = async (
+    req,
+    res,
+    next
+) => {
 
     try {
 
@@ -113,7 +103,8 @@ export const getAdmissionReport = async (req, res) => {
 
             success: true,
 
-            message: "Admission report retrieved successfully.",
+            message:
+                "Admission report retrieved successfully.",
 
             data: report,
 
@@ -121,20 +112,7 @@ export const getAdmissionReport = async (req, res) => {
 
     } catch (error) {
 
-        console.error(
-            "Admission report error:",
-            error
-        );
-
-        return res.status(500).json({
-
-            success: false,
-
-            message: "Failed to retrieve admission report.",
-
-            error: error.message,
-
-        });
+        next(error);
 
     }
 
@@ -145,7 +123,11 @@ export const getAdmissionReport = async (req, res) => {
 // GET /api/reports/billing
 // ============================================================
 
-export const getBillingReport = async (req, res) => {
+export const getBillingReport = async (
+    req,
+    res,
+    next
+) => {
 
     try {
 
@@ -156,7 +138,8 @@ export const getBillingReport = async (req, res) => {
 
             success: true,
 
-            message: "Billing report retrieved successfully.",
+            message:
+                "Billing report retrieved successfully.",
 
             data: report,
 
@@ -164,20 +147,7 @@ export const getBillingReport = async (req, res) => {
 
     } catch (error) {
 
-        console.error(
-            "Billing report error:",
-            error
-        );
-
-        return res.status(500).json({
-
-            success: false,
-
-            message: "Failed to retrieve billing report.",
-
-            error: error.message,
-
-        });
+        next(error);
 
     }
 
@@ -188,7 +158,11 @@ export const getBillingReport = async (req, res) => {
 // GET /api/reports/medicines
 // ============================================================
 
-export const getMedicineInventoryReport = async (req, res) => {
+export const getMedicineInventoryReport = async (
+    req,
+    res,
+    next
+) => {
 
     try {
 
@@ -199,7 +173,8 @@ export const getMedicineInventoryReport = async (req, res) => {
 
             success: true,
 
-            message: "Medicine inventory report retrieved successfully.",
+            message:
+                "Medicine inventory report retrieved successfully.",
 
             data: report,
 
@@ -207,20 +182,7 @@ export const getMedicineInventoryReport = async (req, res) => {
 
     } catch (error) {
 
-        console.error(
-            "Medicine inventory report error:",
-            error
-        );
-
-        return res.status(500).json({
-
-            success: false,
-
-            message: "Failed to retrieve medicine inventory report.",
-
-            error: error.message,
-
-        });
+        next(error);
 
     }
 
