@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-  "start": "node server.js",
-  "dev": "node --watch server.js",
-  "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js"
-},
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
@@ -16,7 +16,8 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.17.1",
     "morgan": "^1.11.0",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "node-cron": "^4.6.0"
   },
   "description": "",
   "main": "app.js",
