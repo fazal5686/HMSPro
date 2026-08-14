@@ -221,7 +221,122 @@ app.use(
 
     }
 );
+// ============================================================
+// Global Error Handler
+// Must remain AFTER all routes and 404 handler.
+// ============================================================
 
+// ============================================================
+// Global Error Handler
+// Must remain AFTER all routes and 404 handler.
+// ============================================================
+
+app.use(
+    (error, req, res, next) => {
+
+        console.error(
+            "Global Error:",
+            error
+        );
+
+        // --------------------------------------------------------
+        // Default status code
+        // --------------------------------------------------------
+
+        let statusCode = 500;
+
+        // --------------------------------------------------------
+        // Known business errors
+        // --------------------------------------------------------
+
+        if (
+            error.message ===
+            "Email already exists."
+        ) {
+
+            statusCode = 409;
+
+        }
+
+        else if (
+            error.message ===
+            "Invalid email or password."
+        ) {
+
+            statusCode = 401;
+
+        }
+
+        else if (
+            error.message ===
+            "Your account has been deactivated."
+        ) {
+
+            statusCode = 401;
+
+        }
+
+        else if (
+            error.message ===
+            "Patient profile already exists."
+        ) {
+
+            statusCode = 409;
+
+        }
+
+        else if (
+            error.message ===
+            "Billing record not found."
+        ) {
+
+            statusCode = 404;
+
+        }
+
+        else if (
+            error.message ===
+            "Invoice number already exists."
+        ) {
+
+            statusCode = 409;
+
+        }
+
+        else if (
+            error.message ===
+            "Amount paid cannot exceed total amount."
+        ) {
+
+            statusCode = 400;
+
+        }
+
+        else if (
+            error.message ===
+            "Patient profile not found."
+        ) {
+
+            statusCode = 404;
+
+        }
+
+        // --------------------------------------------------------
+        // Send Error Response
+        // --------------------------------------------------------
+
+        return res.status(statusCode).json({
+
+            success: false,
+
+            message:
+                error.message ||
+                "Internal server error.",
+
+        });
+
+    }
+);
 // ============================================================
 // Export Application
 // ============================================================
