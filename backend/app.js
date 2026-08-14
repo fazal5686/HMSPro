@@ -24,6 +24,7 @@ import admissionRoutes from "./routes/admissionRoutes.js";
 import medicineRoutes from "./routes/medicineRoutes.js";
 import billingRoutes from "./routes/billingRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
+import settingRoutes from "./routes/settingRoutes.js";
 // ============================================================
 // Load Environment Variables
 // ============================================================
@@ -167,6 +168,10 @@ app.use(
 app.use(
     "/api/reports",
      reportRoutes
+    );
+    app.use(
+        "/api/settings", 
+        settingRoutes
     );
 // ------------------------------------------------------------
 // Billing Routes
