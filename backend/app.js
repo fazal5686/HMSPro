@@ -27,6 +27,7 @@ import billingRoutes from "./routes/billingRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import logger from "./utils/logger.js";
 
 // ============================================================
 // Load Environment Variables
@@ -262,9 +263,11 @@ app.use(
 app.use(
     (error, req, res, next) => {
 
-        console.error(
-            "Global Error:",
-            error
+        logger.error(
+            error.stack ||
+            error.message ||
+            "Unknown application error."
+        
         );
 
         // ----------------------------------------------------
