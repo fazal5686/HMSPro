@@ -12,6 +12,7 @@ import {
     getAdmissionsByDoctorService,
     getAdmissionsByRoomService,
     updateAdmissionService,
+    dischargeAdmissionService,
     deleteAdmissionService,
 } from "../services/admissionService.js";
 
@@ -267,6 +268,44 @@ export const updateAdmission = async (
 };
 
 // ============================================================
+// Discharge Admission
+// PUT /api/admissions/:id/discharge
+// ============================================================
+
+export const dischargeAdmission = async (
+    req,
+    res,
+    next
+) => {
+
+    try {
+
+        const admission =
+            await dischargeAdmissionService(
+                req.params.id,
+                req.body
+            );
+
+        res.status(200).json({
+
+            success: true,
+
+            message:
+                "Patient discharged successfully.",
+
+            data: admission,
+
+        });
+
+    } catch (error) {
+
+        next(error);
+
+    }
+
+};
+
+// ============================================================
 // Delete Admission
 // DELETE /api/admissions/:id
 // ============================================================
@@ -299,3 +338,7 @@ export const deleteAdmission = async (
     }
 
 };
+
+// ============================================================
+// Export Controller
+// ============================================================

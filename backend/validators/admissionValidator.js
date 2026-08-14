@@ -1,4 +1,3 @@
-
 // ============================================================
 // File: validators/admissionValidator.js
 // Purpose: Validate Admission API request data.
@@ -93,6 +92,23 @@ export const createAdmissionValidator = [
         })
         .withMessage(
             "Admission reason cannot exceed 500 characters."
+        ),
+
+    // --------------------------------------------------------
+    // Diagnosis
+    // --------------------------------------------------------
+
+    body("diagnosis")
+
+        .optional()
+
+        .trim()
+
+        .isLength({
+            max: 1000,
+        })
+        .withMessage(
+            "Diagnosis cannot exceed 1000 characters."
         ),
 
     body("status")
@@ -214,6 +230,23 @@ export const updateAdmissionValidator = [
         })
         .withMessage(
             "Admission reason cannot exceed 500 characters."
+        ),
+
+    // --------------------------------------------------------
+    // Diagnosis
+    // --------------------------------------------------------
+
+    body("diagnosis")
+
+        .optional()
+
+        .trim()
+
+        .isLength({
+            max: 1000,
+        })
+        .withMessage(
+            "Diagnosis cannot exceed 1000 characters."
         ),
 
     body("status")

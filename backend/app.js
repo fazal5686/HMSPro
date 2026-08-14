@@ -2,7 +2,8 @@
 // ============================================================
 // File: app.js
 // Purpose: Express application configuration for HMSPro.
-// Handles middleware, static files, API routes, and 404 handling.
+// Handles middleware, static files, API routes, 404 handling,
+// and global error handling.
 // ============================================================
 
 import express from "express";
@@ -25,6 +26,7 @@ import medicineRoutes from "./routes/medicineRoutes.js";
 import billingRoutes from "./routes/billingRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
+
 // ============================================================
 // Load Environment Variables
 // ============================================================
@@ -89,12 +91,11 @@ app.use(
 );
 
 // ============================================================
-// API Routes
+// API ROUTES
 // ============================================================
 
 // ------------------------------------------------------------
-// Authentication Routes
-// Base URL:
+// Authentication
 // /api/auth
 // ------------------------------------------------------------
 
@@ -104,8 +105,7 @@ app.use(
 );
 
 // ------------------------------------------------------------
-// Patient Routes
-// Base URL:
+// Patients
 // /api/patients
 // ------------------------------------------------------------
 
@@ -115,8 +115,7 @@ app.use(
 );
 
 // ------------------------------------------------------------
-// Doctor Routes
-// Base URL:
+// Doctors
 // /api/doctors
 // ------------------------------------------------------------
 
@@ -126,8 +125,7 @@ app.use(
 );
 
 // ------------------------------------------------------------
-// Appointment Routes
-// Base URL:
+// Appointments
 // /api/appointments
 // ------------------------------------------------------------
 
@@ -137,8 +135,7 @@ app.use(
 );
 
 // ------------------------------------------------------------
-// Department Routes
-// Base URL:
+// Departments
 // /api/departments
 // ------------------------------------------------------------
 
@@ -148,8 +145,7 @@ app.use(
 );
 
 // ------------------------------------------------------------
-// Room Routes
-// Base URL:
+// Rooms
 // /api/rooms
 // ------------------------------------------------------------
 
@@ -157,25 +153,29 @@ app.use(
     "/api/rooms",
     roomRoutes
 );
+
+// ------------------------------------------------------------
+// Admissions
+// /api/admissions
+// ------------------------------------------------------------
+
 app.use(
     "/api/admissions",
     admissionRoutes
 );
+
+// ------------------------------------------------------------
+// Medicines
+// /api/medicines
+// ------------------------------------------------------------
+
 app.use(
     "/api/medicines",
     medicineRoutes
 );
-app.use(
-    "/api/reports",
-     reportRoutes
-    );
-    app.use(
-        "/api/settings", 
-        settingRoutes
-    );
+
 // ------------------------------------------------------------
-// Billing Routes
-// Base URL:
+// Billings
 // /api/billings
 // ------------------------------------------------------------
 
@@ -183,6 +183,27 @@ app.use(
     "/api/billings",
     billingRoutes
 );
+
+// ------------------------------------------------------------
+// Reports
+// /api/reports
+// ------------------------------------------------------------
+
+app.use(
+    "/api/reports",
+    reportRoutes
+);
+
+// ------------------------------------------------------------
+// Settings
+// /api/settings
+// ------------------------------------------------------------
+
+app.use(
+    "/api/settings",
+    settingRoutes
+);
+
 // ============================================================
 // Default / Health Check Route
 // GET /
@@ -196,7 +217,8 @@ app.get(
 
             success: true,
 
-            message: "HMSPro Backend Running",
+            message:
+                "HMSPro Backend Running",
 
         });
 
@@ -204,7 +226,7 @@ app.get(
 );
 
 // ============================================================
-// 404 Route Handler
+// 404 ROUTE HANDLER
 // Must remain AFTER all API routes.
 // ============================================================
 
@@ -215,19 +237,16 @@ app.use(
 
             success: false,
 
-            message: "Route not found",
+            message:
+                "Route not found",
 
         });
 
     }
 );
-// ============================================================
-// Global Error Handler
-// Must remain AFTER all routes and 404 handler.
-// ============================================================
 
 // ============================================================
-// Global Error Handler
+// GLOBAL ERROR HANDLER
 // Must remain AFTER all routes and 404 handler.
 // ============================================================
 
@@ -239,15 +258,16 @@ app.use(
             error
         );
 
-        // --------------------------------------------------------
-        // Default status code
-        // --------------------------------------------------------
+        // ----------------------------------------------------
+        // Use statusCode supplied by service
+        // ----------------------------------------------------
 
-        let statusCode = 500;
+        let statusCode =
+            error.statusCode || 500;
 
-        // --------------------------------------------------------
-        // Known business errors
-        // --------------------------------------------------------
+        // ----------------------------------------------------
+        // Known application errors
+        // ----------------------------------------------------
 
         if (
             error.message ===
@@ -321,9 +341,9 @@ app.use(
 
         }
 
-        // --------------------------------------------------------
+        // ----------------------------------------------------
         // Send Error Response
-        // --------------------------------------------------------
+        // ----------------------------------------------------
 
         return res.status(statusCode).json({
 
@@ -337,6 +357,7 @@ app.use(
 
     }
 );
+
 // ============================================================
 // Export Application
 // ============================================================

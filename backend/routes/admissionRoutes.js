@@ -45,6 +45,7 @@ import {
     getAdmissionsByDoctor,
     getAdmissionsByRoom,
     updateAdmission,
+    dischargeAdmission,
     deleteAdmission,
 } from "../controllers/admissionController.js";
 
@@ -148,6 +149,29 @@ router.get(
     admissionRoomIdValidator,
     validateRequest,
     getAdmissionsByRoom
+);
+
+// ============================================================
+// Discharge Admission
+// PUT /api/admissions/:id/discharge
+//
+// Admin, Doctor and Nurse can discharge patients.
+//
+// IMPORTANT:
+// This route MUST remain before PUT /:id.
+// ============================================================
+
+router.put(
+    "/:id/discharge",
+    protect,
+    authorize(
+        ROLES.ADMIN,
+        ROLES.DOCTOR,
+        ROLES.NURSE
+    ),
+    admissionIdValidator,
+    validateRequest,
+    dischargeAdmission
 );
 
 // ============================================================

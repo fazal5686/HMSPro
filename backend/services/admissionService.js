@@ -37,9 +37,8 @@ export const createAdmissionService = async (
     // Verify Patient
     // --------------------------------------------------------
 
-    const patient = await Patient.findById(
-        patientId
-    );
+    const patient =
+        await Patient.findById(patientId);
 
     if (!patient) {
 
@@ -57,9 +56,8 @@ export const createAdmissionService = async (
     // Verify Doctor
     // --------------------------------------------------------
 
-    const doctor = await Doctor.findById(
-        doctorId
-    );
+    const doctor =
+        await Doctor.findById(doctorId);
 
     if (!doctor) {
 
@@ -93,9 +91,8 @@ export const createAdmissionService = async (
     // Verify Room
     // --------------------------------------------------------
 
-    const room = await Room.findById(
-        roomId
-    );
+    const room =
+        await Room.findById(roomId);
 
     if (!room) {
 
@@ -226,11 +223,12 @@ export const getAdmissionByIdService = async (
 // Get All Admissions
 // ============================================================
 
-export const getAllAdmissionsService = async () => {
+export const getAllAdmissionsService =
+    async () => {
 
-    return await findAllAdmissions();
+        return await findAllAdmissions();
 
-};
+    };
 
 // ============================================================
 // Get Admissions By Patient
@@ -354,7 +352,7 @@ export const updateAdmissionService =
         }
 
         // ----------------------------------------------------
-        // Handle Discharge
+        // Handle Discharge Through Update
         // ----------------------------------------------------
 
         if (
@@ -383,10 +381,13 @@ export const updateAdmissionService =
             "Discharged"
         ) {
 
+            const roomId =
+                existingAdmission.roomId?._id ||
+                existingAdmission.roomId;
+
             const room =
                 await Room.findById(
-                    existingAdmission.roomId._id ||
-                    existingAdmission.roomId
+                    roomId
                 );
 
             if (room) {
@@ -399,6 +400,141 @@ export const updateAdmissionService =
             }
 
         }
+
+        return updatedAdmission;
+
+    };
+
+// ============================================================
+// Discharge Admission
+// PUT /api/admissions/:id/discharge
+// ============================================================
+
+export const dischargeAdmissionService =
+    async (
+        id,
+        dischargeData = {}
+    ) => {
+
+        // ----------------------------------------------------
+        // Find Existing Admission
+        // ----------------------------------------------------
+
+        const existingAdmission =
+            await findAdmissionById(id);
+
+        if (!existingAdmission) {
+
+            const error = new Error(
+                "Admission not found."
+            );
+
+            error.statusCode = 404;
+
+            throw error;
+
+        }
+
+        // ----------------------------------------------------
+        // Prevent Re-discharge
+        // ----------------------------------------------------
+
+        if (
+            existingAdmission.status ===
+            "Discharged"
+        ) {
+
+            const error = new Error(
+                "Admission is already discharged."
+            );
+
+            error.statusCode = 400;
+
+            throw error;
+
+        }
+
+        // ----------------------------------------------------
+        // Set Discharge Information
+        // ----------------------------------------------------
+
+        const updateData = {
+
+            status: "Discharged",
+
+            dischargeDate:
+                dischargeData.dischargeDate ||
+                new Date(),
+
+        };
+
+        // ----------------------------------------------------
+        // Optional Diagnosis
+        // ----------------------------------------------------
+
+        if (
+            dischargeData.diagnosis !== undefined
+        ) {
+
+            updateData.diagnosis =
+                dischargeData.diagnosis;
+
+        }
+
+        // ----------------------------------------------------
+        // Optional Notes
+        // ----------------------------------------------------
+
+        if (
+            dischargeData.notes !== undefined
+        ) {
+
+            updateData.notes =
+                dischargeData.notes;
+
+        }
+
+        // ----------------------------------------------------
+        // Mark Admission as Inactive
+        // ----------------------------------------------------
+
+        updateData.isActive = false;
+
+        // ----------------------------------------------------
+        // Update Admission
+        // ----------------------------------------------------
+
+        const updatedAdmission =
+            await updateAdmission(
+                id,
+                updateData
+            );
+
+        // ----------------------------------------------------
+        // Release Assigned Room
+        // ----------------------------------------------------
+
+        const roomId =
+            existingAdmission.roomId?._id ||
+            existingAdmission.roomId;
+
+        const room =
+            await Room.findById(
+                roomId
+            );
+
+        if (room) {
+
+            room.status =
+                "Available";
+
+            await room.save();
+
+        }
+
+        // ----------------------------------------------------
+        // Return Updated Admission
+        // ----------------------------------------------------
 
         return updatedAdmission;
 
@@ -437,10 +573,13 @@ export const deleteAdmissionService =
             "Admitted"
         ) {
 
+            const roomId =
+                admission.roomId?._id ||
+                admission.roomId;
+
             const room =
                 await Room.findById(
-                    admission.roomId._id ||
-                    admission.roomId
+                    roomId
                 );
 
             if (room) {
