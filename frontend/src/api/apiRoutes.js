@@ -1,11 +1,15 @@
 // ============================================================
-// File: api/apiRoutes.js
+// File: D:\HMSPro\frontend\src\api\apiRoutes.js
 // Purpose: Central location for all backend API endpoints.
 // ============================================================
 
 
 const API_ROUTES = {
 
+
+    // ========================================================
+    // Authentication
+    // ========================================================
 
     AUTH: {
 
@@ -14,6 +18,17 @@ const API_ROUTES = {
         REGISTER: "/auth/register",
 
         ME: "/auth/me",
+
+    },
+
+
+    // ========================================================
+    // Patients
+    // ========================================================
+
+    PATIENTS: {
+
+        PROFILE: "/patients/profile",
 
     },
 

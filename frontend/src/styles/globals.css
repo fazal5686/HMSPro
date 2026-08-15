@@ -1,0 +1,65 @@
+/* ============================================================
+   HMSPro Global Styles
+   ============================================================ */
+
+   html {
+    font-family: var(--font-family);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    background: var(--color-background);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    background: var(--color-background);
+    color: var(--color-text-primary);
+  }
+  
+  #root {
+    min-height: 100vh;
+  }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-family-heading);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+  
+  button,
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+  
+  ::selection {
+    color: var(--color-text-white);
+    background: var(--color-primary);
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface-soft);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: var(--radius-full);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }

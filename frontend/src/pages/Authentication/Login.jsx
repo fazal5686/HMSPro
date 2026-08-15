@@ -1,7 +1,7 @@
 // ============================================================
-// File: pages/Login.jsx
+// File: D:\HMSPro\frontend\src\pages\Authentication\Login.jsx
 // Purpose: HMSPro user login page.
-// 
+//
 // Responsibilities:
 //          1. Collect user email and password.
 //          2. Send credentials to authentication service.
@@ -17,6 +17,8 @@
 //              ↓
 //          authService.js
 //              ↓
+//          Axios
+//              ↓
 //          Backend JWT Authentication
 // ============================================================
 
@@ -25,7 +27,18 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import useAuth from "../hooks/useAuth.js";
+import {
+    Hospital,
+    Mail,
+    LockKeyhole,
+    Eye,
+    EyeOff,
+    LogIn,
+} from "lucide-react";
+
+import useAuth from "../../hooks/useAuth.js";
+
+import "./Login.css";
 
 
 
@@ -56,7 +69,6 @@ const Login = () => {
     });
 
 
-
     const [showPassword, setShowPassword] = useState(false);
 
 
@@ -73,7 +85,6 @@ const Login = () => {
 
     const handleChange = (e) => {
 
-
         setFormData({
 
             ...formData,
@@ -82,6 +93,13 @@ const Login = () => {
 
         });
 
+        // Clear previous error when user starts correcting input.
+
+        if (error) {
+
+            setError("");
+
+        }
 
     };
 
@@ -93,7 +111,6 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
 
-
         e.preventDefault();
 
 
@@ -102,40 +119,34 @@ const Login = () => {
         setLoading(true);
 
 
-
         try {
-
 
             await login(formData);
 
 
+            // Redirect authenticated user to dashboard.
 
-            // Redirect after successful login.
-
-            navigate("/dashboard");
-
+            navigate("/", {
+                replace: true,
+            });
 
 
         } catch (error) {
-
 
             setError(
 
                 error.response?.data?.message ||
 
-                "Login failed. Please try again."
+                "Invalid email or password."
 
             );
 
 
         } finally {
 
-
             setLoading(false);
 
-
         }
-
 
     };
 
@@ -147,156 +158,356 @@ const Login = () => {
 
     return (
 
-        <div className="login-container">
+        <div className="login-page">
 
 
-            <div className="login-card">
+            {/* ==================================================
+                Left Branding Panel
+                ================================================== */}
+
+            <div className="login-brand-panel">
 
 
-                <h2>
-
-                    HMSPro Login
-
-                </h2>
+                <div className="login-brand-content">
 
 
+                    {/* HT Monogram */}
 
-                {error && (
+                    <div className="ht-monogram">
 
-                    <p className="error-message">
+                        <span>
+                            H
+                        </span>
 
-                        {error}
+                        <span>
+                            T
+                        </span>
+
+                    </div>
+
+
+
+                    {/* HMSPro */}
+
+                    <h1>
+
+                        HMSPro
+
+                    </h1>
+
+
+
+                    <p className="login-brand-title">
+
+                        Hospital Management System
 
                     </p>
 
-                )}
+
+
+                    <div className="brand-divider"></div>
 
 
 
-                <form onSubmit={handleSubmit}>
+                    <p className="powered-by">
 
+                        Powered by
 
-                    <div className="form-group">
-
-
-                        <label>
-
-                            Email
-
-                        </label>
-
-
-                        <input
-
-                            type="email"
-
-                            name="email"
-
-                            value={formData.email}
-
-                            onChange={handleChange}
-
-                            placeholder="Enter email"
-
-                            required
-
-                        />
-
-
-                    </div>
+                    </p>
 
 
 
+                    <p className="hayyar-tech">
 
-                    <div className="form-group">
+                        Hayyar Tech
 
-
-                        <label>
-
-                            Password
-
-                        </label>
+                    </p>
 
 
 
-                        <input
+                    <p className="login-brand-description">
 
-                            type={
-                                showPassword
-                                ? "text"
-                                : "password"
-                            }
+                        Smart, secure and efficient
+                        hospital management.
 
-                            name="password"
-
-                            value={formData.password}
-
-                            onChange={handleChange}
-
-                            placeholder="Enter password"
-
-                            required
-
-                        />
+                    </p>
 
 
+                </div>
+
+
+            </div>
+
+
+
+            {/* ==================================================
+                Right Login Panel
+                ================================================== */}
+
+            <div className="login-form-panel">
+
+
+                <div className="login-card">
+
+
+                    {/* Hospital Icon */}
+
+                    <div className="login-icon">
+
+                        <Hospital size={30} />
 
                     </div>
 
 
 
-                    <div className="password-toggle">
+                    {/* Heading */}
 
+                    <h2>
 
-                        <label>
+                        Welcome Back
 
-
-                            <input
-
-                                type="checkbox"
-
-                                checked={showPassword}
-
-                                onChange={() =>
-                                    setShowPassword(
-                                        !showPassword
-                                    )
-                                }
-
-                            />
-
-
-                            Show Password
-
-
-                        </label>
-
-
-                    </div>
+                    </h2>
 
 
 
+                    <p className="login-subtitle">
 
-                    <button
+                        Sign in to your HMSPro account
 
-                        type="submit"
+                    </p>
 
-                        disabled={loading}
 
+
+                    {/* Error */}
+
+                    {error && (
+
+                        <div className="login-error">
+
+                            {error}
+
+                        </div>
+
+                    )}
+
+
+
+                    {/* ==================================================
+                        Login Form
+                        ================================================== */}
+
+                    <form
+                        onSubmit={handleSubmit}
+                        className="login-form"
                     >
 
-                        {
-                            loading
-                            ? "Logging in..."
-                            : "Login"
-                        }
+
+                        {/* Email */}
+
+                        <div className="form-group">
 
 
-                    </button>
+                            <label htmlFor="email">
+
+                                Email Address
+
+                            </label>
+
+
+                            <div className="input-wrapper">
+
+
+                                <Mail
+                                    size={19}
+                                    className="input-icon"
+                                />
+
+
+                                <input
+
+                                    id="email"
+
+                                    type="email"
+
+                                    name="email"
+
+                                    value={formData.email}
+
+                                    onChange={handleChange}
+
+                                    placeholder="Enter your email"
+
+                                    autoComplete="email"
+
+                                    required
+
+                                />
+
+
+                            </div>
+
+
+                        </div>
 
 
 
-                </form>
+                        {/* Password */}
+
+                        <div className="form-group">
+
+
+                            <label htmlFor="password">
+
+                                Password
+
+                            </label>
+
+
+                            <div className="input-wrapper">
+
+
+                                <LockKeyhole
+                                    size={19}
+                                    className="input-icon"
+                                />
+
+
+                                <input
+
+                                    id="password"
+
+                                    type={
+                                        showPassword
+                                            ? "text"
+                                            : "password"
+                                    }
+
+                                    name="password"
+
+                                    value={formData.password}
+
+                                    onChange={handleChange}
+
+                                    placeholder="Enter your password"
+
+                                    autoComplete="current-password"
+
+                                    required
+
+                                />
+
+
+                                <button
+
+                                    type="button"
+
+                                    className="password-toggle-button"
+
+                                    onClick={() =>
+                                        setShowPassword(
+                                            !showPassword
+                                        )
+                                    }
+
+                                    aria-label={
+                                        showPassword
+                                            ? "Hide password"
+                                            : "Show password"
+                                    }
+
+                                >
+
+                                    {
+                                        showPassword
+                                            ? <EyeOff size={19} />
+                                            : <Eye size={19} />
+                                    }
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        {/* ==================================================
+                            Login Button
+                            ================================================== */}
+
+                        <button
+
+                            type="submit"
+
+                            className="login-submit-button"
+
+                            disabled={loading}
+
+                        >
+
+
+                            {
+                                loading ? (
+
+                                    <>
+
+                                        <span className="login-spinner"></span>
+
+                                        Signing in...
+
+                                    </>
+
+                                ) : (
+
+                                    <>
+
+                                        <LogIn size={19} />
+
+                                        Login
+
+                                    </>
+
+                                )
+                            }
+
+
+                        </button>
+
+
+                    </form>
+
+
+
+                    {/* Footer */}
+
+                    <div className="login-footer">
+
+
+                        <span>
+
+                            HMSPro
+
+                        </span>
+
+
+                        <span>
+                            •
+                        </span>
+
+
+                        <span>
+
+                            Hayyar Tech
+
+                        </span>
+
+
+                    </div>
+
+
+                </div>
 
 
             </div>
@@ -305,7 +516,6 @@ const Login = () => {
         </div>
 
     );
-
 
 };
 

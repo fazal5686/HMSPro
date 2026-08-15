@@ -1,0 +1,590 @@
+/* ============================================================
+   HMSPro Main Layout
+   ============================================================ */
+
+   .hms-layout {
+    min-height: 100vh;
+    display: flex;
+    background: var(--color-background);
+}
+
+
+/* ============================================================
+   Sidebar
+   ============================================================ */
+
+.hms-sidebar {
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: var(--z-sidebar);
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--color-surface);
+
+    border-right: 1px solid var(--color-border);
+
+    transition:
+        width var(--transition-normal),
+        transform var(--transition-normal);
+}
+
+
+/* ============================================================
+   Brand
+   ============================================================ */
+
+.hms-brand {
+    height: var(--header-height);
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 var(--space-6);
+
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+
+.hms-brand-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: var(--color-text-white);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--color-primary),
+            var(--color-primary-dark)
+        );
+
+    border-radius: var(--radius-md);
+
+    box-shadow:
+        0 6px 14px rgba(15, 118, 110, 0.20);
+}
+
+
+.hms-brand-text {
+    display: flex;
+    flex-direction: column;
+
+    margin-left: var(--space-3);
+
+    min-width: 0;
+}
+
+
+.hms-brand-text strong {
+    color: var(--color-text-primary);
+
+    font-size: var(--font-size-lg);
+    line-height: 1.2;
+
+    font-weight: var(--font-weight-bold);
+}
+
+
+.hms-brand-text span {
+    margin-top: 2px;
+
+    color: var(--color-text-muted);
+
+    font-size: var(--font-size-xs);
+}
+
+
+/* ============================================================
+   Navigation
+   ============================================================ */
+
+.hms-navigation {
+    flex: 1;
+
+    padding: var(--space-5) var(--space-3);
+
+    overflow-y: auto;
+}
+
+
+.hms-nav-title {
+    padding: 0 var(--space-3);
+
+    margin: 0 0 var(--space-2);
+
+    color: var(--color-text-light);
+
+    font-size: 10px;
+
+    font-weight: var(--font-weight-bold);
+
+    letter-spacing: 0.08em;
+}
+
+
+.hms-nav-title-settings {
+    margin-top: var(--space-6);
+}
+
+
+.hms-nav-item {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: var(--space-3);
+
+    width: 100%;
+
+    padding: 11px 12px;
+
+    margin-bottom: 3px;
+
+    color: var(--color-text-secondary);
+
+    border-radius: var(--radius-md);
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-medium);
+
+    transition:
+        background var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+
+.hms-nav-item:hover {
+    color: var(--color-primary-dark);
+
+    background: var(--color-surface-hover);
+
+    transform: translateX(2px);
+}
+
+
+.hms-nav-item.active {
+    color: var(--color-primary-dark);
+
+    background: var(--color-primary-light);
+
+    font-weight: var(--font-weight-semibold);
+}
+
+
+.hms-nav-item.active::before {
+    content: "";
+
+    position: absolute;
+
+    left: -12px;
+
+    top: 50%;
+
+    width: 3px;
+    height: 22px;
+
+    transform: translateY(-50%);
+
+    background: var(--color-primary);
+
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+
+/* ============================================================
+   Sidebar Footer
+   ============================================================ */
+
+.hms-sidebar-footer {
+    padding: var(--space-4);
+
+    border-top: 1px solid var(--color-border-light);
+}
+
+
+.hms-logout-button {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: var(--space-3);
+
+    padding: 11px 12px;
+
+    color: var(--color-danger);
+
+    background: transparent;
+
+    border-radius: var(--radius-md);
+
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+
+    transition:
+        background var(--transition-fast);
+}
+
+
+.hms-logout-button:hover {
+    background: var(--color-danger-light);
+}
+
+
+/* ============================================================
+   Main Area
+   ============================================================ */
+
+.hms-main {
+    min-width: 0;
+    width: calc(100% - var(--sidebar-width));
+
+    margin-left: var(--sidebar-width);
+
+    min-height: 100vh;
+
+    transition:
+        margin-left var(--transition-normal),
+        width var(--transition-normal);
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.hms-header {
+    height: var(--header-height);
+
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 var(--space-8);
+
+    background:
+        rgba(255, 255, 255, 0.94);
+
+    border-bottom: 1px solid var(--color-border);
+
+    backdrop-filter: blur(12px);
+}
+
+
+.hms-header-left,
+.hms-header-right {
+    display: flex;
+    align-items: center;
+}
+
+
+.hms-header-left {
+    gap: var(--space-4);
+}
+
+
+.hms-header-right {
+    gap: var(--space-4);
+}
+
+
+/* ============================================================
+   Menu Button
+   ============================================================ */
+
+.hms-menu-button {
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    color: var(--color-text-secondary);
+
+    background: var(--color-surface-soft);
+
+    border-radius: var(--radius-md);
+}
+
+
+/* ============================================================
+   Search
+   ============================================================ */
+
+.hms-search {
+    width: 300px;
+
+    display: flex;
+    align-items: center;
+
+    gap: var(--space-2);
+
+    padding: 9px 13px;
+
+    color: var(--color-text-muted);
+
+    background: var(--color-surface-soft);
+
+    border: 1px solid transparent;
+
+    border-radius: var(--radius-md);
+
+    transition:
+        border-color var(--transition-fast),
+        background var(--transition-fast);
+}
+
+
+.hms-search:focus-within {
+    background: var(--color-surface);
+
+    border-color: var(--color-primary);
+}
+
+
+.hms-search input {
+    width: 100%;
+
+    outline: none;
+
+    color: var(--color-text-primary);
+
+    background: transparent;
+
+    border: 0;
+
+    font-size: var(--font-size-sm);
+}
+
+
+.hms-search input::placeholder {
+    color: var(--color-text-light);
+}
+
+
+/* ============================================================
+   Notification
+   ============================================================ */
+
+.hms-icon-button {
+    position: relative;
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--color-text-secondary);
+
+    background: transparent;
+
+    border-radius: var(--radius-md);
+
+    transition:
+        background var(--transition-fast),
+        color var(--transition-fast);
+}
+
+
+.hms-icon-button:hover {
+    color: var(--color-primary);
+
+    background: var(--color-surface-hover);
+}
+
+
+.hms-notification-dot {
+    position: absolute;
+
+    top: 8px;
+    right: 8px;
+
+    width: 7px;
+    height: 7px;
+
+    background: var(--color-danger);
+
+    border: 2px solid var(--color-surface);
+
+    border-radius: var(--radius-full);
+}
+
+
+/* ============================================================
+   Profile
+   ============================================================ */
+
+.hms-profile {
+    display: flex;
+    align-items: center;
+
+    gap: var(--space-3);
+
+    padding-left: var(--space-3);
+
+    border-left: 1px solid var(--color-border);
+}
+
+
+.hms-avatar {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--color-text-white);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--color-primary),
+            var(--color-secondary)
+        );
+
+    border-radius: var(--radius-full);
+
+    font-size: var(--font-size-sm);
+
+    font-weight: var(--font-weight-bold);
+}
+
+
+.hms-profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.hms-profile-info strong {
+    color: var(--color-text-primary);
+
+    font-size: var(--font-size-sm);
+    line-height: 1.3;
+}
+
+
+.hms-profile-info span {
+    color: var(--color-text-muted);
+
+    font-size: var(--font-size-xs);
+}
+
+
+.hms-profile-chevron {
+    color: var(--color-text-muted);
+}
+
+
+/* ============================================================
+   Content
+   ============================================================ */
+
+.hms-content {
+    width: 100%;
+    max-width: var(--content-max-width);
+
+    margin: 0 auto;
+
+    padding: var(--space-8);
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 992px) {
+
+    .hms-sidebar {
+        transform: translateX(-100%);
+    }
+
+
+    .hms-main {
+        width: 100%;
+        margin-left: 0;
+    }
+
+
+    .hms-menu-button {
+        display: flex;
+    }
+
+
+    .hms-header {
+        padding: 0 var(--space-5);
+    }
+
+
+    .hms-search {
+        width: 240px;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .hms-search {
+        display: none;
+    }
+
+
+    .hms-profile-info,
+    .hms-profile-chevron {
+        display: none;
+    }
+
+
+    .hms-header {
+        padding: 0 var(--space-4);
+    }
+
+
+    .hms-content {
+        padding: var(--space-5);
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .hms-header-right {
+        gap: var(--space-2);
+    }
+
+
+    .hms-profile {
+        padding-left: var(--space-2);
+    }
+
+
+    .hms-content {
+        padding: var(--space-4);
+    }
+
+}

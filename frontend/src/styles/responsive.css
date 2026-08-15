@@ -1,0 +1,28 @@
+/* ============================================================
+   HMSPro Responsive Utilities
+   ============================================================ */
+
+   @media (max-width: 1200px) {
+    :root {
+      --sidebar-width: 240px;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    :root {
+      --header-height: 64px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    :root {
+      --sidebar-width: 260px;
+      --header-height: 60px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    html {
+      font-size: 15px;
+    }
+  }

@@ -1,0 +1,483 @@
+/* ============================================================
+   File:
+   D:\HMSPro\frontend\src\pages\Users\Users.css
+
+   Purpose:
+   Styling for HMSPro User Management.
+   ============================================================ */
+
+
+   .users-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   Page Header
+   ============================================================ */
+
+.users-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+
+.users-title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+
+.users-title-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef4ff;
+    color: #2563eb;
+}
+
+
+.users-page-header h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #172033;
+}
+
+
+.users-page-header p {
+    margin: 5px 0 0;
+    color: #718096;
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   Add User Button
+   ============================================================ */
+
+.users-add-button {
+    border: none;
+    border-radius: 10px;
+    padding: 11px 17px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+.users-add-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.22);
+}
+
+
+/* ============================================================
+   Summary Cards
+   ============================================================ */
+
+.users-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+
+.users-summary-card {
+    background: white;
+    border: 1px solid #e8edf4;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+
+.users-summary-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    color: #2563eb;
+}
+
+
+.users-summary-card span {
+    display: block;
+    font-size: 13px;
+    color: #718096;
+    margin-bottom: 4px;
+}
+
+
+.users-summary-card strong {
+    display: block;
+    font-size: 24px;
+    color: #172033;
+}
+
+
+/* ============================================================
+   Toolbar
+   ============================================================ */
+
+.users-toolbar {
+    background: white;
+    border: 1px solid #e8edf4;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+
+.users-search-box {
+    flex: 1;
+    min-width: 240px;
+    height: 42px;
+    border: 1px solid #dbe2ea;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 12px;
+    color: #94a3b8;
+}
+
+
+.users-search-box:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+
+.users-search-box input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #172033;
+}
+
+
+.users-filter {
+    height: 42px;
+    min-width: 145px;
+    border: 1px solid #dbe2ea;
+    border-radius: 9px;
+    padding: 0 12px;
+    background: white;
+    color: #334155;
+    outline: none;
+    cursor: pointer;
+}
+
+
+.users-filter:focus {
+    border-color: #2563eb;
+}
+
+
+/* ============================================================
+   Table Card
+   ============================================================ */
+
+.users-table-card {
+    background: white;
+    border: 1px solid #e8edf4;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+
+.users-table-header {
+    padding: 19px 20px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+
+.users-table-header h2 {
+    margin: 0;
+    font-size: 17px;
+    color: #172033;
+}
+
+
+.users-table-header p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #718096;
+}
+
+
+/* ============================================================
+   Table
+   ============================================================ */
+
+.users-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.users-table th {
+    padding: 13px 20px;
+    background: #f8fafc;
+    color: #64748b;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+
+.users-table td {
+    padding: 15px 20px;
+    border-top: 1px solid #edf1f5;
+    color: #334155;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+
+.users-table tbody tr:hover {
+    background: #fafcff;
+}
+
+
+/* ============================================================
+   User Cell
+   ============================================================ */
+
+.users-user-cell {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 220px;
+}
+
+
+.users-avatar {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf1ff;
+    color: #2563eb;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+
+.users-user-cell strong {
+    color: #172033;
+    font-weight: 600;
+}
+
+
+.users-email {
+    color: #64748b;
+}
+
+
+/* ============================================================
+   Role Badge
+   ============================================================ */
+
+.users-role {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+
+.users-role-admin,
+.users-role-superadmin {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+
+.users-role-doctor {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+
+.users-role-patient {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+
+/* ============================================================
+   Status
+   ============================================================ */
+
+.users-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.users-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+
+.users-status-active {
+    color: #16a34a;
+}
+
+
+.users-status-inactive {
+    color: #94a3b8;
+}
+
+
+/* ============================================================
+   Actions
+   ============================================================ */
+
+.users-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
+.users-action-button {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: #64748b;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+.users-action-button:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+
+.users-action-delete:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: #fef2f2;
+}
+
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.users-empty {
+    text-align: center;
+    padding: 50px 20px !important;
+    color: #94a3b8 !important;
+}
+
+
+/* ============================================================
+   Responsive Design
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .users-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .users-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+
+    .users-search-box {
+        width: 100%;
+    }
+
+
+    .users-filter {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .users-page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .users-add-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+
+    .users-page-header h1 {
+        font-size: 22px;
+    }
+
+}

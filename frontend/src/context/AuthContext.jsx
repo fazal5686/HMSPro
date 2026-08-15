@@ -87,6 +87,10 @@ export const AuthProvider = ({ children }) => {
                     console.log(
                         "Session expired."
                     );
+                    
+                    logoutUser();
+                    
+                    setUser(null);
 
 
                 }

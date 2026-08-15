@@ -27,6 +27,7 @@ import billingRoutes from "./routes/billingRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import logger from "./utils/logger.js";
 
 // ============================================================
@@ -213,6 +214,15 @@ app.use(
 app.use(
     "/api/dashboard",
     dashboardRoutes
+);
+// ------------------------------------------------------------
+// User Management
+// /api/users
+// ------------------------------------------------------------
+
+app.use(
+    "/api/users",
+    userRoutes
 );
 // ============================================================
 // Default / Health Check Route

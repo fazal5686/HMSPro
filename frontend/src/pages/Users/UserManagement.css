@@ -1,0 +1,465 @@
+/* ============================================================
+   HMSPro User Management
+   ============================================================ */
+
+   .user-management {
+    width: 100%;
+}
+
+
+/* ============================================================
+   Page Header
+   ============================================================ */
+
+.user-page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 26px;
+}
+
+.page-eyebrow {
+    margin: 0 0 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #64748b;
+}
+
+.user-page-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.page-description {
+    margin: 7px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   Add User Button
+   ============================================================ */
+
+.add-user-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border: none;
+    border-radius: 9px;
+
+    padding: 11px 17px;
+
+    background: #0f766e;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.add-user-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(15, 118, 110, 0.18);
+}
+
+
+/* ============================================================
+   Statistics
+   ============================================================ */
+
+.user-stat-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+
+    margin-bottom: 24px;
+}
+
+.user-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.user-stat-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #f0fdfa;
+    color: #0f766e;
+}
+
+.user-stat-card span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+.user-stat-card strong {
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 23px;
+}
+
+
+/* ============================================================
+   Table Card
+   ============================================================ */
+
+.user-table-card {
+    background: white;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 13px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+
+/* ============================================================
+   Toolbar
+   ============================================================ */
+
+.user-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding: 17px 19px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.user-search {
+    width: min(360px, 100%);
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 10px 12px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    color: #64748b;
+}
+
+.user-search:focus-within {
+    border-color: #0f766e;
+}
+
+.user-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 13px;
+
+    color: #0f172a;
+}
+
+.user-toolbar select {
+    min-width: 150px;
+
+    padding: 10px 12px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    background: white;
+
+    color: #334155;
+
+    font-size: 13px;
+
+    outline: none;
+}
+
+.user-toolbar select:focus {
+    border-color: #0f766e;
+}
+
+
+/* ============================================================
+   Table
+   ============================================================ */
+
+.user-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.user-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 760px;
+}
+
+.user-table th {
+    padding: 13px 19px;
+
+    text-align: left;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.7px;
+}
+
+.user-table td {
+    padding: 15px 19px;
+
+    border-top: 1px solid #eef2f7;
+
+    color: #334155;
+
+    font-size: 13px;
+}
+
+.user-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.user-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+
+/* ============================================================
+   User Name
+   ============================================================ */
+
+.user-name-cell {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e6fffb;
+
+    color: #0f766e;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.user-name-cell strong {
+    color: #0f172a;
+
+    font-size: 13px;
+}
+
+.user-email {
+    color: #64748b;
+}
+
+
+/* ============================================================
+   Role Badge
+   ============================================================ */
+
+.role-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   Status Badge
+   ============================================================ */
+
+.status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.status-active {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.status-inactive {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+
+/* ============================================================
+   Actions
+   ============================================================ */
+
+.user-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.user-actions button {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+
+    background: white;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.user-actions button:hover {
+    background: #f1f5f9;
+    color: #0f766e;
+}
+
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.no-users {
+    padding: 45px !important;
+
+    text-align: center;
+
+    color: #94a3b8 !important;
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+    .user-stat-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .user-page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .user-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .user-search {
+        width: 100%;
+    }
+
+    .user-toolbar select {
+        width: 100%;
+    }
+
+    .user-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
