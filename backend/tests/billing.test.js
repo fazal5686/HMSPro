@@ -494,6 +494,471 @@ describe("HMSPro Billing API", () => {
         },
         30000
     );
+        // ========================================================
+    // Authentication & Validation Tests
+    // ========================================================
+
+    // ========================================================
+    // Create Billing Without Authentication
+    // ========================================================
+
+    test(
+        "POST /api/billings without authentication should return 401",
+        async () => {
+
+            const response =
+                await request(app)
+                    .post("/api/billings")
+                    .send({
+
+                        patientId:
+                            patientId,
+
+                        invoiceNumber:
+                            `INV-UNAUTH-${Date.now()}`,
+
+                        consultationCharges:
+                            1000,
+
+                    });
+
+            expect(response.statusCode)
+                .toBe(401);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        },
+        30000
+    );
+
+
+    // ========================================================
+    // Get All Billings Without Authentication
+    // ========================================================
+
+    test(
+        "GET /api/billings without authentication should return 401",
+        async () => {
+
+            const response =
+                await request(app)
+                    .get("/api/billings");
+
+            expect(response.statusCode)
+                .toBe(401);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        },
+        30000
+    );
+
+
+    // ========================================================
+    // Create Billing With Missing Required Fields
+    // ========================================================
+
+    test(
+        "POST /api/billings with missing required fields should return validation error",
+        async () => {
+
+            const response =
+                await request(app)
+                    .post("/api/billings")
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    )
+                    .send({});
+
+            expect(response.statusCode)
+                .toBeGreaterThanOrEqual(400);
+
+            expect(response.statusCode)
+                .toBeLessThan(500);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        },
+        30000
+    );
+
+
+    // ========================================================
+    // Get Billing With Invalid ID
+    // ========================================================
+
+    test(
+        "GET /api/billings/:id with invalid ID should return validation error",
+        async () => {
+
+            const response =
+                await request(app)
+                    .get(
+                        "/api/billings/invalid-billing-id"
+                    )
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    );
+
+            expect(response.statusCode)
+                .toBeGreaterThanOrEqual(400);
+
+            expect(response.statusCode)
+                .toBeLessThan(500);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        },
+        30000
+    );
+        // ========================================================
+    // Billing Business Rule Tests
+    // ========================================================
+
+    // ========================================================
+    // Duplicate Invoice Number
+    // ========================================================
+
+    test(
+        "POST /api/billings with duplicate invoice number should return 409",
+        async () => {
+
+            const response =
+                await request(app)
+                    .post("/api/billings")
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    )
+                    .send({
+
+                        patientId:
+                            patientId,
+
+                        invoiceNumber:
+                            "DUPLICATE-TEST-INVOICE",
+
+                        consultationCharges:
+                            1000,
+
+                    });
+
+            // ------------------------------------------------
+            // First request should create the invoice.
+            // ------------------------------------------------
+
+            expect(response.statusCode)
+                .toBe(201);
+
+            expect(response.body.success)
+                .toBe(true);
+
+            // ------------------------------------------------
+            // Second request uses the same invoice number.
+            // ------------------------------------------------
+
+            const duplicateResponse =
+                await request(app)
+                    .post("/api/billings")
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    )
+                    .send({
+
+                        patientId:
+                            patientId,
+
+                        invoiceNumber:
+                            "DUPLICATE-TEST-INVOICE",
+
+                        consultationCharges:
+                            1500,
+
+                    });
+
+            expect(duplicateResponse.statusCode)
+                .toBe(409);
+
+            expect(duplicateResponse.body.success)
+                .toBe(false);
+
+            expect(duplicateResponse.body.message)
+                .toBe(
+                    "Invoice number already exists."
+                );
+
+        },
+        30000
+    );
+
+
+    // ========================================================
+    // Overpayment
+    // ========================================================
+
+    test(
+        "POST /api/billings with amount paid greater than total should return 400",
+        async () => {
+
+            const response =
+                await request(app)
+                    .post("/api/billings")
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    )
+                    .send({
+
+                        patientId:
+                            patientId,
+
+                        invoiceNumber:
+                            `INV-OVERPAY-${Date.now()}`,
+
+                        consultationCharges:
+                            1000,
+
+                        amountPaid:
+                            1500,
+
+                    });
+
+            expect(response.statusCode)
+                .toBe(400);
+
+            expect(response.body.success)
+                .toBe(false);
+
+            expect(response.body.message)
+                .toBe(
+                    "Amount paid cannot exceed total amount."
+                );
+
+        },
+        30000
+    );
+
+
+    // ========================================================
+    // Update Non-Existent Billing
+    // ========================================================
+
+    test(
+        "PUT /api/billings/:id for non-existent billing should return 404",
+        async () => {
+
+            const fakeBillingId =
+                new mongoose.Types.ObjectId().toString();
+
+            const response =
+                await request(app)
+                    .put(
+                        `/api/billings/${fakeBillingId}`
+                    )
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    )
+                    .send({
+
+                        amountPaid:
+                            0,
+
+                    });
+
+            expect(response.statusCode)
+                .toBe(404);
+
+            expect(response.body.success)
+                .toBe(false);
+
+            expect(response.body.message)
+                .toBe(
+                    "Billing record not found."
+                );
+
+        },
+        30000
+    );
+
+
+    // ========================================================
+    // Delete Non-Existent Billing
+    // ========================================================
+
+    test(
+        "DELETE /api/billings/:id for non-existent billing should return 404",
+        async () => {
+
+            const fakeBillingId =
+                new mongoose.Types.ObjectId().toString();
+
+            const response =
+                await request(app)
+                    .delete(
+                        `/api/billings/${fakeBillingId}`
+                    )
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    );
+
+            expect(response.statusCode)
+                .toBe(404);
+
+            expect(response.body.success)
+                .toBe(false);
+
+            expect(response.body.message)
+                .toBe(
+                    "Billing record not found."
+                );
+
+        },
+        30000
+    );
+
+
+    // ========================================================
+    // Full Payment / Paid Status
+    // ========================================================
+
+    test(
+        "PUT /api/billings/:id should calculate Paid status when fully paid",
+        async () => {
+
+            // ------------------------------------------------
+            // Create a separate billing record for this test.
+            // ------------------------------------------------
+
+            const paidInvoiceNumber =
+                `INV-PAID-${Date.now()}`;
+
+            const createResponse =
+                await request(app)
+                    .post("/api/billings")
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    )
+                    .send({
+
+                        patientId:
+                            patientId,
+
+                        invoiceNumber:
+                            paidInvoiceNumber,
+
+                        consultationCharges:
+                            2000,
+
+                        roomCharges:
+                            1000,
+
+                        medicineCharges:
+                            500,
+
+                        amountPaid:
+                            0,
+
+                    });
+
+            expect(createResponse.statusCode)
+                .toBe(201);
+
+            expect(createResponse.body.success)
+                .toBe(true);
+
+            const paidBillingId =
+                createResponse.body.data._id;
+
+            // ------------------------------------------------
+            // Total:
+            //
+            // 2000 + 1000 + 500 = 3500
+            // ------------------------------------------------
+
+            expect(
+                createResponse.body.data.totalAmount
+            ).toBe(3500);
+
+            expect(
+                createResponse.body.data.balance
+            ).toBe(3500);
+
+            expect(
+                createResponse.body.data.paymentStatus
+            ).toBe("Pending");
+
+            // ------------------------------------------------
+            // Pay the complete amount.
+            // ------------------------------------------------
+
+            const updateResponse =
+                await request(app)
+                    .put(
+                        `/api/billings/${paidBillingId}`
+                    )
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    )
+                    .send({
+
+                        amountPaid:
+                            3500,
+
+                    });
+
+            expect(updateResponse.statusCode)
+                .toBe(200);
+
+            expect(updateResponse.body.success)
+                .toBe(true);
+
+            expect(
+                updateResponse.body.data.totalAmount
+            ).toBe(3500);
+
+            expect(
+                updateResponse.body.data.amountPaid
+            ).toBe(3500);
+
+            expect(
+                updateResponse.body.data.balance
+            ).toBe(0);
+
+            expect(
+                updateResponse.body.data.paymentStatus
+            ).toBe("Paid");
+
+            // ------------------------------------------------
+            // Clean up this additional test billing record.
+            // ------------------------------------------------
+
+            const deleteResponse =
+                await request(app)
+                    .delete(
+                        `/api/billings/${paidBillingId}`
+                    )
+                    .set(
+                        "Authorization",
+                        `Bearer ${token}`
+                    );
+
+            expect(deleteResponse.statusCode)
+                .toBe(200);
+
+        },
+        30000
+    );
     // ========================================================
     // Close MongoDB connection
     // ========================================================

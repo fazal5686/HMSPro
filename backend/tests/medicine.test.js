@@ -381,6 +381,188 @@ describe("HMSPro Medicine API", () => {
             );
 
     });
+        // ========================================================
+    // Authentication & Validation Tests
+    // ========================================================
+
+    // ========================================================
+    // Create Medicine Without Authentication
+    // ========================================================
+
+    test("POST /api/medicines without authentication should return 401", async () => {
+
+        const response = await request(app)
+            .post("/api/medicines")
+            .send({
+
+                name:
+                    `Unauthorized Medicine ${Date.now()}`,
+
+                genericName:
+                    "Test Generic",
+
+                category:
+                    "Test Category",
+
+                manufacturer:
+                    "HMSPro Pharmaceuticals",
+
+                strength:
+                    "500mg",
+
+                dosageForm:
+                    "Tablet",
+
+                unitPrice:
+                    20,
+
+                quantity:
+                    50,
+
+                reorderLevel:
+                    10,
+
+                expiryDate:
+                    "2028-12-31",
+
+                isActive:
+                    true,
+
+            });
+
+        expect(response.statusCode)
+            .toBe(401);
+
+        expect(response.body.success)
+            .toBe(false);
+
+    });
+
+    // ========================================================
+    // Get All Medicines Without Authentication
+    // ========================================================
+
+    test("GET /api/medicines without authentication should return 401", async () => {
+
+        const response = await request(app)
+            .get("/api/medicines");
+
+        expect(response.statusCode)
+            .toBe(401);
+
+        expect(response.body.success)
+            .toBe(false);
+
+    });
+
+    // ========================================================
+    // Create Medicine With Missing Required Fields
+    // ========================================================
+
+    test("POST /api/medicines with missing required fields should return validation error", async () => {
+
+        const response = await request(app)
+            .post("/api/medicines")
+            .set(
+                "Authorization",
+                `Bearer ${token}`
+            )
+            .send({});
+
+        expect(response.statusCode)
+            .toBeGreaterThanOrEqual(400);
+
+        expect(response.statusCode)
+            .toBeLessThan(500);
+
+        expect(response.body.success)
+            .toBe(false);
+
+    });
+
+    // ========================================================
+    // Get Medicine With Invalid ID
+    // ========================================================
+
+    test("GET /api/medicines/:id with invalid ID should return an error", async () => {
+
+        const response = await request(app)
+            .get(
+                "/api/medicines/invalid-medicine-id"
+            )
+            .set(
+                "Authorization",
+                `Bearer ${token}`
+            );
+
+        expect(response.statusCode)
+            .toBeGreaterThanOrEqual(400);
+
+        expect(response.statusCode)
+            .toBeLessThan(500);
+
+        expect(response.body.success)
+            .toBe(false);
+
+    });
+
+    // ========================================================
+    // Update Non-Existent Medicine
+    // ========================================================
+
+    test("PUT /api/medicines/:id for non-existent medicine should return 404", async () => {
+
+        const fakeMedicineId =
+            new mongoose.Types.ObjectId().toString();
+
+        const response = await request(app)
+            .put(
+                `/api/medicines/${fakeMedicineId}`
+            )
+            .set(
+                "Authorization",
+                `Bearer ${token}`
+            )
+            .send({
+
+                unitPrice:
+                    50,
+
+            });
+
+        expect(response.statusCode)
+            .toBe(404);
+
+        expect(response.body.success)
+            .toBe(false);
+
+    });
+
+    // ========================================================
+    // Delete Non-Existent Medicine
+    // ========================================================
+
+    test("DELETE /api/medicines/:id for non-existent medicine should return 404", async () => {
+
+        const fakeMedicineId =
+            new mongoose.Types.ObjectId().toString();
+
+        const response = await request(app)
+            .delete(
+                `/api/medicines/${fakeMedicineId}`
+            )
+            .set(
+                "Authorization",
+                `Bearer ${token}`
+            );
+
+        expect(response.statusCode)
+            .toBe(404);
+
+        expect(response.body.success)
+            .toBe(false);
+
+    });
     // ========================================================
     // Close MongoDB connection
     // ========================================================

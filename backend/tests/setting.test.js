@@ -253,6 +253,236 @@ describe("HMSPro Settings API", () => {
 
         }
     );
+        // ========================================================
+    // Authentication Protection
+    // ========================================================
+
+    test(
+        "GET /api/settings without authentication should return 401",
+        async () => {
+
+            const response = await request(app)
+                .get("/api/settings");
+
+            expect(response.statusCode)
+                .toBe(401);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        }
+    );
+
+
+    test(
+        "PUT /api/settings without authentication should return 401",
+        async () => {
+
+            const response = await request(app)
+                .put("/api/settings")
+                .send({
+
+                    hospitalName:
+                        "Unauthorized Hospital",
+
+                });
+
+            expect(response.statusCode)
+                .toBe(401);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        }
+    );
+
+
+    test(
+        "POST /api/settings without authentication should return 401",
+        async () => {
+
+            const response = await request(app)
+                .post("/api/settings")
+                .send({
+
+                    hospitalName:
+                        "Unauthorized Hospital",
+
+                });
+
+            expect(response.statusCode)
+                .toBe(401);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        }
+    );
+
+
+    test(
+        "DELETE /api/settings without authentication should return 401",
+        async () => {
+
+            const response = await request(app)
+                .delete("/api/settings");
+
+            expect(response.statusCode)
+                .toBe(401);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        }
+    );
+
+
+    // ========================================================
+    // Validation
+    // ========================================================
+
+    test(
+        "PUT /api/settings with invalid time format should return 400",
+        async () => {
+
+            const response = await request(app)
+                .put("/api/settings")
+                .set(
+                    "Authorization",
+                    `Bearer ${token}`
+                )
+                .send({
+
+                    timeFormat:
+                        "invalid-format",
+
+                });
+
+            expect(response.statusCode)
+                .toBe(400);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        }
+    );
+
+
+    test(
+        "PUT /api/settings with invalid tax percentage should return 400",
+        async () => {
+
+            const response = await request(app)
+                .put("/api/settings")
+                .set(
+                    "Authorization",
+                    `Bearer ${token}`
+                )
+                .send({
+
+                    taxPercentage:
+                        150,
+
+                });
+
+            expect(response.statusCode)
+                .toBe(400);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        }
+    );
+
+
+    test(
+        "PUT /api/settings with invalid appointment duration should return 400",
+        async () => {
+
+            const response = await request(app)
+                .put("/api/settings")
+                .set(
+                    "Authorization",
+                    `Bearer ${token}`
+                )
+                .send({
+
+                    defaultAppointmentDuration:
+                        2,
+
+                });
+
+            expect(response.statusCode)
+                .toBe(400);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        }
+    );
+
+
+    test(
+        "POST /api/settings with missing hospital name should return 400",
+        async () => {
+
+            const response = await request(app)
+                .post("/api/settings")
+                .set(
+                    "Authorization",
+                    `Bearer ${token}`
+                )
+                .send({
+
+                    hospitalAddress:
+                        "Rawalpindi",
+
+                });
+
+            expect(response.statusCode)
+                .toBe(400);
+
+            expect(response.body.success)
+                .toBe(false);
+
+        }
+    );
+
+
+    // ========================================================
+    // Duplicate Settings Protection
+    // ========================================================
+
+    test(
+        "POST /api/settings when settings already exist should return 409",
+        async () => {
+
+            const response = await request(app)
+                .post("/api/settings")
+                .set(
+                    "Authorization",
+                    `Bearer ${token}`
+                )
+                .send({
+
+                    hospitalName:
+                        "Duplicate HMSPro Hospital",
+
+                });
+
+            expect(response.statusCode)
+                .toBe(409);
+
+            expect(response.body.success)
+                .toBe(false);
+
+            expect(response.body.message)
+                .toBe(
+                    "Hospital settings already exist."
+                );
+
+        }
+    );
 
     // ========================================================
     // Close MongoDB after tests
