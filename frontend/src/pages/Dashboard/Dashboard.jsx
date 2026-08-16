@@ -3,6 +3,8 @@
 // Purpose: HMSPro command-center dashboard.
 // ============================================================
 
+import { useEffect, useState } from "react";
+
 import {
     Activity,
     ArrowUpRight,
@@ -17,48 +19,14 @@ import {
     Users,
 } from "lucide-react";
 
+import API from "../../api/axios.js";
+
 import "./Dashboard.css";
 
 
 // ============================================================
-// Dashboard Data
+// Static Dashboard Data
 // ============================================================
-
-const stats = [
-    {
-        title: "Total Patients",
-        value: "2,846",
-        change: "+12.4%",
-        note: "vs. last month",
-        icon: Users,
-        tone: "teal",
-    },
-    {
-        title: "Appointments",
-        value: "186",
-        change: "+8.2%",
-        note: "vs. last week",
-        icon: CalendarCheck2,
-        tone: "blue",
-    },
-    {
-        title: "Admissions",
-        value: "74",
-        change: "+4.5%",
-        note: "this month",
-        icon: BedDouble,
-        tone: "purple",
-    },
-    {
-        title: "Revenue",
-        value: "Rs 4.82M",
-        change: "+15.7%",
-        note: "vs. last month",
-        icon: DollarSign,
-        tone: "orange",
-    },
-];
-
 
 const appointments = [
     {
@@ -149,10 +117,365 @@ const quickActions = [
 
 
 // ============================================================
+// Default Weekly Chart Data
+// Used before API data arrives.
+// ============================================================
+
+const defaultWeeklyData = [
+    {
+        day: "Mon",
+        scheduled: 0,
+        completed: 0,
+    },
+    {
+        day: "Tue",
+        scheduled: 0,
+        completed: 0,
+    },
+    {
+        day: "Wed",
+        scheduled: 0,
+        completed: 0,
+    },
+    {
+        day: "Thu",
+        scheduled: 0,
+        completed: 0,
+    },
+    {
+        day: "Fri",
+        scheduled: 0,
+        completed: 0,
+    },
+    {
+        day: "Sat",
+        scheduled: 0,
+        completed: 0,
+    },
+    {
+        day: "Sun",
+        scheduled: 0,
+        completed: 0,
+    },
+];
+
+
+// ============================================================
 // Dashboard Component
 // ============================================================
 
 const Dashboard = () => {
+
+    // ========================================================
+    // Dashboard Report State
+    // ========================================================
+
+    const [dashboardData, setDashboardData] =
+        useState(null);
+
+    const [dashboardLoading, setDashboardLoading] =
+        useState(true);
+
+    const [dashboardError, setDashboardError] =
+        useState("");
+
+
+    // ========================================================
+    // Appointment Report State
+    // ========================================================
+
+    const [appointmentData, setAppointmentData] =
+        useState(null);
+
+    const [appointmentLoading, setAppointmentLoading] =
+        useState(true);
+
+    const [appointmentError, setAppointmentError] =
+        useState("");
+// ========================================================
+// Room Report State
+// ========================================================
+
+const [roomData, setRoomData] =
+    useState(null);
+
+const [roomLoading, setRoomLoading] =
+    useState(true);
+
+const [roomError, setRoomError] =
+    useState("");
+
+    // ========================================================
+    // Dashboard Statistics
+    // ========================================================
+
+    const stats = [
+        {
+            title: "Total Patients",
+
+            value:
+                dashboardData?.totalPatients ?? "—",
+
+            change: "",
+
+            note: "registered patients",
+
+            icon: Users,
+
+            tone: "teal",
+        },
+
+        {
+            title: "Appointments",
+
+            value:
+                dashboardData?.totalAppointments ?? "—",
+
+            change: "",
+
+            note: "total appointments",
+
+            icon: CalendarCheck2,
+
+            tone: "blue",
+        },
+
+        {
+            title: "Admissions",
+
+            value:
+                dashboardData?.totalAdmissions ?? "—",
+
+            change: "",
+
+            note: "total admissions",
+
+            icon: BedDouble,
+
+            tone: "purple",
+        },
+
+        {
+            title: "Doctors",
+
+            value:
+                dashboardData?.totalDoctors ?? "—",
+
+            change: "",
+
+            note: "total doctors",
+
+            icon: Stethoscope,
+
+            tone: "orange",
+        },
+    ];
+
+
+    // ========================================================
+    // Load Dashboard Reports
+    // ========================================================
+
+    useEffect(() => {
+
+        let mounted = true;
+
+
+        const loadReports = async () => {
+
+            try {
+                setRoomLoading(true);
+
+                setRoomError("");
+                setDashboardLoading(true);
+
+                setAppointmentLoading(true);
+
+                setDashboardError("");
+
+                setAppointmentError("");
+
+
+                // ------------------------------------------------
+                // Dashboard Report
+                // ------------------------------------------------
+
+                const dashboardResponse =
+                    await API.get(
+                        "/reports/dashboard"
+                    );
+
+
+                if (mounted) {
+
+                    setDashboardData(
+                        dashboardResponse.data?.data ?? null
+                    );
+
+                }
+
+
+                // ------------------------------------------------
+                // Appointment Report
+                // ------------------------------------------------
+
+                const appointmentResponse =
+                    await API.get(
+                        "/reports/appointments"
+                    );
+
+
+                if (mounted) {
+
+                    setAppointmentData(
+                        appointmentResponse.data?.data ?? null
+                    );
+
+                }
+// ------------------------------------------------
+// Room Data
+// ------------------------------------------------
+
+const roomResponse =
+    await API.get(
+        "/rooms"
+    );
+
+
+if (mounted) {
+
+    setRoomData(
+        roomResponse.data?.data ?? []
+    );
+
+}
+            } catch (error) {
+
+                console.error(
+                    "Dashboard reports error:",
+                    error
+                );
+
+
+                const message =
+                    error.response?.data?.message ||
+                    "Unable to load dashboard data.";
+
+
+                if (mounted) {
+
+                    setDashboardError(message);
+
+setAppointmentError(message);
+
+setRoomError(message);
+
+                }
+
+            } finally {
+
+                if (mounted) {
+
+                    setDashboardLoading(false);
+
+setAppointmentLoading(false);
+
+setRoomLoading(false);
+                }
+
+            }
+
+        };
+
+
+        loadReports();
+
+
+        return () => {
+
+            mounted = false;
+
+        };
+
+    }, []);
+
+
+    // ========================================================
+    // Weekly Appointment Data
+    // ========================================================
+
+    const weeklyAppointmentData =
+        appointmentData?.weeklyAppointmentData?.length
+            ? appointmentData.weeklyAppointmentData
+            : defaultWeeklyData;
+// ========================================================
+// Room Occupancy Calculations
+// ========================================================
+
+const rooms = Array.isArray(roomData)
+    ? roomData
+    : [];
+
+const totalRooms =
+    rooms.length;
+
+const occupiedRooms =
+    rooms.filter(
+        (room) =>
+            room.status === "Occupied"
+    ).length;
+
+const availableRooms =
+    rooms.filter(
+        (room) =>
+            room.status === "Available"
+    ).length;
+
+const reservedRooms =
+    rooms.filter(
+        (room) =>
+            room.status === "Reserved"
+    ).length;
+
+const maintenanceRooms =
+    rooms.filter(
+        (room) =>
+            room.status === "Maintenance"
+    ).length;
+
+const occupancyPercentage =
+    totalRooms > 0
+        ? Math.round(
+            (occupiedRooms / totalRooms) * 100
+        )
+        : 0;
+
+    // ========================================================
+    // Find maximum chart value.
+    //
+    // This allows the bars to scale according to actual
+    // appointment numbers from the backend.
+    // ========================================================
+
+    const chartMaximum =
+        Math.max(
+
+            ...weeklyAppointmentData.map(
+                (item) =>
+                    Math.max(
+                        Number(item.scheduled) || 0,
+                        Number(item.completed) || 0
+                    )
+            ),
+
+            1
+
+        );
+
+
+    // ========================================================
+    // Render
+    // ========================================================
 
     return (
 
@@ -207,6 +530,19 @@ const Dashboard = () => {
 
 
             {/* ==================================================
+                Dashboard Error
+                ================================================== */}
+
+            {dashboardError && (
+
+                <div className="dashboard-error">
+                    {dashboardError}
+                </div>
+
+            )}
+
+
+            {/* ==================================================
                 Statistics
                 ================================================== */}
 
@@ -215,6 +551,7 @@ const Dashboard = () => {
                 {stats.map((stat) => {
 
                     const Icon = stat.icon;
+
 
                     return (
 
@@ -225,7 +562,9 @@ const Dashboard = () => {
 
                             <div className="stat-card-top">
 
-                                <div className={`stat-icon ${stat.tone}`}>
+                                <div
+                                    className={`stat-icon ${stat.tone}`}
+                                >
 
                                     <Icon size={21} />
 
@@ -251,19 +590,27 @@ const Dashboard = () => {
 
 
                             <div className="stat-value">
-                                {stat.value}
+
+                                {dashboardLoading
+                                    ? "..."
+                                    : stat.value}
+
                             </div>
 
 
                             <div className="stat-footer">
 
-                                <span className="stat-change">
+                                {stat.change && (
 
-                                    <ArrowUpRight size={14} />
+                                    <span className="stat-change">
 
-                                    {stat.change}
+                                        <ArrowUpRight size={14} />
 
-                                </span>
+                                        {stat.change}
+
+                                    </span>
+
+                                )}
 
 
                                 <span className="stat-note">
@@ -288,7 +635,9 @@ const Dashboard = () => {
             <section className="dashboard-grid analytics-grid">
 
 
-                {/* Appointment Overview */}
+                {/* ==================================================
+                    Appointment Overview
+                    ================================================== */}
 
                 <article className="dashboard-card appointment-chart-card">
 
@@ -311,8 +660,11 @@ const Dashboard = () => {
                             type="button"
                             className="card-period"
                         >
+
                             This week
+
                             <ChevronRight size={15} />
+
                         </button>
 
                     </div>
@@ -323,7 +675,11 @@ const Dashboard = () => {
                         <div>
 
                             <strong>
-                                186
+
+                                {appointmentLoading
+                                    ? "..."
+                                    : appointmentData?.totalAppointments ?? "—"}
+
                             </strong>
 
                             <span>
@@ -336,13 +692,20 @@ const Dashboard = () => {
                         <div className="chart-legend">
 
                             <span>
+
                                 <i className="legend-dot scheduled"></i>
+
                                 Scheduled
+
                             </span>
 
+
                             <span>
+
                                 <i className="legend-dot completed"></i>
+
                                 Completed
+
                             </span>
 
                         </div>
@@ -350,56 +713,105 @@ const Dashboard = () => {
                     </div>
 
 
+                    {appointmentError && (
+
+                        <div className="dashboard-error">
+                            {appointmentError}
+                        </div>
+
+                    )}
+
+
                     <div className="bar-chart">
 
-                        {[
-                            ["Mon", 58, 40],
-                            ["Tue", 72, 51],
-                            ["Wed", 64, 45],
-                            ["Thu", 88, 59],
-                            ["Fri", 76, 52],
-                            ["Sat", 48, 32],
-                            ["Sun", 31, 20],
-                        ].map(([day, scheduled, completed]) => (
+                        {weeklyAppointmentData.map(
+                            (item) => {
 
-                            <div
-                                className="chart-column"
-                                key={day}
-                            >
+                                const scheduled =
+                                    Number(item.scheduled) || 0;
 
-                                <div className="chart-bars">
+                                const completed =
+                                    Number(item.completed) || 0;
+
+
+                                const scheduledHeight =
+                                    scheduled > 0
+                                        ? Math.max(
+                                            (
+                                                scheduled /
+                                                chartMaximum
+                                            ) * 100,
+                                            8
+                                        )
+                                        : 0;
+
+
+                                const completedHeight =
+                                    completed > 0
+                                        ? Math.max(
+                                            (
+                                                completed /
+                                                chartMaximum
+                                            ) * 100,
+                                            8
+                                        )
+                                        : 0;
+
+
+                                return (
 
                                     <div
-                                        className="bar scheduled"
-                                        style={{
-                                            height: `${scheduled}%`,
-                                        }}
-                                    ></div>
+                                        className="chart-column"
+                                        key={item.day}
+                                    >
 
-                                    <div
-                                        className="bar completed"
-                                        style={{
-                                            height: `${completed}%`,
-                                        }}
-                                    ></div>
+                                        <div className="chart-bars">
 
-                                </div>
+                                            <div
+                                                className="bar scheduled"
+                                                style={{
+                                                    height:
+                                                        `${scheduledHeight}%`,
+                                                }}
+                                                title={
+                                                    `Scheduled: ${scheduled}`
+                                                }
+                                            ></div>
 
 
-                                <span>
-                                    {day}
-                                </span>
+                                            <div
+                                                className="bar completed"
+                                                style={{
+                                                    height:
+                                                        `${completedHeight}%`,
+                                                }}
+                                                title={
+                                                    `Completed: ${completed}`
+                                                }
+                                            ></div>
 
-                            </div>
+                                        </div>
 
-                        ))}
+
+                                        <span>
+                                            {item.day}
+                                        </span>
+
+                                    </div>
+
+                                );
+
+                            }
+                        )}
 
                     </div>
 
                 </article>
 
 
-                {/* Room Occupancy */}
+                {/* ==================================================
+                    Room Occupancy
+                    ================================================== */}
 
                 <article className="dashboard-card occupancy-card">
 
@@ -433,13 +845,21 @@ const Dashboard = () => {
 
                     <div className="occupancy-content">
 
-                        <div className="occupancy-ring">
+                    <div
+    className="occupancy-ring"
+    style={{
+        "--occupancy-angle":
+            `${(occupancyPercentage / 100) * 360}deg`,
+    }}
+>
 
                             <div className="occupancy-ring-inner">
 
-                                <strong>
-                                    72%
-                                </strong>
+                            <strong>
+    {roomLoading
+        ? "..."
+        : `${occupancyPercentage}%`}
+</strong>
 
                                 <span>
                                     Occupied
@@ -463,8 +883,10 @@ const Dashboard = () => {
                                 </span>
 
                                 <strong>
-                                    86
-                                </strong>
+    {roomLoading
+        ? "..."
+        : occupiedRooms}
+</strong>
 
                             </div>
 
@@ -480,8 +902,10 @@ const Dashboard = () => {
                                 </span>
 
                                 <strong>
-                                    34
-                                </strong>
+    {roomLoading
+        ? "..."
+        : availableRooms}
+</strong>
 
                             </div>
 
@@ -497,8 +921,10 @@ const Dashboard = () => {
                                 </span>
 
                                 <strong>
-                                    8
-                                </strong>
+    {roomLoading
+        ? "..."
+        : maintenanceRooms}
+</strong>
 
                             </div>
 
@@ -543,7 +969,9 @@ const Dashboard = () => {
             <section className="dashboard-grid lower-grid">
 
 
-                {/* Today's Appointments */}
+                {/* ==================================================
+                    Today's Appointments
+                    ================================================== */}
 
                 <article className="dashboard-card appointments-card">
 
@@ -632,7 +1060,9 @@ const Dashboard = () => {
                 </article>
 
 
-                {/* Recent Activity */}
+                {/* ==================================================
+                    Recent Activity
+                    ================================================== */}
 
                 <article className="dashboard-card activity-card">
 
@@ -669,6 +1099,7 @@ const Dashboard = () => {
                         {activities.map((activity) => {
 
                             const Icon = activity.icon;
+
 
                             return (
 
@@ -736,6 +1167,7 @@ const Dashboard = () => {
 
                     </div>
 
+
                     <Stethoscope size={22} />
 
                 </div>
@@ -746,6 +1178,7 @@ const Dashboard = () => {
                     {quickActions.map((action) => {
 
                         const Icon = action.icon;
+
 
                         return (
 

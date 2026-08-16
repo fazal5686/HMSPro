@@ -1,9 +1,7 @@
 // ============================================================
 // File: services/authService.js
 // Purpose: Handles all authentication API communication.
-// This layer communicates with the backend auth APIs.
 // ============================================================
-
 
 import API from "../api/axios.js";
 
@@ -15,40 +13,45 @@ import {
 } from "../utils/storage.js";
 
 
-
 // ============================================================
 // Login User
 // ============================================================
 
 export const loginUser = async (credentials) => {
 
+    // Always remove any previous session before a new login.
+    removeToken();
+
+    const cleanCredentials = {
+        email: credentials.email?.trim().toLowerCase(),
+        password: credentials.password,
+    };
+
     const response = await API.post(
         API_ROUTES.AUTH.LOGIN,
-        credentials
+        cleanCredentials
     );
 
+    const responseData = response.data?.data;
 
-    // Extract backend response data.
+    if (!responseData?.token || !responseData?.user) {
+
+        throw new Error(
+            "Invalid login response from server."
+        );
+
+    }
 
     const {
         token,
         user,
-    } = response.data.data;
+    } = responseData;
 
-
-
-    // Save JWT token.
-
+    // Save the NEW user's token.
     setToken(token);
 
-
-
-    // Return user information.
-
     return user;
-
 };
-
 
 
 // ============================================================
@@ -62,24 +65,25 @@ export const registerUser = async (userData) => {
         userData
     );
 
+    const responseData = response.data?.data;
+
+    if (!responseData?.token || !responseData?.user) {
+
+        throw new Error(
+            "Invalid registration response from server."
+        );
+
+    }
 
     const {
         token,
         user,
-    } = response.data.data;
-
-
-
-    // Save token after registration.
+    } = responseData;
 
     setToken(token);
 
-
-
     return user;
-
 };
-
 
 
 // ============================================================
@@ -88,26 +92,32 @@ export const registerUser = async (userData) => {
 
 export const logoutUser = () => {
 
-
     removeToken();
 
-
 };
+
+
 // ============================================================
 // Get Current User
 // ============================================================
 
 export const getCurrentUser = async () => {
 
-
-    const response = await API.get(
-
-        API_ROUTES.AUTH.ME
-
+    const token = localStorage.getItem(
+        "hmspro_token"
     );
 
+    if (!token) {
 
-    return response.data.data;
+        throw new Error(
+            "No authentication token."
+        );
 
+    }
 
+    const response = await API.get(
+        API_ROUTES.AUTH.ME
+    );
+
+    return response.data?.data;
 };

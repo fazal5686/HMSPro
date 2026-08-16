@@ -13,21 +13,58 @@ import {
 
 
 // ============================================================
+// Prevent Duplicate Scheduler Initialization
+// ============================================================
+
+let cronJobsStarted = false;
+
+
+// ============================================================
 // Start Cron Jobs
 // ============================================================
 
 export const startCronJobs = () => {
 
     // --------------------------------------------------------
+    // Prevent duplicate initialization.
+    // --------------------------------------------------------
+
+    if (cronJobsStarted) {
+
+        logger.warn(
+            "HMSPro cron jobs are already running."
+        );
+
+        return;
+
+    }
+
+
+    cronJobsStarted = true;
+
+
+    // --------------------------------------------------------
     // Appointment Status Automation
+    //
     // Runs every minute.
+    // Automatically marks overdue appointments as missed.
     // --------------------------------------------------------
 
     cron.schedule(
         "* * * * *",
         async () => {
 
-            await markMissedAppointments();
+            try {
+
+                await markMissedAppointments();
+
+            } catch (error) {
+
+                logger.error(
+                    `Appointment cron error: ${error.message}`
+                );
+
+            }
 
         }
     );
@@ -35,11 +72,13 @@ export const startCronJobs = () => {
 
     // --------------------------------------------------------
     // Scheduler Health Check
-    // Runs every minute.
+    //
+    // Runs every 5 minutes instead of every minute.
+    // This keeps the backend console/logs clean.
     // --------------------------------------------------------
 
     cron.schedule(
-        "* * * * *",
+        "*/5 * * * *",
         () => {
 
             logger.info(

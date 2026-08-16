@@ -2,14 +2,12 @@
    HMSPro Premium Dashboard
    ============================================================ */
 
-   .dashboard-page {
+.dashboard-page {
     width: 100%;
     animation: dashboardFadeIn 0.45s ease both;
 }
 
-
 @keyframes dashboardFadeIn {
-
     from {
         opacity: 0;
         transform: translateY(8px);
@@ -19,7 +17,6 @@
         opacity: 1;
         transform: translateY(0);
     }
-
 }
 
 
@@ -31,142 +28,105 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-
     gap: var(--space-6);
-
     margin-bottom: var(--space-7);
 }
-
 
 .dashboard-eyebrow {
     display: inline-flex;
     align-items: center;
-
     gap: 7px;
-
     margin-bottom: 9px;
-
     color: var(--color-primary);
-
     font-size: 11px;
     font-weight: var(--font-weight-bold);
-
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
-
 .dashboard-heading h1 {
     margin: 0 0 7px;
-
     color: var(--color-text-primary);
-
     font-size: clamp(26px, 3vw, 34px);
     line-height: 1.15;
-
     letter-spacing: -0.035em;
-
     font-weight: var(--font-weight-bold);
 }
 
-
 .dashboard-heading p {
     margin: 0;
-
     color: var(--color-text-muted);
-
     font-size: var(--font-size-sm);
 }
-
 
 .dashboard-primary-button {
     display: inline-flex;
     align-items: center;
-
+    justify-content: center;
     gap: 8px;
-
     flex-shrink: 0;
-
     padding: 11px 16px;
-
     color: var(--color-text-white);
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--color-primary),
-            var(--color-primary-dark)
-        );
-
+    background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-primary-dark)
+    );
     border-radius: var(--radius-md);
-
-    box-shadow:
-        0 7px 18px rgba(15, 118, 110, 0.20);
-
+    box-shadow: 0 7px 18px rgba(15, 118, 110, 0.20);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
-
     transition:
         transform var(--transition-fast),
         box-shadow var(--transition-fast);
 }
 
-
 .dashboard-primary-button:hover {
     transform: translateY(-2px);
-
-    box-shadow:
-        0 10px 24px rgba(15, 118, 110, 0.25);
+    box-shadow: 0 10px 24px rgba(15, 118, 110, 0.25);
 }
 
 
 /* ============================================================
-   Statistics
+   Statistics Cards
    ============================================================ */
 
 .dashboard-stats {
     display: grid;
-
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--space-4);
-
     margin-bottom: var(--space-5);
 }
 
-
 .stat-card {
     position: relative;
-
-    padding: 19px;
-
+    min-height: 166px;
+    padding: 20px;
     overflow: hidden;
 
+    display: flex;
+    flex-direction: column;
+
     background: var(--color-surface);
-
     border: 1px solid var(--color-border);
-
     border-radius: var(--radius-lg);
-
     box-shadow: var(--shadow-card);
 
     transition:
         transform var(--transition-fast),
-        box-shadow var(--transition-fast);
+        box-shadow var(--transition-fast),
+        border-color var(--transition-fast);
 }
-
 
 .stat-card::after {
     content: "";
 
     position: absolute;
-
-    right: -35px;
+    right: -40px;
     bottom: -45px;
 
-    width: 105px;
-    height: 105px;
+    width: 125px;
+    height: 125px;
 
     background:
         radial-gradient(
@@ -175,31 +135,35 @@
             transparent 68%
         );
 
-    opacity: 0.65;
-
+    opacity: 0.55;
     pointer-events: none;
 }
 
-
 .stat-card:hover {
     transform: translateY(-3px);
-
+    border-color: #cfe3e1;
     box-shadow: var(--shadow-card-hover);
 }
 
 
+/* ============================================================
+   Stat Card Top
+   ============================================================ */
+
 .stat-card-top {
+    position: relative;
+    z-index: 1;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    margin-bottom: 17px;
+    margin-bottom: 18px;
 }
 
-
 .stat-icon {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
 
     display: flex;
     align-items: center;
@@ -208,30 +172,25 @@
     border-radius: 12px;
 }
 
-
 .stat-icon.teal {
     color: var(--color-primary-dark);
     background: var(--color-primary-light);
 }
-
 
 .stat-icon.blue {
     color: #2563eb;
     background: #eff6ff;
 }
 
-
 .stat-icon.purple {
     color: #7c3aed;
     background: #f5f3ff;
 }
 
-
 .stat-icon.orange {
     color: #ea580c;
     background: #fff7ed;
 }
-
 
 .stat-more,
 .icon-card-button {
@@ -243,12 +202,13 @@
     height: 32px;
 
     color: var(--color-text-muted);
-
     background: transparent;
-
     border-radius: var(--radius-sm);
-}
 
+    transition:
+        color var(--transition-fast),
+        background var(--transition-fast);
+}
 
 .stat-more:hover,
 .icon-card-button:hover {
@@ -257,70 +217,81 @@
 }
 
 
-.stat-title {
-    color: var(--color-text-muted);
+/* ============================================================
+   Stat Typography
+   ============================================================ */
 
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
+.stat-title {
+    position: relative;
+    z-index: 1;
+
+    margin: 0;
+
+    color: var(--color-text-secondary);
+
+    font-size: 12px;
+    line-height: 1.35;
+
+    font-weight: var(--font-weight-semibold);
 }
 
-
 .stat-value {
+    position: relative;
+    z-index: 1;
+
     margin-top: 4px;
 
     color: var(--color-text-primary);
 
-    font-size: 27px;
-    line-height: 1.2;
+    font-size: 32px;
+    line-height: 1.15;
 
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
 
     font-weight: var(--font-weight-bold);
 }
 
-
 .stat-footer {
+    position: relative;
+    z-index: 1;
+
     display: flex;
     align-items: center;
 
-    gap: 7px;
+    min-height: 18px;
 
-    margin-top: 11px;
+    margin-top: auto;
+    padding-top: 12px;
 }
-
 
 .stat-change {
     display: inline-flex;
     align-items: center;
-
     gap: 2px;
 
     color: var(--color-success);
 
-    font-size: var(--font-size-xs);
+    font-size: 11px;
     font-weight: var(--font-weight-semibold);
 }
 
-
 .stat-note {
-    color: var(--color-text-light);
+    color: var(--color-text-muted);
 
     font-size: 11px;
+    line-height: 1.3;
 }
 
 
 /* ============================================================
-   Grid / Cards
+   Dashboard Grid / Cards
    ============================================================ */
 
 .dashboard-grid {
     display: grid;
-
     gap: var(--space-5);
-
     margin-bottom: var(--space-5);
 }
-
 
 .analytics-grid {
     grid-template-columns:
@@ -328,13 +299,11 @@
         minmax(340px, 0.95fr);
 }
 
-
 .lower-grid {
     grid-template-columns:
         minmax(0, 1.55fr)
         minmax(340px, 0.95fr);
 }
-
 
 .dashboard-card {
     min-width: 0;
@@ -350,7 +319,6 @@
     box-shadow: var(--shadow-card);
 }
 
-
 .card-header {
     display: flex;
     align-items: flex-start;
@@ -360,7 +328,6 @@
 
     margin-bottom: 20px;
 }
-
 
 .card-kicker {
     display: block;
@@ -376,7 +343,6 @@
     letter-spacing: 0.12em;
 }
 
-
 .card-header h2,
 .quick-actions-heading h2 {
     margin: 0;
@@ -388,7 +354,6 @@
 
     font-weight: var(--font-weight-semibold);
 }
-
 
 .card-period,
 .view-all-button {
@@ -409,18 +374,14 @@
     font-weight: var(--font-weight-medium);
 }
 
-
 .card-period:hover,
 .view-all-button:hover {
     color: var(--color-primary-dark);
-
     background: var(--color-primary-light);
 }
 
-
 .view-all-button {
     color: var(--color-primary-dark);
-
     background: transparent;
 }
 
@@ -437,66 +398,49 @@
     margin-bottom: 16px;
 }
 
-
 .chart-summary > div:first-child {
     display: flex;
     align-items: baseline;
-
     gap: 8px;
 }
 
-
 .chart-summary strong {
     color: var(--color-text-primary);
-
     font-size: 25px;
-
     letter-spacing: -0.03em;
 }
 
-
 .chart-summary span {
     color: var(--color-text-muted);
-
     font-size: 11px;
 }
-
 
 .chart-legend {
     display: flex !important;
     align-items: center;
-
     gap: 13px;
 }
-
 
 .chart-legend span {
     display: inline-flex;
     align-items: center;
-
     gap: 5px;
 }
-
 
 .legend-dot {
     width: 7px;
     height: 7px;
-
     display: inline-block;
-
     border-radius: var(--radius-full);
 }
-
 
 .legend-dot.scheduled {
     background: var(--color-primary);
 }
 
-
 .legend-dot.completed {
     background: #b9dcd8;
 }
-
 
 .bar-chart {
     height: 175px;
@@ -512,10 +456,8 @@
     border-bottom: 1px solid var(--color-border);
 }
 
-
 .chart-column {
     flex: 1;
-
     min-width: 0;
 
     display: flex;
@@ -524,7 +466,6 @@
 
     gap: 8px;
 }
-
 
 .chart-bars {
     height: 145px;
@@ -536,20 +477,16 @@
     gap: 4px;
 }
 
-
 .bar {
     width: 13px;
-
     min-height: 6px;
 
-    border-radius:
-        5px 5px 2px 2px;
+    border-radius: 5px 5px 2px 2px;
 
     transition:
         height 0.6s ease,
         opacity var(--transition-fast);
 }
-
 
 .bar.scheduled {
     background:
@@ -560,16 +497,13 @@
         );
 }
 
-
 .bar.completed {
     background: #b9dcd8;
 }
 
-
 .chart-column:hover .bar {
     opacity: 0.78;
 }
-
 
 .chart-column > span {
     text-align: center;
@@ -584,7 +518,7 @@
    Occupancy
    ============================================================ */
 
-.occupancy-content {
+   .occupancy-content {
     display: flex;
     align-items: center;
 
@@ -593,6 +527,10 @@
     min-height: 180px;
 }
 
+
+/* ============================================================
+   Occupancy Ring
+   ============================================================ */
 
 .occupancy-ring {
     width: 158px;
@@ -606,15 +544,26 @@
 
     border-radius: 50%;
 
+    /*
+       The dynamic occupancy angle is supplied
+       from Dashboard.jsx through --occupancy-angle.
+    */
+
     background:
         conic-gradient(
-            var(--color-primary) 0deg 259deg,
-            #e6f1f0 259deg 360deg
+            var(--color-primary) 0deg,
+            var(--occupancy-angle, 0deg),
+            #e6f1f0 var(--occupancy-angle, 0deg),
+            #e6f1f0 360deg
         );
 
     transform: rotate(-2deg);
 }
 
+
+/* ============================================================
+   Occupancy Ring Inner
+   ============================================================ */
 
 .occupancy-ring-inner {
     width: 112px;
@@ -636,23 +585,39 @@
 }
 
 
+/* ============================================================
+   Occupancy Percentage
+   ============================================================ */
+
 .occupancy-ring-inner strong {
     color: var(--color-text-primary);
 
     font-size: 29px;
 
+    line-height: 1;
+
     letter-spacing: -0.04em;
 }
 
 
+/* ============================================================
+   Occupancy Label
+   ============================================================ */
+
 .occupancy-ring-inner span {
-    margin-top: 2px;
+    margin-top: 5px;
 
     color: var(--color-text-muted);
 
     font-size: 10px;
+
+    line-height: 1.2;
 }
 
+
+/* ============================================================
+   Occupancy Details
+   ============================================================ */
 
 .occupancy-details {
     flex: 1;
@@ -661,6 +626,8 @@
     flex-direction: column;
 
     gap: 15px;
+
+    min-width: 0;
 }
 
 
@@ -668,8 +635,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    gap: 12px;
 }
 
+
+/* ============================================================
+   Occupancy Labels
+   ============================================================ */
 
 .occupancy-label {
     display: flex;
@@ -680,14 +653,22 @@
     color: var(--color-text-secondary);
 
     font-size: 11px;
+
+    line-height: 1.3;
 }
 
+
+/* ============================================================
+   Occupancy Dots
+   ============================================================ */
 
 .occupancy-dot {
     width: 7px;
     height: 7px;
 
     display: inline-block;
+
+    flex-shrink: 0;
 
     border-radius: 50%;
 }
@@ -703,17 +684,34 @@
 }
 
 
+.occupancy-dot.reserved {
+    background: #8b5cf6;
+}
+
+
 .occupancy-dot.maintenance {
     background: #f59e0b;
 }
 
 
+/* ============================================================
+   Occupancy Numbers
+   ============================================================ */
+
 .occupancy-details strong {
     color: var(--color-text-primary);
 
     font-size: 14px;
+
+    line-height: 1;
+
+    font-weight: var(--font-weight-semibold);
 }
 
+
+/* ============================================================
+   Occupancy Progress Bar
+   ============================================================ */
 
 .occupancy-progress {
     width: 100%;
@@ -738,20 +736,58 @@
         );
 
     border-radius: inherit;
+
+    transition:
+        width 0.6s ease;
 }
 
 
+/* ============================================================
+   Occupancy Footer
+   ============================================================ */
+
 .occupancy-footer {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+
+    gap: 12px;
 
     margin-top: 9px;
 
     color: var(--color-text-light);
 
     font-size: 10px;
+
+    line-height: 1.3;
 }
 
+
+/* ============================================================
+   Occupancy Responsive
+   ============================================================ */
+
+@media (max-width: 560px) {
+
+    .occupancy-content {
+        gap: 18px;
+    }
+
+    .occupancy-ring {
+        width: 125px;
+        height: 125px;
+    }
+
+    .occupancy-ring-inner {
+        width: 90px;
+        height: 90px;
+    }
+
+    .occupancy-ring-inner strong {
+        font-size: 24px;
+    }
+
+}
 
 /* ============================================================
    Appointments
@@ -761,7 +797,6 @@
     display: flex;
     flex-direction: column;
 }
-
 
 .appointment-row {
     display: grid;
@@ -782,11 +817,9 @@
     border-top: 1px solid var(--color-border-light);
 }
 
-
 .appointment-row:first-child {
     border-top: 0;
 }
-
 
 .patient-avatar {
     width: 36px;
@@ -806,14 +839,12 @@
     font-weight: var(--font-weight-bold);
 }
 
-
 .appointment-patient {
     display: flex;
     flex-direction: column;
 
     min-width: 0;
 }
-
 
 .appointment-patient strong {
     overflow: hidden;
@@ -825,7 +856,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
 
 .appointment-patient span,
 .appointment-department {
@@ -841,7 +871,6 @@
     white-space: nowrap;
 }
 
-
 .appointment-time {
     display: flex;
     align-items: center;
@@ -852,7 +881,6 @@
 
     font-size: 10px;
 }
-
 
 .status-badge {
     justify-self: end;
@@ -865,18 +893,15 @@
     font-weight: var(--font-weight-semibold);
 }
 
-
 .status-badge.confirmed {
     color: #047857;
     background: #ecfdf5;
 }
 
-
 .status-badge.waiting {
     color: #b45309;
     background: #fffbeb;
 }
-
 
 .status-badge.pending {
     color: #475569;
@@ -893,7 +918,6 @@
     flex-direction: column;
 }
 
-
 .activity-row {
     display: grid;
 
@@ -908,11 +932,9 @@
     border-top: 1px solid var(--color-border-light);
 }
 
-
 .activity-row:first-child {
     border-top: 0;
 }
-
 
 .activity-icon {
     width: 32px;
@@ -925,38 +947,31 @@
     border-radius: 9px;
 }
 
-
 .activity-icon.teal {
     color: var(--color-primary-dark);
     background: var(--color-primary-light);
 }
-
 
 .activity-icon.blue {
     color: #2563eb;
     background: #eff6ff;
 }
 
-
 .activity-icon.purple {
     color: #7c3aed;
     background: #f5f3ff;
 }
-
 
 .activity-icon.orange {
     color: #ea580c;
     background: #fff7ed;
 }
 
-
 .activity-info {
     display: flex;
     flex-direction: column;
-
     min-width: 0;
 }
-
 
 .activity-info strong {
     overflow: hidden;
@@ -968,7 +983,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
 
 .activity-info span {
     overflow: hidden;
@@ -982,7 +996,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
 
 .activity-row time {
     color: var(--color-text-light);
@@ -1014,7 +1027,6 @@
     border-radius: var(--radius-lg);
 }
 
-
 .quick-actions-heading {
     display: flex;
     align-items: center;
@@ -1023,13 +1035,10 @@
     margin-bottom: 15px;
 }
 
-
 .quick-actions-heading > svg {
     color: var(--color-primary);
-
     opacity: 0.6;
 }
-
 
 .quick-actions {
     display: grid;
@@ -1039,7 +1048,6 @@
 
     gap: 10px;
 }
-
 
 .quick-action {
     display: flex;
@@ -1070,7 +1078,6 @@
         box-shadow var(--transition-fast);
 }
 
-
 .quick-action:hover {
     transform: translateY(-2px);
 
@@ -1081,7 +1088,6 @@
     box-shadow:
         0 7px 18px rgba(15, 118, 110, 0.08);
 }
-
 
 .quick-action-icon {
     width: 32px;
@@ -1100,10 +1106,8 @@
     border-radius: 9px;
 }
 
-
 .quick-action-arrow {
     margin-left: auto;
-
     color: var(--color-text-light);
 }
 
@@ -1119,12 +1123,10 @@
             repeat(2, minmax(0, 1fr));
     }
 
-
     .analytics-grid,
     .lower-grid {
         grid-template-columns: 1fr;
     }
-
 }
 
 
@@ -1135,18 +1137,15 @@
         flex-direction: column;
     }
 
-
     .dashboard-primary-button {
         width: 100%;
         justify-content: center;
     }
 
-
     .quick-actions {
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
     }
-
 
     .appointment-row {
         grid-template-columns:
@@ -1156,11 +1155,9 @@
             auto;
     }
 
-
     .appointment-department {
         display: none;
     }
-
 }
 
 
@@ -1170,34 +1167,37 @@
         grid-template-columns: 1fr;
     }
 
-
     .dashboard-card,
     .quick-actions-section {
         padding: 16px;
     }
 
+    .stat-card {
+        min-height: 150px;
+        padding: 18px;
+    }
+
+    .stat-value {
+        font-size: 30px;
+    }
 
     .occupancy-content {
         gap: 18px;
     }
-
 
     .occupancy-ring {
         width: 125px;
         height: 125px;
     }
 
-
     .occupancy-ring-inner {
         width: 90px;
         height: 90px;
     }
 
-
     .occupancy-ring-inner strong {
         font-size: 24px;
     }
-
 
     .appointment-row {
         grid-template-columns:
@@ -1206,14 +1206,11 @@
             auto;
     }
 
-
     .appointment-time {
         display: none;
     }
 
-
     .quick-actions {
         grid-template-columns: 1fr;
     }
-
 }

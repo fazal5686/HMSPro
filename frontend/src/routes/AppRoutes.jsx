@@ -1,5 +1,5 @@
 // ============================================================
-// File: D:\HMSPro\frontend\src\routes\AppRoutes.jsx
+// File: routes/AppRoutes.jsx
 // Purpose: Central routing configuration for HMSPro.
 // ============================================================
 
@@ -9,17 +9,27 @@ import {
     Navigate,
 } from "react-router-dom";
 
-import MainLayout from "../components/Layout/MainLayout.jsx";
+import MainLayout
+    from "../components/Layout/MainLayout.jsx";
 
-import Dashboard from "../pages/Dashboard/Dashboard.jsx";
+import Dashboard
+    from "../pages/Dashboard/Dashboard.jsx";
 
-import Login from "../pages/Authentication/Login.jsx";
+import Login
+    from "../pages/Authentication/Login.jsx";
 
-import PatientProfile from "../pages/Patients/PatientProfile.jsx";
+import PatientProfile
+    from "../pages/Patients/PatientProfile.jsx";
 
-import ProtectedRoute from "./ProtectedRoute.jsx";
 import UserManagement
     from "../pages/Users/UserManagement.jsx";
+
+import Reports
+    from "../pages/Reports/Reports.jsx";
+
+import ProtectedRoute
+    from "./ProtectedRoute.jsx";
+
 
 // ============================================================
 // HMSPro Application Routes
@@ -44,7 +54,6 @@ const AppRoutes = () => {
             />
 
 
-
             {/* ==================================================
                 Protected Application Routes
                 ================================================== */}
@@ -61,46 +70,62 @@ const AppRoutes = () => {
                     ================================================== */}
 
                 <Route
-                    path="/"
                     element={
                         <MainLayout />
                     }
                 >
 
-                    {/* Dashboard */}
+
+                    {/* ==================================================
+                        Dashboard
+                        ================================================== */}
 
                     <Route
-                        index
+                        path="/"
                         element={
                             <Dashboard />
                         }
                     />
 
+
+                    {/* ==================================================
+                        Reports
+                        ================================================== */}
+
+                    <Route
+                        path="/reports"
+                        element={
+                            <Reports />
+                        }
+                    />
+
+
+                    {/* ==================================================
+                        Users
+                        ================================================== */}
+
+                    <Route
+                        path="/users"
+                        element={
+                            <UserManagement />
+                        }
+                    />
+
+
+                    {/* ==================================================
+                        Patient Profile
+                        ================================================== */}
+
+                    <Route
+                        path="/patient-profile"
+                        element={
+                            <PatientProfile />
+                        }
+                    />
+
                 </Route>
 
-{/* User Management */}
-
-<Route
-    path="/users"
-    element={
-        <UserManagement />
-    }
-/>
-
-                {/* ==================================================
-                    Patient Profile
-                    ================================================== */}
-
-                <Route
-                    path="/patient-profile"
-                    element={
-                        <PatientProfile />
-                    }
-                />
-
-
             </Route>
-
 
 
             {/* ==================================================
@@ -116,7 +141,6 @@ const AppRoutes = () => {
                     />
                 }
             />
-
 
         </Routes>
 

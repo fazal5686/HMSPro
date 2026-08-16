@@ -1,22 +1,14 @@
 // ============================================================
 // File: context/AuthContext.jsx
-// Purpose: Provides global authentication state for HMSPro.
-//
-// Responsibilities:
-//          1. Stores current logged-in user.
-//          2. Handles login and logout.
-//          3. Restores user session after browser refresh.
-//          4. Provides authentication status globally.
+// Purpose: Global authentication state for HMSPro.
 // ============================================================
-
 
 import {
     createContext,
     useContext,
-    useState,
     useEffect,
+    useState,
 } from "react";
-
 
 import {
     loginUser,
@@ -24,17 +16,12 @@ import {
     getCurrentUser,
 } from "../services/authService.js";
 
-
 import {
     getToken,
 } from "../utils/storage.js";
 
 
-
-// Create Authentication Context
-
-const AuthContext = createContext();
-
+const AuthContext = createContext(null);
 
 
 // ============================================================
@@ -43,163 +30,167 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 
-
     const [user, setUser] = useState(null);
-
 
     const [loading, setLoading] = useState(true);
 
 
-
-
     // ========================================================
-    // Restore User Session
+    // Restore Existing Session
     // ========================================================
 
     useEffect(() => {
 
+        let mounted = true;
 
-        const restoreUser = async () => {
 
+        const restoreSession = async () => {
 
             const token = getToken();
 
 
+            if (!token) {
 
-            if (token) {
-
-
-                try {
-
-
-                    const currentUser =
-                        await getCurrentUser();
-
-
-
-                    setUser(currentUser);
-
-
-
-                } catch (error) {
-
-
-                    console.log(
-                        "Session expired."
-                    );
-                    
-                    logoutUser();
-                    
-                    setUser(null);
-
-
+                if (mounted) {
+                    setLoading(false);
                 }
 
-
+                return;
             }
 
 
+            try {
 
-            setLoading(false);
+                const currentUser =
+                    await getCurrentUser();
 
+
+                if (mounted) {
+
+                    setUser(currentUser);
+
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "HMSPro session could not be restored."
+                );
+
+                logoutUser();
+
+                if (mounted) {
+
+                    setUser(null);
+
+                }
+
+            } finally {
+
+                if (mounted) {
+
+                    setLoading(false);
+
+                }
+
+            }
 
         };
 
 
+        restoreSession();
 
-        restoreUser();
 
+        return () => {
 
+            mounted = false;
+
+        };
 
     }, []);
 
 
-
-
     // ========================================================
-    // Login Function
+    // Login
     // ========================================================
 
     const login = async (credentials) => {
 
-
         const loggedInUser =
             await loginUser(credentials);
 
-
-
         setUser(loggedInUser);
 
-
-
         return loggedInUser;
-
 
     };
 
 
-
-
     // ========================================================
-    // Logout Function
+    // Logout
     // ========================================================
 
     const logout = () => {
 
-
         logoutUser();
 
-
         setUser(null);
-
 
     };
 
 
+    // ========================================================
+    // Context Value
+    // ========================================================
+
+    const value = {
+
+        user,
+
+        login,
+
+        logout,
+
+        loading,
+
+        isAuthenticated:
+            Boolean(user),
+
+    };
 
 
     return (
 
-        <AuthContext.Provider
-
-            value={{
-
-                user,
-
-                login,
-
-                logout,
-
-                loading,
-
-                isAuthenticated:
-                    Boolean(user),
-
-            }}
-
-        >
+        <AuthContext.Provider value={value}>
 
             {children}
-
 
         </AuthContext.Provider>
 
     );
 
-
 };
 
 
-
-
 // ============================================================
-// Custom Context Hook
+// Custom Hook
 // ============================================================
 
 export const useAuthContext = () => {
 
+    const context =
+        useContext(AuthContext);
 
-    return useContext(AuthContext);
 
+    if (!context) {
+
+        throw new Error(
+            "useAuthContext must be used inside AuthProvider."
+        );
+
+    }
+
+
+    return context;
 
 };

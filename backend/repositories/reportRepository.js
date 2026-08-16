@@ -21,23 +21,14 @@ import Doctor from "../models/Doctor.js";
 export const getDashboardReport = async () => {
 
     const [
-
         totalPatients,
-
         totalDoctors,
-
         activeDoctors,
-
         totalAppointments,
-
         totalAdmissions,
-
         activeAdmissions,
-
         totalMedicines,
-
         activeMedicines,
-
     ] = await Promise.all([
 
         Patient.countDocuments(),
@@ -66,23 +57,14 @@ export const getDashboardReport = async () => {
 
 
     return {
-
         totalPatients,
-
         totalDoctors,
-
         activeDoctors,
-
         totalAppointments,
-
         totalAdmissions,
-
         activeAdmissions,
-
         totalMedicines,
-
         activeMedicines,
-
     };
 
 };
@@ -90,25 +72,19 @@ export const getDashboardReport = async () => {
 
 // ============================================================
 // Appointment Report
-// Returns appointment statistics by status.
+// Returns appointment statistics by status and
+// weekly appointment chart data.
 // ============================================================
 
 export const getAppointmentReport = async () => {
 
     const [
-
         totalAppointments,
-
         pendingAppointments,
-
         confirmedAppointments,
-
         completedAppointments,
-
         cancelledAppointments,
-
         noShowAppointments,
-
     ] = await Promise.all([
 
         Appointment.countDocuments(),
@@ -136,6 +112,286 @@ export const getAppointmentReport = async () => {
     ]);
 
 
+    // ========================================================
+    // Weekly Appointment Chart
+    //
+    // Current week:
+    // Monday 00:00 -> next Monday 00:00
+    //
+    // Timezone:
+    // Asia/Karachi
+    //
+    // Scheduled:
+    // Pending + Confirmed
+    //
+    // Completed:
+    // Completed
+    // ========================================================
+
+    const weeklyAppointments =
+        await Appointment.aggregate([
+
+            // ------------------------------------------------
+            // Calculate the beginning of the current week.
+            //
+            // Monday is the first day of the week.
+            // Asia/Karachi controls the local date boundary.
+            // ------------------------------------------------
+
+            {
+                $set: {
+
+                    weekStart: {
+
+                        $dateTrunc: {
+
+                            date: "$$NOW",
+
+                            unit: "week",
+
+                            binSize: 1,
+
+                            timezone: "Asia/Karachi",
+
+                            startOfWeek: "monday",
+
+                        },
+
+                    },
+
+                },
+
+            },
+
+
+            // ------------------------------------------------
+            // Keep appointments inside the current week.
+            //
+            // Start:
+            // Monday 00:00
+            //
+            // End:
+            // Next Monday 00:00
+            // ------------------------------------------------
+
+            {
+                $match: {
+
+                    $expr: {
+
+                        $and: [
+
+                            {
+                                $gte: [
+                                    "$appointmentDate",
+                                    "$weekStart",
+                                ],
+                            },
+
+                            {
+                                $lt: [
+
+                                    "$appointmentDate",
+
+                                    {
+                                        $dateAdd: {
+
+                                            startDate:
+                                                "$weekStart",
+
+                                            unit: "week",
+
+                                            amount: 1,
+
+                                        },
+
+                                    },
+
+                                ],
+                            },
+
+                        ],
+
+                    },
+
+                },
+
+            },
+
+
+            // ------------------------------------------------
+            // Group appointments by ISO weekday.
+            //
+            // 1 = Monday
+            // 2 = Tuesday
+            // 3 = Wednesday
+            // 4 = Thursday
+            // 5 = Friday
+            // 6 = Saturday
+            // 7 = Sunday
+            // ------------------------------------------------
+
+            {
+                $group: {
+
+                    _id: {
+
+                        $isoDayOfWeek: {
+
+                            date: "$appointmentDate",
+
+                            timezone: "Asia/Karachi",
+
+                        },
+
+                    },
+
+
+                    // ----------------------------------------
+                    // Scheduled = Pending + Confirmed
+                    // ----------------------------------------
+
+                    scheduled: {
+
+                        $sum: {
+
+                            $cond: [
+
+                                {
+                                    $in: [
+
+                                        "$status",
+
+                                        [
+                                            "Pending",
+                                            "Confirmed",
+                                        ],
+
+                                    ],
+
+                                },
+
+                                1,
+
+                                0,
+
+                            ],
+
+                        },
+
+                    },
+
+
+                    // ----------------------------------------
+                    // Completed = Completed
+                    // ----------------------------------------
+
+                    completed: {
+
+                        $sum: {
+
+                            $cond: [
+
+                                {
+                                    $eq: [
+                                        "$status",
+                                        "Completed",
+                                    ],
+                                },
+
+                                1,
+
+                                0,
+
+                            ],
+
+                        },
+
+                    },
+
+                },
+
+            },
+
+
+            // ------------------------------------------------
+            // Sort Monday -> Sunday.
+            // ------------------------------------------------
+
+            {
+                $sort: {
+                    _id: 1,
+                },
+            },
+
+        ]);
+
+
+    // ========================================================
+    // Dashboard day labels.
+    //
+    // MongoDB ISO weekday:
+    // 1 = Monday
+    // 2 = Tuesday
+    // 3 = Wednesday
+    // 4 = Thursday
+    // 5 = Friday
+    // 6 = Saturday
+    // 7 = Sunday
+    // ========================================================
+
+    const dayNames = [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun",
+    ];
+
+
+    // ========================================================
+    // Always return all seven days.
+    //
+    // Days without appointments receive:
+    //
+    // scheduled = 0
+    // completed = 0
+    // ========================================================
+
+    const weeklyAppointmentData =
+        dayNames.map((day, index) => {
+
+            const dayNumber = index + 1;
+
+
+            const dayData =
+                weeklyAppointments.find(
+                    (item) =>
+                        Number(item._id) === dayNumber
+                );
+
+
+            return {
+
+                day,
+
+                scheduled:
+                    dayData?.scheduled ?? 0,
+
+                completed:
+                    dayData?.completed ?? 0,
+
+            };
+
+        });
+
+
+    // ========================================================
+    // Return Appointment Report
+    // ========================================================
+
     return {
 
         totalAppointments,
@@ -150,6 +406,8 @@ export const getAppointmentReport = async () => {
 
         noShowAppointments,
 
+        weeklyAppointmentData,
+
     };
 
 };
@@ -163,13 +421,9 @@ export const getAppointmentReport = async () => {
 export const getAdmissionReport = async () => {
 
     const [
-
         totalAdmissions,
-
         activeAdmissions,
-
         dischargedAdmissions,
-
     ] = await Promise.all([
 
         Admission.countDocuments(),
@@ -214,8 +468,10 @@ export const getBillingReport = async () => {
     // --------------------------------------------------------
     // Calculate total billing amount.
     //
-    // The aggregation supports the common amount field names
-    // used in HMSPro billing records.
+    // Supports:
+    // totalAmount
+    // grandTotal
+    // amount
     // --------------------------------------------------------
 
     const amountResult =
@@ -236,13 +492,16 @@ export const getBillingReport = async () => {
 
                                 {
                                     $ifNull: [
+
                                         "$grandTotal",
+
                                         {
                                             $ifNull: [
                                                 "$amount",
                                                 0,
                                             ],
                                         },
+
                                     ],
                                 },
 
@@ -284,17 +543,11 @@ export const getBillingReport = async () => {
 export const getMedicineInventoryReport = async () => {
 
     const [
-
         totalMedicines,
-
         activeMedicines,
-
         inactiveMedicines,
-
         lowStockMedicines,
-
         outOfStockMedicines,
-
     ] = await Promise.all([
 
         Medicine.countDocuments(),
@@ -340,10 +593,13 @@ export const getMedicineInventoryReport = async () => {
     ]);
 
 
-    // --------------------------------------------------------
+    // ========================================================
     // Calculate total inventory value.
+    //
+    // Formula:
+    //
     // quantity × unitPrice
-    // --------------------------------------------------------
+    // ========================================================
 
     const inventoryValueResult =
         await Medicine.aggregate([

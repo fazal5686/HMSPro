@@ -33,6 +33,48 @@ const API_ROUTES = {
     },
 
 
+    // ========================================================
+    // Users
+    // ========================================================
+
+    USERS: {
+
+        BASE: "/users",
+
+        ALL: "/users/all",
+
+        BY_ROLE: (role) =>
+            `/users/role/${role}`,
+
+        BY_ID: (id) =>
+            `/users/${id}`,
+
+        STATUS: (id) =>
+            `/users/${id}/status`,
+
+        PASSWORD: (id) =>
+            `/users/${id}/password`,
+
+    },
+
+
+    // ========================================================
+    // Reports
+    // ========================================================
+
+    REPORTS: {
+
+        DASHBOARD: "/reports/dashboard",
+
+        APPOINTMENTS: "/reports/appointments",
+
+        ADMISSIONS: "/reports/admissions",
+
+        BILLING: "/reports/billing",
+
+    },
+
+
 };
 
 

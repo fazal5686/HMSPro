@@ -8,61 +8,97 @@ import "dotenv/config";
 import app from "./app.js";
 
 import connectDB from "./config/db.js";
+
 import { startCronJobs } from "./cron/index.js";
 
-// ============================================================
-// Connect Database
-// ============================================================
 
-connectDB();
-// ============================================================
-// Start Scheduled Cron Jobs
-// ============================================================
-
-startCronJobs();
 // ============================================================
 // Server Port
 // ============================================================
 
-const PORT = process.env.PORT || 5000;
+const PORT =
+    process.env.PORT || 5000;
+
 
 // ============================================================
-// Global Error Handler
-// Must remain AFTER all routes and 404 handling.
+// Start HMSPro
 // ============================================================
 
-app.use(
-    (error, req, res, next) => {
+const startServer = async () => {
+
+    try {
+
+        // ----------------------------------------------------
+        // Connect MongoDB first
+        // ----------------------------------------------------
+
+        await connectDB();
+
+
+        // ----------------------------------------------------
+        // Start cron jobs
+        // ----------------------------------------------------
+
+        startCronJobs();
+
+
+        // ----------------------------------------------------
+        // Global Error Handler
+        // Must remain after routes/404 handling
+        // ----------------------------------------------------
+
+        app.use(
+            (error, req, res, next) => {
+
+                console.error(
+                    "ERROR:",
+                    error.message
+                );
+
+                const statusCode =
+                    error.statusCode || 500;
+
+                return res.status(statusCode).json({
+
+                    success: false,
+
+                    message:
+                        error.message ||
+                        "Internal server error.",
+
+                });
+
+            }
+        );
+
+
+        // ----------------------------------------------------
+        // Start HTTP server
+        // ----------------------------------------------------
+
+        app.listen(
+            PORT,
+            () => {
+
+                console.log(
+                    `HMSPro Server running on port ${PORT}`
+                );
+
+            }
+        );
+
+    } catch (error) {
 
         console.error(
-            "ERROR:",
+            "HMSPro startup failed:",
             error.message
         );
 
-        const statusCode =
-            error.statusCode || 500;
-
-        return res.status(statusCode).json({
-
-            success: false,
-
-            message:
-                error.message ||
-                "Internal server error.",
-
-        });
+        process.exit(1);
 
     }
-);
 
-// ============================================================
-// Start Server
-// ============================================================
+};
 
-app.listen(PORT, () => {
 
-    console.log(
-        `HMSPro Server running on port ${PORT}`
-    );
-
-});
+startServer();
