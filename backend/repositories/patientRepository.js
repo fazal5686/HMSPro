@@ -1,4 +1,3 @@
-
 // ============================================================
 // File: repositories/patientRepository.js
 // Purpose: Database operations for Patient collection.
@@ -20,6 +19,32 @@ export const createPatient = async (patientData) => {
         patientData
 
     );
+
+};
+
+
+// ============================================================
+// Find All Patients
+// Administrative Patient Directory
+// ============================================================
+
+export const findAllPatients = async () => {
+
+    return await Patient.find()
+
+        .populate({
+
+            path: "userId",
+
+            select: "fullName email phone role isActive",
+
+        })
+
+        .sort({
+
+            createdAt: -1,
+
+        });
 
 };
 
@@ -57,6 +82,46 @@ export const findPatientById = async (patientId) => {
     return await Patient.findById(
 
         patientId
+
+    )
+
+    .populate({
+
+        path: "userId",
+
+        select: "fullName email phone role isActive",
+
+    });
+
+};
+
+
+// ============================================================
+// Update Patient By Patient ID
+// Administrative Patient Directory
+// ============================================================
+
+export const updatePatientById = async (
+
+    patientId,
+
+    patientData
+
+) => {
+
+    return await Patient.findByIdAndUpdate(
+
+        patientId,
+
+        patientData,
+
+        {
+
+            new: true,
+
+            runValidators: true,
+
+        }
 
     )
 
@@ -110,6 +175,22 @@ export const updatePatient = async (
         select: "fullName email phone role isActive",
 
     });
+
+};
+
+
+// ============================================================
+// Delete Patient By Patient ID
+// Administrative operation
+// ============================================================
+
+export const deletePatientById = async (patientId) => {
+
+    return await Patient.findByIdAndDelete(
+
+        patientId
+
+    );
 
 };
 

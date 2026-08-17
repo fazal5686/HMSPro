@@ -1,0 +1,378 @@
+/* ============================================================
+   File: pages/Rooms/Rooms.css
+   Purpose: Styling for HMSPro Rooms page.
+   ============================================================ */
+
+   .rooms-page {
+    width: 100%;
+    padding: 28px;
+}
+
+
+/* ============================================================
+   Page Heading
+   ============================================================ */
+
+.rooms-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.rooms-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.rooms-heading h1 {
+    margin: 0;
+    font-size: 32px;
+    line-height: 1.15;
+}
+
+.rooms-heading p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+
+/* ============================================================
+   Refresh Button
+   ============================================================ */
+
+.rooms-refresh-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.rooms-refresh-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.rooms-spin {
+    animation: rooms-spin 1s linear infinite;
+}
+
+@keyframes rooms-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ============================================================
+   Error
+   ============================================================ */
+
+.rooms-error {
+    margin-bottom: 20px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   Statistics
+   ============================================================ */
+
+.rooms-stats {
+    display: grid;
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.rooms-stat-card {
+    min-height: 145px;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(127, 127, 127, 0.14);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.rooms-stat-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+}
+
+.rooms-stat-card span {
+    margin-top: 14px;
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.rooms-stat-card strong {
+    margin-top: 4px;
+    font-size: 27px;
+    line-height: 1;
+}
+
+
+/* ============================================================
+   Main Card
+   ============================================================ */
+
+.rooms-card {
+    border: 1px solid rgba(127, 127, 127, 0.14);
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.rooms-card-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px;
+    border-bottom: 1px solid rgba(127, 127, 127, 0.12);
+}
+
+.rooms-card-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+}
+
+.rooms-card-header h2 {
+    margin: 5px 0 0;
+    font-size: 20px;
+}
+
+
+/* ============================================================
+   Controls
+   ============================================================ */
+
+.rooms-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.rooms-search,
+.rooms-filter {
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid rgba(127, 127, 127, 0.2);
+    border-radius: 9px;
+    outline: none;
+    font-size: 13px;
+}
+
+.rooms-search {
+    width: 210px;
+}
+
+.rooms-filter {
+    min-width: 135px;
+}
+
+
+/* ============================================================
+   Room Grid
+   ============================================================ */
+
+.rooms-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    padding: 22px;
+}
+
+.room-item {
+    min-height: 190px;
+    padding: 18px;
+    border: 1px solid rgba(127, 127, 127, 0.14);
+    border-radius: 15px;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.room-item:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.07);
+}
+
+.room-item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.room-number-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+}
+
+.room-more {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.room-number {
+    margin-top: 18px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.room-type {
+    margin-top: 4px;
+    font-size: 13px;
+    opacity: 0.65;
+}
+
+.room-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 18px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   Empty / Loading State
+   ============================================================ */
+
+.rooms-state {
+    min-height: 240px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+    opacity: 0.7;
+}
+
+.rooms-state strong {
+    font-size: 15px;
+}
+
+.rooms-state span {
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .rooms-stats {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .rooms-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 850px) {
+
+    .rooms-page {
+        padding: 20px;
+    }
+
+    .rooms-heading,
+    .rooms-card-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .rooms-controls {
+        width: 100%;
+    }
+
+    .rooms-search {
+        flex: 1;
+        width: auto;
+    }
+
+    .rooms-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .rooms-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 560px) {
+
+    .rooms-page {
+        padding: 14px;
+    }
+
+    .rooms-stats,
+    .rooms-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rooms-controls {
+        flex-direction: column;
+    }
+
+    .rooms-search,
+    .rooms-filter {
+        width: 100%;
+    }
+
+}

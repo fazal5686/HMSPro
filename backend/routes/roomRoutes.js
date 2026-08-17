@@ -27,33 +27,42 @@ import authorize from "../middleware/authorize.js";
 
 import { ROLES } from "../constants/roles.js";
 
+
 const router = express.Router();
+
+
 
 // ============================================================
 // Create Room
 // POST /api/rooms
-// Admin only
+// SuperAdmin and Admin
 // ============================================================
 
 router.post(
     "/",
     protect,
-    authorize(ROLES.ADMIN),
+    authorize(
+        ROLES.SUPER_ADMIN,
+        ROLES.ADMIN
+    ),
     createRoomValidator,
     validateRequest,
     createRoom
 );
 
+
+
 // ============================================================
 // Get Rooms By Department
 // GET /api/rooms/department/:departmentId
-// Admin and authorized hospital staff
+// SuperAdmin, Admin and authorized hospital staff
 // ============================================================
 
 router.get(
     "/department/:departmentId",
     protect,
     authorize(
+        ROLES.SUPER_ADMIN,
         ROLES.ADMIN,
         ROLES.DOCTOR,
         ROLES.RECEPTIONIST,
@@ -62,16 +71,19 @@ router.get(
     getRoomsByDepartment
 );
 
+
+
 // ============================================================
 // Get All Rooms
 // GET /api/rooms
-// Admin and authorized hospital staff
+// SuperAdmin, Admin and authorized hospital staff
 // ============================================================
 
 router.get(
     "/",
     protect,
     authorize(
+        ROLES.SUPER_ADMIN,
         ROLES.ADMIN,
         ROLES.DOCTOR,
         ROLES.RECEPTIONIST,
@@ -80,16 +92,19 @@ router.get(
     getAllRooms
 );
 
+
+
 // ============================================================
 // Get Room By ID
 // GET /api/rooms/:id
-// Admin and authorized hospital staff
+// SuperAdmin, Admin and authorized hospital staff
 // ============================================================
 
 router.get(
     "/:id",
     protect,
     authorize(
+        ROLES.SUPER_ADMIN,
         ROLES.ADMIN,
         ROLES.DOCTOR,
         ROLES.RECEPTIONIST,
@@ -100,38 +115,51 @@ router.get(
     getRoomById
 );
 
+
+
 // ============================================================
 // Update Room
 // PUT /api/rooms/:id
-// Admin only
+// SuperAdmin and Admin
 // ============================================================
 
 router.put(
     "/:id",
     protect,
-    authorize(ROLES.ADMIN),
+    authorize(
+        ROLES.SUPER_ADMIN,
+        ROLES.ADMIN
+    ),
     updateRoomValidator,
     validateRequest,
     updateRoom
 );
 
+
+
 // ============================================================
 // Delete Room
 // DELETE /api/rooms/:id
-// Admin only
+// SuperAdmin and Admin
 // ============================================================
 
 router.delete(
     "/:id",
     protect,
-    authorize(ROLES.ADMIN),
+    authorize(
+        ROLES.SUPER_ADMIN,
+        ROLES.ADMIN
+    ),
     roomIdValidator,
     validateRequest,
     deleteRoom
 );
+
+
 
 // ============================================================
 // Export Router
 // ============================================================
 
 export default router;
+

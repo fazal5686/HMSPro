@@ -5,6 +5,8 @@
 
 import { useEffect, useState } from "react";
 
+import useAuthContext from "../../hooks/useAuthContext.js";
+
 import {
     Activity,
     ArrowUpRight,
@@ -28,40 +30,7 @@ import "./Dashboard.css";
 // Static Dashboard Data
 // ============================================================
 
-const appointments = [
-    {
-        patient: "Ahmad Khan",
-        doctor: "Dr. Sarah Ahmed",
-        department: "Cardiology",
-        time: "10:30 AM",
-        status: "Confirmed",
-        initials: "AK",
-    },
-    {
-        patient: "Maria John",
-        doctor: "Dr. Hamza Ali",
-        department: "Neurology",
-        time: "11:15 AM",
-        status: "Waiting",
-        initials: "MJ",
-    },
-    {
-        patient: "Usman Shah",
-        doctor: "Dr. Ayesha Noor",
-        department: "Pediatrics",
-        time: "12:00 PM",
-        status: "Confirmed",
-        initials: "US",
-    },
-    {
-        patient: "Fatima Khan",
-        doctor: "Dr. Bilal Ahmad",
-        department: "Orthopedics",
-        time: "01:30 PM",
-        status: "Pending",
-        initials: "FK",
-    },
-];
+
 
 
 const activities = [
@@ -165,7 +134,31 @@ const defaultWeeklyData = [
 // ============================================================
 
 const Dashboard = () => {
+    // ========================================================
+    // Authenticated User
+    // ========================================================
 
+    const { user } = useAuthContext();
+
+
+    // ========================================================
+    // Dynamic Dashboard Greeting
+    // ========================================================
+
+    const currentHour =
+        new Date().getHours();
+
+    const greeting =
+        currentHour < 12
+            ? "Good morning"
+            : currentHour < 18
+                ? "Good afternoon"
+                : "Good evening";
+
+
+    const userName =
+        user?.fullName ||
+        "HMS Admin";
     // ========================================================
     // Dashboard Report State
     // ========================================================
@@ -192,6 +185,18 @@ const Dashboard = () => {
 
     const [appointmentError, setAppointmentError] =
         useState("");
+        // ========================================================
+// Today's Appointments State
+// ========================================================
+
+const [todayAppointments, setTodayAppointments] =
+useState([]);
+
+const [todayAppointmentsLoading, setTodayAppointmentsLoading] =
+useState(true);
+
+const [todayAppointmentsError, setTodayAppointmentsError] =
+useState("");
 // ========================================================
 // Room Report State
 // ========================================================
@@ -341,7 +346,39 @@ const roomResponse =
         "/rooms"
     );
 
+// ------------------------------------------------
+// Today's Appointments
+// ------------------------------------------------
 
+const appointmentsResponse =
+    await API.get(
+        "/appointments"
+    );
+
+const allAppointments =
+    appointmentsResponse.data?.data ?? [];
+
+const todaysAppointments =
+    allAppointments
+        .filter(
+            (appointment) =>
+                isToday(
+                    appointment.appointmentDate
+                )
+        )
+        .sort(
+            (a, b) =>
+                new Date(a.appointmentDate) -
+                new Date(b.appointmentDate)
+        );
+
+if (mounted) {
+
+    setTodayAppointments(
+        todaysAppointments
+    );
+
+}
 if (mounted) {
 
     setRoomData(
@@ -369,7 +406,7 @@ if (mounted) {
 setAppointmentError(message);
 
 setRoomError(message);
-
+setTodayAppointmentsError(message);
                 }
 
             } finally {
@@ -381,6 +418,7 @@ setRoomError(message);
 setAppointmentLoading(false);
 
 setRoomLoading(false);
+setTodayAppointmentsLoading(false);
                 }
 
             }
@@ -398,7 +436,85 @@ setRoomLoading(false);
         };
 
     }, []);
+// ============================================================
+// Helper: Get Initials
+// ============================================================
 
+const getInitials = (name = "") => {
+
+    return name
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(
+            (part) =>
+                part.charAt(0).toUpperCase()
+        )
+        .join("");
+
+};
+
+
+// ============================================================
+// Helper: Format Appointment Time
+// ============================================================
+
+const formatAppointmentTime = (date) => {
+
+    if (!date) {
+        return "—";
+    }
+
+    const appointmentDate =
+        new Date(date);
+
+    if (
+        Number.isNaN(
+            appointmentDate.getTime()
+        )
+    ) {
+        return "—";
+    }
+
+    return appointmentDate.toLocaleTimeString(
+        "en-US",
+        {
+            hour: "numeric",
+            minute: "2-digit",
+        }
+    );
+
+};
+
+
+// ============================================================
+// Helper: Check Appointment Is Today
+// ============================================================
+
+const isToday = (date) => {
+
+    if (!date) {
+        return false;
+    }
+
+    const appointmentDate =
+        new Date(date);
+
+    const today =
+        new Date();
+
+    return (
+        appointmentDate.getFullYear() ===
+            today.getFullYear() &&
+
+        appointmentDate.getMonth() ===
+            today.getMonth() &&
+
+        appointmentDate.getDate() ===
+            today.getDate()
+    );
+
+};
 
     // ========================================================
     // Weekly Appointment Data
@@ -502,7 +618,7 @@ const occupancyPercentage =
 
 
                     <h1>
-                        Good afternoon, HMS Admin
+                    {greeting}, {userName}
                     </h1>
 
 
@@ -1006,57 +1122,125 @@ const occupancyPercentage =
 
                     <div className="appointments-list">
 
-                        {appointments.map((appointment) => (
+    {todayAppointmentsLoading ? (
 
-                            <div
-                                className="appointment-row"
-                                key={`${appointment.patient}-${appointment.time}`}
-                            >
+        <div className="appointments-empty">
 
-                                <div className="patient-avatar">
-                                    {appointment.initials}
-                                </div>
+            Loading today's appointments...
+
+        </div>
+
+    ) : todayAppointmentsError ? (
+
+        <div className="appointments-empty">
+
+            {todayAppointmentsError}
+
+        </div>
+
+    ) : todayAppointments.length === 0 ? (
+
+        <div className="appointments-empty">
+
+            No appointments scheduled for today.
+
+        </div>
+
+    ) : (
+
+        todayAppointments
+            .slice(0, 5)
+            .map((appointment) => {
+
+                const patientName =
+                    appointment.patientId?.userId?.fullName ||
+                    appointment.patientId?.fullName ||
+                    "Unknown Patient";
+
+                const doctorName =
+                    appointment.doctorId?.userId?.fullName ||
+                    appointment.doctorId?.fullName ||
+                    "Unknown Doctor";
+
+                const department =
+                    appointment.doctorId?.department ||
+                    "—";
+
+                const initials =
+                    getInitials(
+                        patientName
+                    );
+
+                const status =
+                    appointment.status ||
+                    "Pending";
+
+                return (
+
+                    <div
+                        className="appointment-row"
+                        key={appointment._id}
+                    >
+
+                        <div className="patient-avatar">
+
+                            {initials}
+
+                        </div>
 
 
-                                <div className="appointment-patient">
+                        <div className="appointment-patient">
 
-                                    <strong>
-                                        {appointment.patient}
-                                    </strong>
+                            <strong>
+                                {patientName}
+                            </strong>
 
-                                    <span>
-                                        {appointment.doctor}
-                                    </span>
+                            <span>
+                                {doctorName}
+                            </span>
 
-                                </div>
-
-
-                                <div className="appointment-department">
-                                    {appointment.department}
-                                </div>
+                        </div>
 
 
-                                <div className="appointment-time">
+                        <div className="appointment-department">
 
-                                    <Clock3 size={15} />
+                            {department}
 
-                                    {appointment.time}
-
-                                </div>
+                        </div>
 
 
-                                <span
-                                    className={`status-badge ${appointment.status.toLowerCase()}`}
-                                >
-                                    {appointment.status}
-                                </span>
+                        <div className="appointment-time">
 
-                            </div>
+                            <Clock3 size={15} />
 
-                        ))}
+                            {formatAppointmentTime(
+                                appointment.appointmentDate
+                            )}
+
+                        </div>
+
+
+                        <span
+                            className={
+                                `status-badge ${status
+                                    .toLowerCase()
+                                    .replace(/\s+/g, "-")}`
+                            }
+                        >
+
+                            {status}
+
+                        </span>
 
                     </div>
 
+                );
+
+            })
+
+    )}
+
+</div>
                 </article>
 
 

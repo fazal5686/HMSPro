@@ -1,10 +1,30 @@
+
 // ============================================================
-// File: pages/Reports/Reports.jsx
-// Purpose: HMSPro Reports Center.
-// Connects to the real Reports APIs.
+// File:
+// D:\HMSPro\frontend\src\pages\Reports\Reports.jsx
+//
+// Purpose:
+// HMSPro Reports Center.
+//
+// Responsibilities:
+// 1. Connects to live Reports APIs.
+// 2. Displays hospital summary statistics.
+// 3. Displays appointment statistics and weekly chart.
+// 4. Displays admission statistics.
+// 5. Displays billing statistics.
+// 6. Displays medicine inventory statistics.
+// 7. Provides refresh and error handling.
+//
+// API endpoints are centralized in apiRoutes.js.
 // ============================================================
 
-import { useEffect, useState } from "react";
+
+import {
+    useCallback,
+    useEffect,
+    useState,
+} from "react";
+
 
 import {
     Activity,
@@ -24,7 +44,12 @@ import {
     XCircle,
 } from "lucide-react";
 
+
 import API from "../../api/axios.js";
+
+import API_ROUTES
+    from "../../api/apiRoutes.js";
+
 
 import "./Reports.css";
 
@@ -35,112 +60,163 @@ import "./Reports.css";
 
 const Reports = () => {
 
+
     // ========================================================
     // State
     // ========================================================
 
-    const [dashboard, setDashboard] = useState(null);
+    const [dashboard, setDashboard] =
+        useState(null);
 
-    const [appointments, setAppointments] = useState(null);
 
-    const [admissions, setAdmissions] = useState(null);
+    const [appointments, setAppointments] =
+        useState(null);
 
-    const [billing, setBilling] = useState(null);
 
-    const [inventory, setInventory] = useState(null);
+    const [admissions, setAdmissions] =
+        useState(null);
 
-    const [loading, setLoading] = useState(true);
 
-    const [error, setError] = useState("");
+    const [billing, setBilling] =
+        useState(null);
 
-    const [refreshing, setRefreshing] = useState(false);
+
+    const [inventory, setInventory] =
+        useState(null);
+
+
+    const [loading, setLoading] =
+        useState(true);
+
+
+    const [error, setError] =
+        useState("");
+
+
+    const [refreshing, setRefreshing] =
+        useState(false);
+
 
 
     // ========================================================
     // Load Reports
     // ========================================================
 
-    const loadReports = async () => {
+    const loadReports = useCallback(
+        async () => {
 
-        try {
+            try {
 
-            setError("");
+                setError("");
 
-            setRefreshing(true);
-
-            const [
-
-                dashboardResponse,
-
-                appointmentsResponse,
-
-                admissionsResponse,
-
-                billingResponse,
-
-                inventoryResponse,
-
-            ] = await Promise.all([
-
-                API.get("/reports/dashboard"),
-
-                API.get("/reports/appointments"),
-
-                API.get("/reports/admissions"),
-
-                API.get("/reports/billing"),
-
-                API.get("/reports/medicines"),
-
-            ]);
+                setRefreshing(true);
 
 
-            setDashboard(
-                dashboardResponse.data?.data
-            );
+                // ------------------------------------------------
+                // IMPORTANT:
+                // Keep these requests in exactly the same order
+                // as the response variables below.
+                // ------------------------------------------------
+
+                const [
+
+                    dashboardResponse,
+
+                    appointmentsResponse,
+
+                    admissionsResponse,
+
+                    billingResponse,
+
+                    inventoryResponse,
+
+                ] = await Promise.all([
 
 
-            setAppointments(
-                appointmentsResponse.data?.data
-            );
+                    API.get(
+                        API_ROUTES.REPORTS.DASHBOARD
+                    ),
 
 
-            setAdmissions(
-                admissionsResponse.data?.data
-            );
+                    API.get(
+                        API_ROUTES.REPORTS.APPOINTMENTS
+                    ),
 
 
-            setBilling(
-                billingResponse.data?.data
-            );
+                    API.get(
+                        API_ROUTES.REPORTS.ADMISSIONS
+                    ),
 
 
-            setInventory(
-                inventoryResponse.data?.data
-            );
-
-        } catch (err) {
-
-            console.error(
-                "Reports loading error:",
-                err
-            );
+                    API.get(
+                        API_ROUTES.REPORTS.BILLING
+                    ),
 
 
-            setError(
-                err.response?.data?.message ||
-                "Unable to load reports."
-            );
+                    API.get(
+                        API_ROUTES.REPORTS.MEDICINES
+                    ),
 
-        } finally {
+                ]);
 
-            setLoading(false);
 
-            setRefreshing(false);
+                // ------------------------------------------------
+                // Store API results
+                // ------------------------------------------------
 
-        }
+                setDashboard(
+                    dashboardResponse.data?.data ?? null
+                );
 
-    };
+
+                setAppointments(
+                    appointmentsResponse.data?.data ?? null
+                );
+
+
+                setAdmissions(
+                    admissionsResponse.data?.data ?? null
+                );
+
+
+                setBilling(
+                    billingResponse.data?.data ?? null
+                );
+
+
+                setInventory(
+                    inventoryResponse.data?.data ?? null
+                );
+
+
+            } catch (err) {
+
+                console.error(
+                    "Reports loading error:",
+                    err
+                );
+
+
+                setError(
+
+                    err.response?.data?.message ||
+
+                    "Unable to load reports."
+
+                );
+
+            } finally {
+
+                setLoading(false);
+
+                setRefreshing(false);
+
+            }
+
+        },
+        []
+    );
+
 
 
     // ========================================================
@@ -151,7 +227,8 @@ const Reports = () => {
 
         loadReports();
 
-    }, []);
+    }, [loadReports]);
+
 
 
     // ========================================================
@@ -169,9 +246,11 @@ const Reports = () => {
                     className="reports-loading-icon"
                 />
 
+
                 <strong>
                     Loading reports...
                 </strong>
+
 
                 <span>
                     Gathering the latest hospital statistics.
@@ -182,6 +261,7 @@ const Reports = () => {
         );
 
     }
+
 
 
     // ========================================================
@@ -209,6 +289,7 @@ const Reports = () => {
                         Unable to load reports
                     </strong>
 
+
                     <p>
                         {error}
                     </p>
@@ -219,11 +300,18 @@ const Reports = () => {
                 <button
                     type="button"
                     onClick={loadReports}
+                    disabled={refreshing}
                 >
 
                     <RefreshCw
                         size={16}
+                        className={
+                            refreshing
+                                ? "reports-spin"
+                                : ""
+                        }
                     />
+
 
                     Retry
 
@@ -236,34 +324,47 @@ const Reports = () => {
     }
 
 
+
     // ========================================================
-    // Safe Values
+    // Safe Dashboard Values
     // ========================================================
 
     const totalPatients =
         dashboard?.totalPatients ?? 0;
 
+
     const totalDoctors =
         dashboard?.totalDoctors ?? 0;
+
 
     const activeDoctors =
         dashboard?.activeDoctors ?? 0;
 
+
     const totalAppointments =
         dashboard?.totalAppointments ?? 0;
+
 
     const totalAdmissions =
         dashboard?.totalAdmissions ?? 0;
 
+
     const activeAdmissions =
         dashboard?.activeAdmissions ?? 0;
+
 
     const totalMedicines =
         dashboard?.totalMedicines ?? 0;
 
+
     const activeMedicines =
         dashboard?.activeMedicines ?? 0;
 
+
+
+    // ========================================================
+    // Safe Billing Values
+    // ========================================================
 
     const totalBilling =
         billing?.totalAmount ?? 0;
@@ -273,12 +374,22 @@ const Reports = () => {
         billing?.totalBills ?? 0;
 
 
+
+    // ========================================================
+    // Weekly Appointment Data
+    // ========================================================
+
     const weeklyData =
-        appointments?.weeklyAppointmentData || [];
+        Array.isArray(
+            appointments?.weeklyAppointmentData
+        )
+            ? appointments.weeklyAppointmentData
+            : [];
+
 
 
     // ========================================================
-    // Format Currency
+    // Currency Formatter
     // ========================================================
 
     const formatCurrency = (value) => {
@@ -295,8 +406,9 @@ const Reports = () => {
     };
 
 
+
     // ========================================================
-    // Find maximum chart value
+    // Chart Maximum
     // ========================================================
 
     const chartMaximum =
@@ -306,12 +418,16 @@ const Reports = () => {
 
             ...weeklyData.flatMap(
                 (item) => [
+
                     item.scheduled || 0,
+
                     item.completed || 0,
+
                 ]
             )
 
         );
+
 
 
     // ========================================================
@@ -328,13 +444,16 @@ const Reports = () => {
             tone: "teal",
         },
 
+
         {
             title: "Doctors",
             value: totalDoctors,
-            note: `${activeDoctors} active doctors`,
+            note:
+                `${activeDoctors} active doctors`,
             icon: Stethoscope,
             tone: "blue",
         },
+
 
         {
             title: "Appointments",
@@ -344,31 +463,39 @@ const Reports = () => {
             tone: "purple",
         },
 
+
         {
             title: "Admissions",
             value: totalAdmissions,
-            note: `${activeAdmissions} currently active`,
+            note:
+                `${activeAdmissions} currently active`,
             icon: BedDouble,
             tone: "orange",
         },
 
+
         {
             title: "Medicines",
             value: totalMedicines,
-            note: `${activeMedicines} active medicines`,
+            note:
+                `${activeMedicines} active medicines`,
             icon: Pill,
             tone: "green",
         },
 
+
         {
             title: "Billing",
-            value: formatCurrency(totalBilling),
-            note: `${totalBills} total bills`,
+            value:
+                formatCurrency(totalBilling),
+            note:
+                `${totalBills} total bills`,
             icon: DollarSign,
             tone: "rose",
         },
 
     ];
+
 
 
     // ========================================================
@@ -393,6 +520,7 @@ const Reports = () => {
                         <FileBarChart2
                             size={16}
                         />
+
 
                         <span>
                             REPORTING CENTER
@@ -430,8 +558,12 @@ const Reports = () => {
                         }
                     />
 
+
                     <span>
-                        Refresh
+                        {refreshing
+                            ? "Refreshing..."
+                            : "Refresh"
+                        }
                     </span>
 
                 </button>
@@ -450,6 +582,7 @@ const Reports = () => {
 
                     const Icon = card.icon;
 
+
                     return (
 
                         <article
@@ -458,7 +591,9 @@ const Reports = () => {
                         >
 
                             <div
-                                className={`report-summary-icon ${card.tone}`}
+                                className={
+                                    `report-summary-icon ${card.tone}`
+                                }
                             >
 
                                 <Icon
@@ -474,9 +609,11 @@ const Reports = () => {
                                     {card.title}
                                 </span>
 
+
                                 <strong>
                                     {card.value}
                                 </strong>
+
 
                                 <small>
                                     {card.note}
@@ -505,7 +642,11 @@ const Reports = () => {
                     Appointment Report
                     ================================================== */}
 
-                <article className="reports-card appointment-report-card">
+                <article
+                    className={
+                        "reports-card appointment-report-card"
+                    }
+                >
 
                     <div className="reports-card-header">
 
@@ -514,6 +655,7 @@ const Reports = () => {
                             <span className="reports-card-kicker">
                                 APPOINTMENTS
                             </span>
+
 
                             <h2>
                                 Appointment Overview
@@ -533,6 +675,7 @@ const Reports = () => {
                     </div>
 
 
+
                     <div className="appointment-status-grid">
 
                         <div className="appointment-status">
@@ -541,8 +684,12 @@ const Reports = () => {
                                 Total
                             </span>
 
+
                             <strong>
-                                {appointments?.totalAppointments ?? 0}
+                                {
+                                    appointments?.totalAppointments
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -554,8 +701,12 @@ const Reports = () => {
                                 Pending
                             </span>
 
+
                             <strong>
-                                {appointments?.pendingAppointments ?? 0}
+                                {
+                                    appointments?.pendingAppointments
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -567,8 +718,12 @@ const Reports = () => {
                                 Confirmed
                             </span>
 
+
                             <strong>
-                                {appointments?.confirmedAppointments ?? 0}
+                                {
+                                    appointments?.confirmedAppointments
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -580,8 +735,12 @@ const Reports = () => {
                                 Completed
                             </span>
 
+
                             <strong>
-                                {appointments?.completedAppointments ?? 0}
+                                {
+                                    appointments?.completedAppointments
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -593,8 +752,12 @@ const Reports = () => {
                                 Cancelled
                             </span>
 
+
                             <strong>
-                                {appointments?.cancelledAppointments ?? 0}
+                                {
+                                    appointments?.cancelledAppointments
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -606,8 +769,12 @@ const Reports = () => {
                                 No Show
                             </span>
 
+
                             <strong>
-                                {appointments?.noShowAppointments ?? 0}
+                                {
+                                    appointments?.noShowAppointments
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -615,7 +782,10 @@ const Reports = () => {
                     </div>
 
 
-                    {/* Weekly Chart */}
+
+                    {/* ==================================================
+                        Weekly Appointment Chart
+                        ================================================== */}
 
                     <div className="weekly-report">
 
@@ -627,6 +797,7 @@ const Reports = () => {
                                     Weekly Appointments
                                 </strong>
 
+
                                 <span>
                                     Monday to Sunday
                                 </span>
@@ -637,13 +808,20 @@ const Reports = () => {
                             <div className="weekly-legend">
 
                                 <span>
+
                                     <i className="legend scheduled"></i>
+
                                     Scheduled
+
                                 </span>
 
+
                                 <span>
+
                                     <i className="legend completed"></i>
+
                                     Completed
+
                                 </span>
 
                             </div>
@@ -651,77 +829,106 @@ const Reports = () => {
                         </div>
 
 
+
                         <div className="weekly-chart">
 
-                            {weeklyData.map((item) => {
+                            {weeklyData.length > 0 ? (
 
-                                const scheduled =
-                                    item.scheduled || 0;
+                                weeklyData.map((item) => {
 
-                                const completed =
-                                    item.completed || 0;
-
-
-                                const scheduledHeight =
-                                    `${Math.max(
-                                        scheduled === 0
-                                            ? 0
-                                            : 6,
-                                        (scheduled / chartMaximum) * 100
-                                    )}%`;
+                                    const scheduled =
+                                        item.scheduled || 0;
 
 
-                                const completedHeight =
-                                    `${Math.max(
-                                        completed === 0
-                                            ? 0
-                                            : 6,
-                                        (completed / chartMaximum) * 100
-                                    )}%`;
+                                    const completed =
+                                        item.completed || 0;
 
 
-                                return (
+                                    const scheduledHeight =
+                                        `${Math.max(
+                                            scheduled === 0
+                                                ? 0
+                                                : 6,
+                                            (
+                                                scheduled /
+                                                chartMaximum
+                                            ) * 100
+                                        )}%`;
 
-                                    <div
-                                        className="weekly-column"
-                                        key={item.day}
-                                    >
 
-                                        <div className="weekly-bars">
+                                    const completedHeight =
+                                        `${Math.max(
+                                            completed === 0
+                                                ? 0
+                                                : 6,
+                                            (
+                                                completed /
+                                                chartMaximum
+                                            ) * 100
+                                        )}%`;
 
-                                            <div
-                                                className="weekly-bar scheduled"
-                                                style={{
-                                                    height:
-                                                        scheduledHeight,
-                                                }}
-                                                title={`Scheduled: ${scheduled}`}
-                                            >
+
+                                    return (
+
+                                        <div
+                                            className="weekly-column"
+                                            key={item.day}
+                                        >
+
+                                            <div className="weekly-bars">
+
+                                                <div
+                                                    className={
+                                                        "weekly-bar scheduled"
+                                                    }
+                                                    style={{
+                                                        height:
+                                                            scheduledHeight,
+                                                    }}
+                                                    title={
+                                                        `Scheduled: ${scheduled}`
+                                                    }
+                                                >
+                                                </div>
+
+
+                                                <div
+                                                    className={
+                                                        "weekly-bar completed"
+                                                    }
+                                                    style={{
+                                                        height:
+                                                            completedHeight,
+                                                    }}
+                                                    title={
+                                                        `Completed: ${completed}`
+                                                    }
+                                                >
+                                                </div>
+
                                             </div>
 
 
-                                            <div
-                                                className="weekly-bar completed"
-                                                style={{
-                                                    height:
-                                                        completedHeight,
-                                                }}
-                                                title={`Completed: ${completed}`}
-                                            >
-                                            </div>
+                                            <span>
+                                                {item.day}
+                                            </span>
 
                                         </div>
 
+                                    );
 
-                                        <span>
-                                            {item.day}
-                                        </span>
+                                })
 
-                                    </div>
+                            ) : (
 
-                                );
+                                <div className="weekly-empty">
 
-                            })}
+                                    No appointment data
+                                    available.
+
+                                </div>
+
+                            )}
 
                         </div>
 
@@ -735,7 +942,11 @@ const Reports = () => {
                     Admission Report
                     ================================================== */}
 
-                <article className="reports-card admission-report-card">
+                <article
+                    className={
+                        "reports-card admission-report-card"
+                    }
+                >
 
                     <div className="reports-card-header">
 
@@ -745,6 +956,7 @@ const Reports = () => {
                                 ADMISSIONS
                             </span>
 
+
                             <h2>
                                 Admission Summary
                             </h2>
@@ -752,7 +964,11 @@ const Reports = () => {
                         </div>
 
 
-                        <div className="reports-card-header-icon purple">
+                        <div
+                            className={
+                                "reports-card-header-icon purple"
+                            }
+                        >
 
                             <BedDouble
                                 size={20}
@@ -763,30 +979,41 @@ const Reports = () => {
                     </div>
 
 
+
                     <div className="admission-total">
 
                         <span>
                             Total Admissions
                         </span>
 
+
                         <strong>
-                            {admissions?.totalAdmissions ?? 0}
+                            {
+                                admissions?.totalAdmissions
+                                ?? 0
+                            }
                         </strong>
 
                     </div>
+
 
 
                     <div className="admission-stat-row">
 
                         <div>
 
-                            <div className="admission-stat-icon active">
+                            <div
+                                className={
+                                    "admission-stat-icon active"
+                                }
+                            >
 
                                 <Activity
                                     size={17}
                                 />
 
                             </div>
+
 
                             <span>
                                 Active
@@ -796,23 +1023,32 @@ const Reports = () => {
 
 
                         <strong>
-                            {admissions?.activeAdmissions ?? 0}
+                            {
+                                admissions?.activeAdmissions
+                                ?? 0
+                            }
                         </strong>
 
                     </div>
+
 
 
                     <div className="admission-stat-row">
 
                         <div>
 
-                            <div className="admission-stat-icon discharged">
+                            <div
+                                className={
+                                    "admission-stat-icon discharged"
+                                }
+                            >
 
                                 <CheckCircle2
                                     size={17}
                                 />
 
                             </div>
+
 
                             <span>
                                 Discharged
@@ -822,10 +1058,14 @@ const Reports = () => {
 
 
                         <strong>
-                            {admissions?.dischargedAdmissions ?? 0}
+                            {
+                                admissions?.dischargedAdmissions
+                                ?? 0
+                            }
                         </strong>
 
                     </div>
+
 
 
                     <div className="admission-progress">
@@ -836,18 +1076,24 @@ const Reports = () => {
                                 Active admission rate
                             </span>
 
+
                             <strong>
+
                                 {
                                     totalAdmissions > 0
                                         ? Math.round(
                                             (
-                                                (admissions?.activeAdmissions || 0)
+                                                (
+                                                    admissions?.activeAdmissions
+                                                    || 0
+                                                )
                                                 /
                                                 totalAdmissions
                                             ) * 100
                                         )
                                         : 0
                                 }%
+
                             </strong>
 
                         </div>
@@ -859,13 +1105,17 @@ const Reports = () => {
                                 style={{
                                     width:
                                         totalAdmissions > 0
-                                            ? `${(
+                                            ? `${Math.min(
+                                                100,
                                                 (
-                                                    admissions?.activeAdmissions || 0
-                                                )
-                                                /
-                                                totalAdmissions
-                                            ) * 100}%`
+                                                    (
+                                                        admissions?.activeAdmissions
+                                                        || 0
+                                                    )
+                                                    /
+                                                    totalAdmissions
+                                                ) * 100
+                                            )}%`
                                             : "0%",
                                 }}
                             >
@@ -883,7 +1133,11 @@ const Reports = () => {
                     Billing Report
                     ================================================== */}
 
-                <article className="reports-card billing-report-card">
+                <article
+                    className={
+                        "reports-card billing-report-card"
+                    }
+                >
 
                     <div className="reports-card-header">
 
@@ -893,6 +1147,7 @@ const Reports = () => {
                                 BILLING
                             </span>
 
+
                             <h2>
                                 Financial Summary
                             </h2>
@@ -900,7 +1155,11 @@ const Reports = () => {
                         </div>
 
 
-                        <div className="reports-card-header-icon orange">
+                        <div
+                            className={
+                                "reports-card-header-icon orange"
+                            }
+                        >
 
                             <DollarSign
                                 size={20}
@@ -911,17 +1170,20 @@ const Reports = () => {
                     </div>
 
 
+
                     <div className="billing-total">
 
                         <span>
                             Total Billing Amount
                         </span>
 
+
                         <strong>
                             {formatCurrency(totalBilling)}
                         </strong>
 
                     </div>
+
 
 
                     <div className="billing-details">
@@ -931,6 +1193,7 @@ const Reports = () => {
                             <span>
                                 Total Bills
                             </span>
+
 
                             <strong>
                                 {totalBills}
@@ -945,12 +1208,14 @@ const Reports = () => {
                                 Average Bill
                             </span>
 
+
                             <strong>
 
                                 {
                                     totalBills > 0
                                         ? formatCurrency(
-                                            totalBilling / totalBills
+                                            totalBilling /
+                                            totalBills
                                         )
                                         : formatCurrency(0)
                                 }
@@ -962,11 +1227,13 @@ const Reports = () => {
                     </div>
 
 
+
                     <div className="billing-highlight">
 
                         <TrendingUp
                             size={18}
                         />
+
 
                         <span>
                             Billing data is synchronized with
@@ -983,7 +1250,11 @@ const Reports = () => {
                     Medicine Inventory
                     ================================================== */}
 
-                <article className="reports-card inventory-report-card">
+                <article
+                    className={
+                        "reports-card inventory-report-card"
+                    }
+                >
 
                     <div className="reports-card-header">
 
@@ -993,6 +1264,7 @@ const Reports = () => {
                                 PHARMACY
                             </span>
 
+
                             <h2>
                                 Medicine Inventory
                             </h2>
@@ -1000,7 +1272,11 @@ const Reports = () => {
                         </div>
 
 
-                        <div className="reports-card-header-icon green">
+                        <div
+                            className={
+                                "reports-card-header-icon green"
+                            }
+                        >
 
                             <Package
                                 size={20}
@@ -1011,19 +1287,25 @@ const Reports = () => {
                     </div>
 
 
+
                     <div className="inventory-value">
 
                         <span>
                             Total Inventory Value
                         </span>
 
+
                         <strong>
-                            {formatCurrency(
-                                inventory?.totalInventoryValue ?? 0
-                            )}
+                            {
+                                formatCurrency(
+                                    inventory?.totalInventoryValue
+                                    ?? 0
+                                )
+                            }
                         </strong>
 
                     </div>
+
 
 
                     <div className="inventory-grid">
@@ -1034,12 +1316,17 @@ const Reports = () => {
                                 size={17}
                             />
 
+
                             <span>
                                 Active
                             </span>
 
+
                             <strong>
-                                {inventory?.activeMedicines ?? 0}
+                                {
+                                    inventory?.activeMedicines
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -1051,12 +1338,17 @@ const Reports = () => {
                                 size={17}
                             />
 
+
                             <span>
                                 Inactive
                             </span>
 
+
                             <strong>
-                                {inventory?.inactiveMedicines ?? 0}
+                                {
+                                    inventory?.inactiveMedicines
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -1067,13 +1359,18 @@ const Reports = () => {
                             <AlertTriangle
                                 size={17}
                             />
+
 
                             <span>
                                 Low Stock
                             </span>
 
+
                             <strong>
-                                {inventory?.lowStockMedicines ?? 0}
+                                {
+                                    inventory?.lowStockMedicines
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -1085,12 +1382,17 @@ const Reports = () => {
                                 size={17}
                             />
 
+
                             <span>
                                 Out of Stock
                             </span>
 
+
                             <strong>
-                                {inventory?.outOfStockMedicines ?? 0}
+                                {
+                                    inventory?.outOfStockMedicines
+                                    ?? 0
+                                }
                             </strong>
 
                         </div>
@@ -1114,6 +1416,7 @@ const Reports = () => {
                     <CheckCircle2
                         size={17}
                     />
+
 
                     <span>
                         Reports are connected to live HMSPro data.

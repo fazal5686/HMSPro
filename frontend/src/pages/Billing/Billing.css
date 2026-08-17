@@ -1,0 +1,312 @@
+/* ============================================================
+   File: pages/Billing/Billing.css
+   Purpose: HMSPro Billing page styling.
+   ============================================================ */
+
+   .billing-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 28px;
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.billing-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.billing-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.billing-heading h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.15;
+}
+
+.billing-heading p {
+    margin: 8px 0 0;
+    opacity: 0.7;
+}
+
+.billing-primary-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 0;
+    border-radius: 10px;
+    padding: 11px 17px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   Summary
+   ============================================================ */
+
+.billing-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.billing-summary-card {
+    padding: 20px;
+    border: 1px solid rgba(127, 127, 127, 0.18);
+    border-radius: 16px;
+    background: var(--card-background, #ffffff);
+}
+
+.billing-summary-card span {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    opacity: 0.65;
+}
+
+.billing-summary-card strong {
+    font-size: 25px;
+}
+
+
+/* ============================================================
+   Main Card
+   ============================================================ */
+
+.billing-card {
+    overflow: hidden;
+    border: 1px solid rgba(127, 127, 127, 0.18);
+    border-radius: 18px;
+    background: var(--card-background, #ffffff);
+}
+
+
+/* ============================================================
+   Toolbar
+   ============================================================ */
+
+.billing-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px;
+    border-bottom: 1px solid rgba(127, 127, 127, 0.14);
+}
+
+.billing-search {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: min(420px, 100%);
+    padding: 10px 13px;
+    border: 1px solid rgba(127, 127, 127, 0.22);
+    border-radius: 10px;
+}
+
+.billing-search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+}
+
+.billing-refresh-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
+    border: 1px solid rgba(127, 127, 127, 0.22);
+    border-radius: 10px;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.billing-refresh-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.billing-spin {
+    animation: billing-spin 0.9s linear infinite;
+}
+
+@keyframes billing-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ============================================================
+   Error
+   ============================================================ */
+
+.billing-error {
+    margin: 16px 18px 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(220, 53, 69, 0.09);
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   Table
+   ============================================================ */
+
+.billing-table-wrapper {
+    overflow-x: auto;
+}
+
+.billing-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+.billing-table th {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.58;
+}
+
+.billing-table td {
+    padding: 16px 18px;
+    border-top: 1px solid rgba(127, 127, 127, 0.12);
+    font-size: 14px;
+}
+
+.billing-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.billing-table tbody tr:hover {
+    background: rgba(127, 127, 127, 0.045);
+}
+
+
+/* ============================================================
+   Status
+   ============================================================ */
+
+.billing-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.billing-status.paid {
+    background: rgba(25, 135, 84, 0.11);
+}
+
+.billing-status.pending {
+    background: rgba(255, 193, 7, 0.14);
+}
+
+.billing-status.partial {
+    background: rgba(13, 110, 253, 0.11);
+}
+
+.billing-status.overdue {
+    background: rgba(220, 53, 69, 0.11);
+}
+
+
+/* ============================================================
+   View Button
+   ============================================================ */
+
+.billing-view-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(127, 127, 127, 0.2);
+    border-radius: 9px;
+    background: transparent;
+    cursor: pointer;
+}
+
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.billing-empty {
+    height: 180px;
+    text-align: center !important;
+    vertical-align: middle;
+    opacity: 0.65;
+}
+
+.billing-empty svg {
+    display: block;
+    margin: 0 auto 8px;
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .billing-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .billing-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .billing-page {
+        padding: 18px;
+    }
+
+    .billing-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .billing-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .billing-search {
+        width: auto;
+    }
+
+}

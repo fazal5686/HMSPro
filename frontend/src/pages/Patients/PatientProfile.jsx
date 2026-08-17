@@ -13,7 +13,7 @@ import {
     updatePatientProfile,
 } from "../../services/patientService.js";
 
-
+import "./PatientProfile.css";
 // ============================================================
 // Initial Form State
 // ============================================================

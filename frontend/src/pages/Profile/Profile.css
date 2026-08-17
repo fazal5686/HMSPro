@@ -1,0 +1,667 @@
+/* ============================================================
+   HMSPro Profile Page
+   ============================================================ */
+
+
+   .profile-page {
+
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 4px 2px 30px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.profile-header {
+
+    margin-bottom: 22px;
+
+}
+
+
+.profile-eyebrow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+
+}
+
+
+.profile-header h1 {
+
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 30px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+}
+
+
+.profile-header p {
+
+    margin: 8px 0 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+}
+
+
+/* ============================================================
+   Profile Hero
+   ============================================================ */
+
+.profile-hero {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 22px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #e6ebf2;
+
+    border-radius: 15px;
+
+    background: white;
+
+    box-shadow:
+        0 6px 22px rgba(15, 23, 42, 0.04);
+
+}
+
+
+.profile-avatar-large {
+
+    width: 72px;
+
+    height: 72px;
+
+    flex: 0 0 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    color: white;
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 18px rgba(37, 99, 235, 0.22);
+
+}
+
+
+.profile-hero-info h2 {
+
+    margin: 0 0 8px;
+
+    color: #172033;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+}
+
+
+.profile-role {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-right: 10px;
+
+    color: #475569;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+
+.profile-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: #15803d;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+/* ============================================================
+   Main Grid
+   ============================================================ */
+
+.profile-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+
+}
+
+
+.profile-card {
+
+    overflow: hidden;
+
+    border: 1px solid #e6ebf2;
+
+    border-radius: 15px;
+
+    background: white;
+
+    box-shadow:
+        0 6px 22px rgba(15, 23, 42, 0.04);
+
+}
+
+
+.profile-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 19px 20px;
+
+    border-bottom: 1px solid #edf0f5;
+
+}
+
+
+.profile-card-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+.profile-card-header span {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.09em;
+
+}
+
+
+.profile-card-header h3 {
+
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+}
+
+
+/* ============================================================
+   Details
+   ============================================================ */
+
+.profile-details {
+
+    padding: 5px 20px 12px;
+
+}
+
+
+.profile-detail {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #f0f2f6;
+
+}
+
+
+.profile-detail:last-child {
+
+    border-bottom: 0;
+
+}
+
+
+.profile-detail-icon {
+
+    width: 35px;
+
+    height: 35px;
+
+    flex: 0 0 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+}
+
+
+.profile-detail span {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #8a94a6;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+.profile-detail strong {
+
+    display: block;
+
+    color: #263244;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    word-break: break-word;
+
+}
+
+
+/* ============================================================
+   Status Panel
+   ============================================================ */
+
+.profile-status-panel {
+
+    padding: 7px 20px 14px;
+
+}
+
+
+.profile-status-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 17px 0;
+
+    border-bottom: 1px solid #f0f2f6;
+
+}
+
+
+.profile-status-row:last-child {
+
+    border-bottom: 0;
+
+}
+
+
+.profile-status-row > div:first-child span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #8a94a6;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+.profile-status-row > div:first-child strong {
+
+    color: #263244;
+
+    font-size: 14px;
+
+    font-weight: 750;
+
+}
+
+
+.profile-status-badge,
+.profile-role-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 10px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+.profile-status-badge.active {
+
+    background: #eaf9f0;
+
+    color: #15803d;
+
+}
+
+
+.profile-status-badge.inactive {
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+}
+
+
+.profile-role-badge {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+/* ============================================================
+   Information
+   ============================================================ */
+
+.profile-information {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin-top: 18px;
+
+    padding: 16px 18px;
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 12px;
+
+    background: #f8fbff;
+
+}
+
+
+.profile-information-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #dbeafe;
+
+    color: #2563eb;
+
+}
+
+
+.profile-information strong {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #1e3a8a;
+
+    font-size: 13px;
+
+}
+
+
+.profile-information p {
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+}
+
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.profile-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 16px;
+
+    padding: 12px 15px;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    color: #7b8494;
+
+    font-size: 11px;
+
+}
+
+
+.profile-footer div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #15945c;
+
+    font-weight: 600;
+
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 850px) {
+
+    .profile-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .profile-hero {
+
+        align-items: flex-start;
+
+    }
+
+
+    .profile-avatar-large {
+
+        width: 58px;
+
+        height: 58px;
+
+        flex-basis: 58px;
+
+        border-radius: 16px;
+
+        font-size: 23px;
+
+    }
+
+
+    .profile-hero-info h2 {
+
+        font-size: 19px;
+
+    }
+
+
+    .profile-status-row {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .profile-footer {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+}

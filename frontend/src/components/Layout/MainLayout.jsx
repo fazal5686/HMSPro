@@ -33,6 +33,8 @@ import {
     Search,
     ChevronDown,
     Hospital,
+    ScanLine,
+    HeartPulse,
 } from "lucide-react";
 
 
@@ -52,68 +54,152 @@ import "./MainLayout.css";
 
 // ============================================================
 // Navigation Configuration
+//
+// Navigation is organized according to the natural HMSPro
+// hospital workflow rather than simply listing modules.
 // ============================================================
 
-const navigationItems = [
+const navigationGroups = [
+
+    // ========================================================
+    // MAIN
+    // ========================================================
 
     {
-        label: "Dashboard",
-        path: "/",
-        icon: LayoutDashboard,
+        title: "MAIN",
+
+        items: [
+
+            {
+                label: "Dashboard",
+                path: "/",
+                icon: LayoutDashboard,
+            },
+
+        ],
     },
 
-    {
-        label: "Patients",
-        path: "/patients",
-        icon: Users,
-    },
+
+    // ========================================================
+    // PATIENT CARE
+    // ========================================================
 
     {
-        label: "Doctors",
-        path: "/doctors",
-        icon: Stethoscope,
+        title: "PATIENT CARE",
+
+        items: [
+
+            {
+                label: "Patients",
+                path: "/patients",
+                icon: Users,
+            },
+
+            {
+                label: "Doctors",
+                path: "/doctors",
+                icon: Stethoscope,
+            },
+
+            {
+                label: "Nurses",
+                path: "/nurses",
+                icon: HeartPulse,
+            },
+
+            {
+                label: "Receptionists",
+                path: "/receptionists",
+                icon: Users,
+            },
+
+            {
+                label: "Departments",
+                path: "/departments",
+                icon: Hospital,
+            },
+
+            {
+                label: "Appointments",
+                path: "/appointments",
+                icon: CalendarDays,
+            },
+
+            {
+                label: "Admissions",
+                path: "/admissions",
+                icon: ClipboardList,
+            },
+
+            {
+                label: "Discharges",
+                path: "/discharges",
+                icon: ClipboardList,
+            },
+
+        ],
     },
 
-    {
-        label: "Appointments",
-        path: "/appointments",
-        icon: CalendarDays,
-    },
+
+    // ========================================================
+    // HOSPITAL OPERATIONS
+    // ========================================================
 
     {
-        label: "Admissions",
-        path: "/admissions",
-        icon: ClipboardList,
+        title: "HOSPITAL OPERATIONS",
+
+        items: [
+
+            {
+                label: "Rooms & Beds",
+                path: "/rooms",
+                icon: BedDouble,
+            },
+
+            {
+                label: "Pharmacy",
+                path: "/pharmacy",
+                icon: Pill,
+            },
+
+            {
+                label: "Laboratory",
+                path: "/laboratory",
+                icon: FlaskConical,
+            },
+
+            {
+                label: "Radiology",
+                path: "/radiology",
+                icon: ScanLine,
+            },
+
+        ],
     },
 
-    {
-        label: "Rooms & Beds",
-        path: "/rooms",
-        icon: BedDouble,
-    },
+
+    // ========================================================
+    // FINANCE & ANALYTICS
+    // ========================================================
 
     {
-        label: "Pharmacy",
-        path: "/pharmacy",
-        icon: Pill,
-    },
+        title: "FINANCE & ANALYTICS",
 
-    {
-        label: "Laboratory",
-        path: "/laboratory",
-        icon: FlaskConical,
-    },
+        items: [
 
-    {
-        label: "Billing",
-        path: "/billing",
-        icon: ReceiptText,
-    },
+            {
+                label: "Billing",
+                path: "/billing",
+                icon: ReceiptText,
+            },
 
-    {
-        label: "Reports",
-        path: "/reports",
-        icon: BarChart3,
+            {
+                label: "Reports",
+                path: "/reports",
+                icon: BarChart3,
+            },
+
+        ],
     },
 
 ];
@@ -164,7 +250,9 @@ const MainLayout = () => {
     // Administrative Roles
     //
     // These roles can access the Users administration section.
-    // Actual security MUST also be enforced by the backend.
+    //
+    // NOTE:
+    // Actual authorization MUST also be enforced by the backend.
     // ========================================================
 
     const canManageUsers =
@@ -179,15 +267,58 @@ const MainLayout = () => {
 
     const handleLogout = () => {
 
-
         logout();
-
 
         navigate(
             "/login",
             {
                 replace: true,
             }
+        );
+
+    };
+
+
+
+    // ========================================================
+    // Navigation Link Renderer
+    //
+    // Keeps all navigation items visually consistent.
+    // ========================================================
+
+    const renderNavigationItem = (item) => {
+
+        const Icon = item.icon;
+
+
+        return (
+
+            <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.path === "/"}
+                className={({ isActive }) =>
+                    `hms-nav-item ${
+                        isActive
+                            ? "active"
+                            : ""
+                    }`
+                }
+            >
+
+                <Icon
+                    size={19}
+                    strokeWidth={2}
+                />
+
+
+                <span>
+                    {item.label}
+                </span>
+
+
+            </NavLink>
+
         );
 
     };
@@ -254,53 +385,32 @@ const MainLayout = () => {
                 <nav className="hms-navigation">
 
 
-                    <p className="hms-nav-title">
-                        MAIN MENU
-                    </p>
-
-
-
                     {/* ==================================================
-                        Main Navigation Items
+                        Navigation Groups
                         ================================================== */}
 
-                    {navigationItems.map(
-                        (item) => {
+                    {navigationGroups.map(
+                        (group) => (
 
-                            const Icon =
-                                item.icon;
-
-
-                            return (
-
-                                <NavLink
-                                    key={item.path}
-                                    to={item.path}
-                                    className={({ isActive }) =>
-                                        `hms-nav-item ${
-                                            isActive
-                                                ? "active"
-                                                : ""
-                                        }`
-                                    }
-                                >
-
-                                    <Icon
-                                        size={19}
-                                        strokeWidth={2}
-                                    />
+                            <div
+                                key={group.title}
+                                className="hms-navigation-group"
+                            >
 
 
-                                    <span>
-                                        {item.label}
-                                    </span>
+                                <p className="hms-nav-title">
+                                    {group.title}
+                                </p>
 
 
-                                </NavLink>
+                                {group.items.map(
+                                    renderNavigationItem
+                                )}
 
-                            );
 
-                        }
+                            </div>
+
+                        )
                     )}
 
 
@@ -311,9 +421,10 @@ const MainLayout = () => {
 
                     {canManageUsers && (
 
-                        <>
+                        <div className="hms-navigation-group">
 
-                            <p className="hms-nav-title hms-nav-title-settings">
+
+                            <p className="hms-nav-title">
                                 ADMINISTRATION
                             </p>
 
@@ -342,7 +453,8 @@ const MainLayout = () => {
 
                             </NavLink>
 
-                        </>
+
+                        </div>
 
                     )}
 
@@ -352,34 +464,40 @@ const MainLayout = () => {
                         System Section
                         ================================================== */}
 
-                    <p className="hms-nav-title hms-nav-title-settings">
-                        SYSTEM
-                    </p>
+                    <div className="hms-navigation-group">
 
 
-                    <NavLink
-                        to="/settings"
-                        className={({ isActive }) =>
-                            `hms-nav-item ${
-                                isActive
-                                    ? "active"
-                                    : ""
-                            }`
-                        }
-                    >
-
-                        <Settings
-                            size={19}
-                            strokeWidth={2}
-                        />
+                        <p className="hms-nav-title">
+                            SYSTEM
+                        </p>
 
 
-                        <span>
-                            Settings
-                        </span>
+                        <NavLink
+                            to="/settings"
+                            className={({ isActive }) =>
+                                `hms-nav-item ${
+                                    isActive
+                                        ? "active"
+                                        : ""
+                                }`
+                            }
+                        >
+
+                            <Settings
+                                size={19}
+                                strokeWidth={2}
+                            />
 
 
-                    </NavLink>
+                            <span>
+                                Settings
+                            </span>
+
+
+                        </NavLink>
+
+
+                    </div>
 
 
                 </nav>
@@ -488,7 +606,6 @@ const MainLayout = () => {
                     </div>
 
 
-
                     {/* ==================================================
                         Header Right
                         ================================================== */}
@@ -496,12 +613,19 @@ const MainLayout = () => {
                     <div className="hms-header-right">
 
 
-                        {/* Notifications */}
+                        {/* ==================================================
+                            Notifications
+                            ================================================== */}
 
                         <button
                             type="button"
                             className="hms-icon-button"
-                            aria-label="Notifications"
+                            onClick={() =>
+                                navigate(
+                                    "/notifications"
+                                )
+                            }
+                            aria-label="Open notifications"
                         >
 
                             <Bell
@@ -512,12 +636,13 @@ const MainLayout = () => {
                             <span className="hms-notification-dot">
                             </span>
 
-
                         </button>
 
 
 
-                        {/* User Profile */}
+                        {/* ==================================================
+                            User Profile
+                            ================================================== */}
 
                         <button
                             type="button"
@@ -545,7 +670,6 @@ const MainLayout = () => {
 
                             <div className="hms-profile-info">
 
-
                                 <strong>
                                     {userName}
                                 </strong>
@@ -554,7 +678,6 @@ const MainLayout = () => {
                                 <span>
                                     {userRole}
                                 </span>
-
 
                             </div>
 
@@ -565,7 +688,6 @@ const MainLayout = () => {
                                 className="hms-profile-chevron"
                             />
 
-
                         </button>
 
 
@@ -573,7 +695,6 @@ const MainLayout = () => {
 
 
                 </header>
-
 
 
                 {/* ==================================================

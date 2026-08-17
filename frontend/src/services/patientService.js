@@ -1,6 +1,9 @@
 // ============================================================
-// File: D:\HMSPro\frontend\src\services\patientService.js
-// Purpose: Handles all patient profile API communication.
+// File:
+// D:\HMSPro\frontend\src\services\patientService.js
+//
+// Purpose:
+// Handles all patient API communication.
 // ============================================================
 
 
@@ -10,38 +13,48 @@ import API_ROUTES from "../api/apiRoutes.js";
 
 
 
+
 // ============================================================
 // Create Patient Profile
+// Patient self-service
 // ============================================================
 
-export const createPatientProfile = async (patientData) => {
+export const createPatientProfile = async (
 
-    const response = await API.post(
+    patientData
 
-        API_ROUTES.PATIENTS.PROFILE,
+) => {
 
-        patientData
+    const response =
+        await API.post(
 
-    );
+            API_ROUTES.PATIENTS.PROFILE,
+
+            patientData
+
+        );
 
 
     return response.data.data;
 
 };
+
 
 
 
 // ============================================================
 // Get Current Patient Profile
+// Patient self-service
 // ============================================================
 
 export const getPatientProfile = async () => {
 
-    const response = await API.get(
+    const response =
+        await API.get(
 
-        API_ROUTES.PATIENTS.PROFILE
+            API_ROUTES.PATIENTS.PROFILE
 
-    );
+        );
 
 
     return response.data.data;
@@ -50,19 +63,104 @@ export const getPatientProfile = async () => {
 
 
 
+
 // ============================================================
 // Update Current Patient Profile
+// Patient self-service
 // ============================================================
 
-export const updatePatientProfile = async (patientData) => {
+export const updatePatientProfile = async (
 
-    const response = await API.put(
+    patientData
 
-        API_ROUTES.PATIENTS.PROFILE,
+) => {
 
-        patientData
+    const response =
+        await API.put(
 
-    );
+            API_ROUTES.PATIENTS.PROFILE,
+
+            patientData
+
+        );
+
+
+    return response.data.data;
+
+};
+
+
+
+
+// ============================================================
+// Get All Patients
+// Administrative Patient Directory
+// ============================================================
+
+export const getAllPatients = async () => {
+
+    const response =
+        await API.get(
+
+            API_ROUTES.PATIENTS.LIST
+
+        );
+
+
+    return response.data.data;
+
+};
+
+
+
+
+// ============================================================
+// Get Patient By ID
+// Administrative Patient Directory
+// ============================================================
+
+export const getPatientById = async (
+
+    patientId
+
+) => {
+
+    const response =
+        await API.get(
+
+            `${API_ROUTES.PATIENTS.LIST}/${patientId}`
+
+        );
+
+
+    return response.data.data;
+
+};
+
+
+
+
+// ============================================================
+// Update Patient By ID
+// Administrative Patient Directory
+// ============================================================
+
+export const updatePatientById = async (
+
+    patientId,
+
+    patientData
+
+) => {
+
+    const response =
+        await API.put(
+
+            `${API_ROUTES.PATIENTS.LIST}/${patientId}`,
+
+            patientData
+
+        );
 
 
     return response.data.data;

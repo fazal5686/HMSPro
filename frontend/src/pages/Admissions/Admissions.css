@@ -1,0 +1,420 @@
+/* ============================================================
+   File: pages/Admissions/Admissions.css
+   Purpose: Styling for HMSPro Admissions page.
+   ============================================================ */
+
+   .admissions-page {
+    width: 100%;
+    padding: 28px;
+}
+
+
+/* ============================================================
+   Heading
+   ============================================================ */
+
+.admissions-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.admissions-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.admissions-heading h1 {
+    margin: 0;
+    font-size: 32px;
+    line-height: 1.15;
+}
+
+.admissions-heading p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+
+/* ============================================================
+   Refresh
+   ============================================================ */
+
+.admissions-refresh-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.admissions-refresh-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.admissions-spin {
+    animation: admissions-spin 1s linear infinite;
+}
+
+@keyframes admissions-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* ============================================================
+   Error
+   ============================================================ */
+
+.admissions-error {
+    margin-bottom: 20px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   Statistics
+   ============================================================ */
+
+.admissions-stats {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admissions-stat-card {
+    min-height: 145px;
+    padding: 20px;
+    border: 1px solid rgba(127, 127, 127, 0.14);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.admissions-stat-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+}
+
+.admissions-stat-card span {
+    margin-top: 14px;
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.admissions-stat-card strong {
+    margin-top: 4px;
+    font-size: 27px;
+    line-height: 1;
+}
+
+
+/* ============================================================
+   Main Card
+   ============================================================ */
+
+.admissions-card {
+    overflow: hidden;
+    border: 1px solid rgba(127, 127, 127, 0.14);
+    border-radius: 18px;
+}
+
+.admissions-card-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px;
+    border-bottom: 1px solid rgba(127, 127, 127, 0.12);
+}
+
+.admissions-card-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+}
+
+.admissions-card-header h2 {
+    margin: 5px 0 0;
+    font-size: 20px;
+}
+
+
+/* ============================================================
+   Controls
+   ============================================================ */
+
+.admissions-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admissions-search {
+    min-width: 230px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border: 1px solid rgba(127, 127, 127, 0.2);
+    border-radius: 9px;
+}
+
+.admissions-search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font-size: 13px;
+}
+
+.admissions-filter {
+    min-width: 135px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid rgba(127, 127, 127, 0.2);
+    border-radius: 9px;
+    outline: none;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   Table
+   ============================================================ */
+
+.admissions-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admissions-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+}
+
+.admissions-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    white-space: nowrap;
+}
+
+.admissions-table td {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(127, 127, 127, 0.1);
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.admissions-table tbody tr {
+    transition: background 0.18s ease;
+}
+
+.admissions-table tbody tr:hover {
+    background: rgba(127, 127, 127, 0.035);
+}
+
+
+/* ============================================================
+   Patient
+   ============================================================ */
+
+.admission-patient {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.admission-patient-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.admission-patient div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.admission-patient strong {
+    font-size: 13px;
+}
+
+.admission-patient span {
+    font-size: 11px;
+    opacity: 0.55;
+}
+
+
+/* ============================================================
+   Doctor
+   ============================================================ */
+
+.admission-doctor {
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   Room
+   ============================================================ */
+
+.admission-room,
+.admission-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   Status
+   ============================================================ */
+
+.admission-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   Action
+   ============================================================ */
+
+.admission-more {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+}
+
+
+/* ============================================================
+   State
+   ============================================================ */
+
+.admissions-state {
+    min-height: 250px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+    opacity: 0.7;
+}
+
+.admissions-state strong {
+    font-size: 15px;
+}
+
+.admissions-state span {
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+    .admissions-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .admissions-heading,
+    .admissions-card-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .admissions-controls {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .admissions-page {
+        padding: 16px;
+    }
+
+    .admissions-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admissions-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admissions-search {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .admissions-filter {
+        width: 100%;
+    }
+
+}

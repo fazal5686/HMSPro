@@ -1,0 +1,598 @@
+
+/* ============================================================
+   File: pages/Notifications/Notifications.css
+   Purpose: HMSPro Notifications page styling.
+   ============================================================ */
+
+
+.notifications-page {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-bottom: 32px;
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.notifications-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+
+.notifications-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+
+.notifications-header h1 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+
+.notifications-header p {
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+.notifications-header-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 120px;
+    padding: 13px 16px;
+    border: 1px solid #dbeafe;
+    border-radius: 14px;
+    background: #eff6ff;
+}
+
+
+.notifications-count-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: #ffffff;
+    color: #2563eb;
+}
+
+
+.notifications-header-summary div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+
+.notifications-header-summary strong {
+    color: #1e3a8a;
+    font-size: 21px;
+    line-height: 1;
+}
+
+
+.notifications-header-summary span {
+    color: #64748b;
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   Toolbar
+   ============================================================ */
+
+.notifications-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+
+.notifications-filters {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+
+.notifications-filters button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 35px;
+    padding: 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #64748b;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+
+.notifications-filters button:hover {
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+
+.notifications-filters button.active {
+    border-color: #2563eb;
+    background: #2563eb;
+    color: #ffffff;
+}
+
+
+.notifications-filters button span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #2563eb;
+    font-size: 10px;
+}
+
+
+.notifications-filters button.active span {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+
+.notifications-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+
+.notifications-search {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 210px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #94a3b8;
+}
+
+
+.notifications-search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #334155;
+    font: inherit;
+    font-size: 12px;
+}
+
+
+.notifications-action-button,
+.notifications-clear-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 11px;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+.notifications-action-button {
+    border: 1px solid #dbeafe;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+.notifications-clear-button {
+    border: 1px solid #fee2e2;
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+.notifications-action-button:disabled,
+.notifications-clear-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+
+/* ============================================================
+   Main Card
+   ============================================================ */
+
+.notifications-card {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+
+
+.notifications-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 22px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+
+.notifications-card-kicker {
+    display: block;
+    margin-bottom: 4px;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+
+.notifications-card-header h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 18px;
+}
+
+
+.notifications-card-total {
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+/* ============================================================
+   Notification List
+   ============================================================ */
+
+.notification-list {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 17px 22px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.2s;
+}
+
+
+.notification-item:last-child {
+    border-bottom: 0;
+}
+
+
+.notification-item:hover {
+    background: #f8fafc;
+}
+
+
+.notification-item.unread {
+    background: #f8fbff;
+}
+
+
+.notification-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+
+.notification-icon.appointment {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+.notification-icon.patient {
+    background: #f0fdfa;
+    color: #0d9488;
+}
+
+
+.notification-icon.medicine {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+
+.notification-icon.system {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+
+.notification-icon.warning {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+
+.notification-content {
+    min-width: 0;
+    flex: 1;
+}
+
+
+.notification-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.notification-title-row h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+
+.notification-content p {
+    margin: 5px 0 7px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+.notification-unread {
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #2563eb;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+
+.notification-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.notification-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+
+.notification-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+
+.notification-item:hover .notification-item-actions {
+    opacity: 1;
+}
+
+
+.notification-item-actions button {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+
+.notification-item-actions button:hover {
+    background: #f1f5f9;
+    color: #2563eb;
+}
+
+
+.notification-item-actions button:last-child:hover {
+    color: #dc2626;
+}
+
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.notifications-empty {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 300px;
+    padding: 30px;
+    text-align: center;
+}
+
+
+.notifications-empty-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    border-radius: 17px;
+    background: #f1f5f9;
+    color: #94a3b8;
+}
+
+
+.notifications-empty strong {
+    color: #334155;
+    font-size: 15px;
+}
+
+
+.notifications-empty span {
+    max-width: 380px;
+    margin-top: 6px;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.notifications-footer {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    padding: 12px 2px;
+    color: #64748b;
+    font-size: 11px;
+}
+
+
+.notifications-footer div {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
+.notifications-footer svg {
+    color: #16a34a;
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 850px) {
+
+    .notifications-header {
+        align-items: flex-start;
+    }
+
+
+    .notifications-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .notifications-actions {
+        width: 100%;
+    }
+
+
+    .notifications-search {
+        flex: 1;
+        width: auto;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .notifications-page {
+        padding: 0 4px 28px;
+    }
+
+
+    .notifications-header-summary {
+        display: none;
+    }
+
+
+    .notifications-header h1 {
+        font-size: 25px;
+    }
+
+
+    .notifications-card-header,
+    .notification-item {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+
+    .notification-item {
+        align-items: flex-start;
+    }
+
+
+    .notification-item-actions {
+        opacity: 1;
+    }
+
+
+    .notifications-search {
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+}

@@ -1,0 +1,506 @@
+/* ============================================================
+   File: pages/Radiology/Radiology.css
+   Purpose: HMSPro Radiology page styling.
+   ============================================================ */
+
+
+   .radiology-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 4px 0 24px;
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.radiology-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+
+.radiology-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #64748b;
+}
+
+
+.radiology-header h1 {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+
+.radiology-header p {
+    margin: 8px 0 0;
+    max-width: 650px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+.radiology-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 10px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+.radiology-primary-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.94;
+}
+
+
+/* ============================================================
+   Summary Cards
+   ============================================================ */
+
+.radiology-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+
+.radiology-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 112px;
+    padding: 18px;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+
+
+.radiology-summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+}
+
+
+.radiology-summary-icon.blue {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+
+.radiology-summary-icon.orange {
+    background: #ffedd5;
+    color: #ea580c;
+}
+
+
+.radiology-summary-icon.green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+
+.radiology-summary-icon.purple {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+
+.radiology-summary-card div:last-child {
+    min-width: 0;
+}
+
+
+.radiology-summary-card span {
+    display: block;
+    margin-bottom: 4px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.radiology-summary-card strong {
+    display: block;
+    color: #0f172a;
+    font-size: 24px;
+    line-height: 1.15;
+}
+
+
+.radiology-summary-card small {
+    display: block;
+    margin-top: 4px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   Main Card
+   ============================================================ */
+
+.radiology-card {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 5px 22px rgba(15, 23, 42, 0.045);
+}
+
+
+.radiology-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px;
+    border-bottom: 1px solid #eef2f7;
+}
+
+
+.radiology-card-kicker {
+    display: block;
+    margin-bottom: 5px;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+
+.radiology-card-header h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 19px;
+    font-weight: 750;
+}
+
+
+.radiology-refresh-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 36px;
+    padding: 0 12px;
+    border: 1px solid #dbe3ec;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+.radiology-refresh-button:hover {
+    background: #f8fafc;
+}
+
+
+/* ============================================================
+   Toolbar
+   ============================================================ */
+
+.radiology-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 24px;
+    border-bottom: 1px solid #eef2f7;
+    background: #fafcff;
+}
+
+
+.radiology-search {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex: 1;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid #dbe3ec;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #94a3b8;
+}
+
+
+.radiology-search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #334155;
+    font-size: 13px;
+}
+
+
+.radiology-search input::placeholder {
+    color: #94a3b8;
+}
+
+
+.radiology-filter {
+    min-width: 150px;
+    height: 40px;
+    padding: 0 11px;
+    border: 1px solid #dbe3ec;
+    border-radius: 9px;
+    outline: 0;
+    background: #ffffff;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   Table
+   ============================================================ */
+
+.radiology-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+
+.radiology-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+}
+
+
+.radiology-table th {
+    padding: 13px 18px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+
+.radiology-table td {
+    padding: 15px 18px;
+    border-bottom: 1px solid #eef2f7;
+    color: #475569;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+
+.radiology-table tbody tr:hover {
+    background: #fafcff;
+}
+
+
+.radiology-table td strong {
+    color: #334155;
+    font-size: 12px;
+}
+
+
+.radiology-patient {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+
+.radiology-patient-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 31px;
+    height: 31px;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+.radiology-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+
+.radiology-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 25px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+
+.radiology-status.pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.radiology-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 46px 24px;
+    text-align: center;
+}
+
+
+.radiology-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 62px;
+    height: 62px;
+    margin-bottom: 14px;
+    border-radius: 16px;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+.radiology-empty h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 16px;
+}
+
+
+.radiology-empty p {
+    max-width: 560px;
+    margin: 8px 0 0;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.radiology-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 14px;
+    padding: 0 4px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+
+.radiology-footer div {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+    .radiology-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .radiology-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .radiology-primary-button {
+        width: 100%;
+    }
+
+
+    .radiology-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .radiology-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .radiology-filter {
+        width: 100%;
+    }
+
+
+    .radiology-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .radiology-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}

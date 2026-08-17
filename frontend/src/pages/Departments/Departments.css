@@ -1,0 +1,539 @@
+/* ============================================================
+   File: pages/Departments/Departments.css
+   Purpose: HMSPro Departments page styling.
+   ============================================================ */
+
+
+/* ============================================================
+   Page
+   ============================================================ */
+
+   .departments-page {
+    width: 100%;
+    min-height: 100%;
+    padding: 4px 0 32px;
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.departments-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+
+.departments-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #0f8f86;
+}
+
+
+.departments-heading h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    color: #172033;
+}
+
+
+.departments-heading p {
+    margin: 9px 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #738096;
+}
+
+
+.departments-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 17px;
+    border: 0;
+    border-radius: 11px;
+    background: #0f8f86;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(15, 143, 134, 0.18);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.departments-primary-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 11px 24px rgba(15, 143, 134, 0.24);
+}
+
+
+/* ============================================================
+   Summary Cards
+   ============================================================ */
+
+.department-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+
+.department-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 94px;
+    padding: 18px;
+    border: 1px solid #e8edf3;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 7px 22px rgba(31, 48, 73, 0.045);
+}
+
+
+.department-summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    border-radius: 13px;
+}
+
+
+.department-summary-icon.blue {
+    background: #edf5ff;
+    color: #3978c9;
+}
+
+
+.department-summary-icon.teal {
+    background: #eaf9f6;
+    color: #168f83;
+}
+
+
+.department-summary-icon.purple {
+    background: #f3efff;
+    color: #7756c7;
+}
+
+
+.department-summary-card span {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #7a879a;
+}
+
+
+.department-summary-card strong {
+    display: block;
+    font-size: 23px;
+    line-height: 1;
+    color: #172033;
+}
+
+
+/* ============================================================
+   Main Card
+   ============================================================ */
+
+.departments-card {
+    overflow: hidden;
+    border: 1px solid #e7ecf2;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 8px 26px rgba(31, 48, 73, 0.05);
+}
+
+
+/* ============================================================
+   Card Header
+   ============================================================ */
+
+.departments-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 24px;
+    border-bottom: 1px solid #edf0f4;
+}
+
+
+.department-card-kicker {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #8a95a6;
+}
+
+
+.departments-card-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #172033;
+}
+
+
+/* ============================================================
+   Search
+   ============================================================ */
+
+.department-search {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 245px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #e1e7ee;
+    border-radius: 10px;
+    background: #f9fafc;
+    color: #8994a5;
+}
+
+
+.department-search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 12px;
+    color: #273246;
+}
+
+
+.department-search input::placeholder {
+    color: #9aa5b5;
+}
+
+
+/* ============================================================
+   Department List
+   ============================================================ */
+
+.department-list {
+    width: 100%;
+}
+
+
+.department-row {
+    display: grid;
+    grid-template-columns:
+        46px
+        minmax(180px, 1.7fr)
+        minmax(150px, 1fr)
+        90px
+        72px
+        36px
+        20px;
+    align-items: center;
+    gap: 15px;
+    min-height: 88px;
+    padding: 14px 24px;
+    border-bottom: 1px solid #eef1f5;
+    transition: background 0.2s ease;
+}
+
+
+.department-row:last-child {
+    border-bottom: 0;
+}
+
+
+.department-row:hover {
+    background: #fafcfd;
+}
+
+
+.department-main-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #edf8f7;
+    color: #128b82;
+}
+
+
+.department-info {
+    min-width: 0;
+}
+
+
+.department-info strong {
+    display: block;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    color: #1c2638;
+}
+
+
+.department-info span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    color: #8490a1;
+}
+
+
+.department-head span {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 10px;
+    color: #98a2b1;
+}
+
+
+.department-head strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    color: #344054;
+}
+
+
+.department-doctors {
+    text-align: center;
+}
+
+
+.department-doctors span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 4px;
+    font-size: 10px;
+    color: #8b96a6;
+}
+
+
+.department-doctors strong {
+    display: block;
+    font-size: 14px;
+    color: #263247;
+}
+
+
+.department-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 25px;
+    padding: 0 9px;
+    border-radius: 20px;
+    background: #eaf8f2;
+    color: #21845c;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+.department-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #8994a5;
+    cursor: pointer;
+}
+
+
+.department-action:hover {
+    background: #f0f3f7;
+    color: #445168;
+}
+
+
+.department-arrow {
+    color: #a2acba;
+}
+
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.departments-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 24px;
+    border-top: 1px solid #edf0f4;
+    background: #fbfcfd;
+}
+
+
+.departments-footer > span {
+    font-size: 11px;
+    color: #8a95a5;
+}
+
+
+.departments-view-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #168b83;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+    .department-row {
+        grid-template-columns:
+            46px
+            minmax(150px, 1.5fr)
+            minmax(130px, 1fr)
+            70px
+            65px
+            32px;
+    }
+
+    .department-arrow {
+        display: none;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .departments-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .department-summary {
+        grid-template-columns: 1fr;
+    }
+
+
+    .departments-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .department-search {
+        width: 100%;
+    }
+
+
+    .department-row {
+        grid-template-columns: 46px 1fr auto;
+        gap: 12px;
+    }
+
+
+    .department-head,
+    .department-doctors {
+        display: none;
+    }
+
+
+    .department-status {
+        grid-column: 2;
+        justify-self: start;
+    }
+
+
+    .department-action {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+
+    .departments-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .departments-page {
+        padding-bottom: 20px;
+    }
+
+
+    .departments-heading h1 {
+        font-size: 25px;
+    }
+
+
+    .departments-primary-button {
+        width: 100%;
+    }
+
+
+    .department-row {
+        padding: 13px 16px;
+    }
+
+
+    .departments-card-header {
+        padding: 18px 16px;
+    }
+
+
+    .departments-footer {
+        padding: 14px 16px;
+    }
+
+}

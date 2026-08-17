@@ -5,7 +5,7 @@
 
 import { Navigate, Outlet } from "react-router-dom";
 
-import { useAuthContext } from "../context/AuthContext.jsx";
+import useAuthContext from "../hooks/useAuthContext.js";
 
 
 // ============================================================

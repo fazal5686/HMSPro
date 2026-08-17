@@ -1,0 +1,754 @@
+/* ============================================================
+   File:
+   D:\HMSPro\frontend\src\pages\Receptionists\Receptionists.css
+
+   Purpose:
+   Styling for HMSPro Receptionists page.
+   ============================================================ */
+
+
+   .receptionists-page {
+
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 4px 2px 30px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.receptionists-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.receptionists-eyebrow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+
+}
+
+
+.receptionists-header h1 {
+
+    margin: 0;
+
+    font-size: 30px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    color: #172033;
+
+}
+
+
+.receptionists-header p {
+
+    margin: 8px 0 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+}
+
+
+.receptionists-primary-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 42px;
+
+    padding: 0 17px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 7px 18px rgba(37, 99, 235, 0.18);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.receptionists-primary-button:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.24);
+
+}
+
+
+/* ============================================================
+   Summary Cards
+   ============================================================ */
+
+.receptionists-summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.receptionist-summary-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    background: white;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 14px;
+
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+
+}
+
+
+.receptionist-summary-icon {
+
+    width: 46px;
+
+    height: 46px;
+
+    flex: 0 0 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+}
+
+
+.receptionist-summary-icon.blue {
+
+    background: #eaf2ff;
+
+    color: #2563eb;
+
+}
+
+
+.receptionist-summary-icon.green {
+
+    background: #eaf9f0;
+
+    color: #15945c;
+
+}
+
+
+.receptionist-summary-icon.purple {
+
+    background: #f2edff;
+
+    color: #7c3aed;
+
+}
+
+
+.receptionist-summary-card span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #697386;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.receptionist-summary-card strong {
+
+    display: block;
+
+    color: #172033;
+
+    font-size: 24px;
+
+    line-height: 1;
+
+}
+
+
+/* ============================================================
+   Toolbar
+   ============================================================ */
+
+.receptionists-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 14px;
+
+    margin-bottom: 16px;
+
+}
+
+
+.receptionists-search {
+
+    width: min(430px, 100%);
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 0 13px;
+
+    background: white;
+
+    border: 1px solid #dfe4ec;
+
+    border-radius: 10px;
+
+    color: #8a94a6;
+
+    box-sizing: border-box;
+
+}
+
+
+.receptionists-search:focus-within {
+
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+
+}
+
+
+.receptionists-search input {
+
+    width: 100%;
+
+    border: 0;
+
+    outline: 0;
+
+    background: transparent;
+
+    color: #172033;
+
+    font-size: 13px;
+
+}
+
+
+.receptionists-search input::placeholder {
+
+    color: #9aa3b2;
+
+}
+
+
+.receptionists-refresh-button {
+
+    height: 42px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 0 14px;
+
+    border: 1px solid #dfe4ec;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #4b5563;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.receptionists-refresh-button:hover {
+
+    border-color: #c7ceda;
+
+    background: #f8fafc;
+
+}
+
+
+/* ============================================================
+   Main Card
+   ============================================================ */
+
+.receptionists-card {
+
+    overflow: hidden;
+
+    background: white;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 15px;
+
+    box-shadow: 0 6px 22px rgba(15, 23, 42, 0.04);
+
+}
+
+
+.receptionists-card-header {
+
+    min-height: 76px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid #edf0f5;
+
+}
+
+
+.receptionists-card-kicker {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.1em;
+
+}
+
+
+.receptionists-card-header h2 {
+
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.receptionists-card-count {
+
+    min-width: 34px;
+
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0 10px;
+
+    border-radius: 8px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+}
+
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.receptionists-empty {
+
+    min-height: 300px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+}
+
+
+.receptionists-empty-icon {
+
+    width: 62px;
+
+    height: 62px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 14px;
+
+    border-radius: 16px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+.receptionists-empty h3 {
+
+    margin: 0;
+
+    color: #1f2937;
+
+    font-size: 17px;
+
+}
+
+
+.receptionists-empty p {
+
+    max-width: 420px;
+
+    margin: 7px 0 18px;
+
+    color: #7b8494;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+}
+
+
+.receptionists-empty-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 38px;
+
+    padding: 0 14px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+/* ============================================================
+   Table
+   ============================================================ */
+
+.receptionists-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.receptionists-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.receptionists-table th {
+
+    padding: 13px 20px;
+
+    background: #f8fafc;
+
+    color: #697386;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+}
+
+
+.receptionists-table td {
+
+    padding: 15px 20px;
+
+    border-top: 1px solid #edf0f5;
+
+    color: #374151;
+
+    font-size: 13px;
+
+}
+
+
+.receptionist-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 25px;
+
+    padding: 0 9px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.receptionist-status.active {
+
+    background: #eaf9f0;
+
+    color: #138a55;
+
+}
+
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.receptionists-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 16px;
+
+    padding: 13px 16px;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 11px;
+
+    background: #f8fafc;
+
+    color: #7b8494;
+
+    font-size: 11px;
+
+}
+
+
+.receptionists-footer div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #15945c;
+
+    font-weight: 600;
+
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .receptionists-summary-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .receptionists-header {
+
+        flex-direction: column;
+
+    }
+
+
+    .receptionists-primary-button {
+
+        width: 100%;
+
+    }
+
+
+    .receptionists-toolbar {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .receptionists-search {
+
+        width: 100%;
+
+    }
+
+
+    .receptionists-refresh-button {
+
+        justify-content: center;
+
+    }
+
+
+    .receptionists-footer {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+}

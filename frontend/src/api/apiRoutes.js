@@ -1,6 +1,14 @@
+
 // ============================================================
-// File: D:\HMSPro\frontend\src\api\apiRoutes.js
-// Purpose: Central location for all backend API endpoints.
+// File:
+// D:\HMSPro\frontend\src\api\apiRoutes.js
+//
+// Purpose:
+// Central location for all HMSPro frontend API endpoints.
+//
+// Rule:
+// Frontend services and pages should use these constants
+// instead of hard-coded API endpoint strings.
 // ============================================================
 
 
@@ -13,11 +21,14 @@ const API_ROUTES = {
 
     AUTH: {
 
-        LOGIN: "/auth/login",
+        LOGIN:
+            "/auth/login",
 
-        REGISTER: "/auth/register",
+        REGISTER:
+            "/auth/register",
 
-        ME: "/auth/me",
+        ME:
+            "/auth/me",
 
     },
 
@@ -28,7 +39,56 @@ const API_ROUTES = {
 
     PATIENTS: {
 
-        PROFILE: "/patients/profile",
+        PROFILE:
+            "/patients/profile",
+    
+        LIST:
+            "/patients",
+    
+    },
+
+
+    // ========================================================
+    // Appointments
+    // ========================================================
+
+    APPOINTMENTS: {
+
+        BASE:
+            "/appointments",
+
+        ALL:
+            "/appointments",
+
+        BY_ID: (id) =>
+            `/appointments/${id}`,
+
+        BY_PATIENT: (patientId) =>
+            `/appointments/patient/${patientId}`,
+
+        BY_DOCTOR: (doctorId) =>
+            `/appointments/doctor/${doctorId}`,
+
+    },
+
+
+    // ========================================================
+    // Billing
+    // ========================================================
+
+    BILLINGS: {
+
+        BASE:
+            "/billings",
+
+        ALL:
+            "/billings",
+
+        BY_ID: (id) =>
+            `/billings/${id}`,
+
+        BY_PATIENT: (patientId) =>
+            `/billings/patient/${patientId}`,
 
     },
 
@@ -39,9 +99,11 @@ const API_ROUTES = {
 
     USERS: {
 
-        BASE: "/users",
+        BASE:
+            "/users",
 
-        ALL: "/users/all",
+        ALL:
+            "/users/all",
 
         BY_ROLE: (role) =>
             `/users/role/${role}`,
@@ -64,18 +126,29 @@ const API_ROUTES = {
 
     REPORTS: {
 
-        DASHBOARD: "/reports/dashboard",
+        DASHBOARD:
+            "/reports/dashboard",
 
-        APPOINTMENTS: "/reports/appointments",
+        APPOINTMENTS:
+            "/reports/appointments",
 
-        ADMISSIONS: "/reports/admissions",
+        ADMISSIONS:
+            "/reports/admissions",
 
-        BILLING: "/reports/billing",
+        BILLING:
+            "/reports/billing",
+
+        MEDICINES:
+            "/reports/medicines",
 
     },
 
 
 };
 
+
+// ============================================================
+// Export
+// ============================================================
 
 export default API_ROUTES;

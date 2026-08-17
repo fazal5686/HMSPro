@@ -1,0 +1,787 @@
+/* ============================================================
+   HMSPro Discharges Page
+   ============================================================ */
+
+
+   .discharges-page {
+
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 4px 2px 30px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.discharges-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.discharges-eyebrow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+
+}
+
+
+.discharges-header h1 {
+
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 30px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+}
+
+
+.discharges-header p {
+
+    margin: 8px 0 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+}
+
+
+.discharges-refresh-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 42px;
+
+    padding: 0 15px;
+
+    border: 1px solid #dfe4ec;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #4b5563;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.discharges-refresh-button:hover {
+
+    background: #f8fafc;
+
+    border-color: #cbd3df;
+
+}
+
+
+/* ============================================================
+   Summary
+   ============================================================ */
+
+.discharges-summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.discharge-summary-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    background: white;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.04);
+
+}
+
+
+.discharge-summary-icon {
+
+    width: 46px;
+
+    height: 46px;
+
+    flex: 0 0 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+}
+
+
+.discharge-summary-icon.blue {
+
+    background: #eaf2ff;
+
+    color: #2563eb;
+
+}
+
+
+.discharge-summary-icon.green {
+
+    background: #eaf9f0;
+
+    color: #15945c;
+
+}
+
+
+.discharge-summary-icon.orange {
+
+    background: #fff4e6;
+
+    color: #d97706;
+
+}
+
+
+.discharge-summary-card span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #697386;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.discharge-summary-card strong {
+
+    display: block;
+
+    color: #172033;
+
+    font-size: 24px;
+
+    line-height: 1;
+
+}
+
+
+/* ============================================================
+   Toolbar
+   ============================================================ */
+
+.discharges-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 14px;
+
+    margin-bottom: 16px;
+
+}
+
+
+.discharges-search {
+
+    width: min(500px, 100%);
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 0 13px;
+
+    background: white;
+
+    border: 1px solid #dfe4ec;
+
+    border-radius: 10px;
+
+    color: #8a94a6;
+
+    box-sizing: border-box;
+
+}
+
+
+.discharges-search:focus-within {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.08);
+
+}
+
+
+.discharges-search input {
+
+    width: 100%;
+
+    border: 0;
+
+    outline: 0;
+
+    background: transparent;
+
+    color: #172033;
+
+    font-size: 13px;
+
+}
+
+
+.discharges-search input::placeholder {
+
+    color: #9aa3b2;
+
+}
+
+
+.discharges-filter {
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 0 12px;
+
+    border: 1px solid #dfe4ec;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #6b7280;
+
+}
+
+
+.discharges-filter select {
+
+    border: 0;
+
+    outline: 0;
+
+    background: transparent;
+
+    color: #374151;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+/* ============================================================
+   Main Card
+   ============================================================ */
+
+.discharges-card {
+
+    overflow: hidden;
+
+    background: white;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 6px 22px rgba(15, 23, 42, 0.04);
+
+}
+
+
+.discharges-card-header {
+
+    min-height: 76px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid #edf0f5;
+
+}
+
+
+.discharges-card-kicker {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.1em;
+
+}
+
+
+.discharges-card-header h2 {
+
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.discharges-card-count {
+
+    min-width: 34px;
+
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0 10px;
+
+    border-radius: 8px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+}
+
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.discharges-empty {
+
+    min-height: 310px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+}
+
+
+.discharges-empty-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 14px;
+
+    border-radius: 17px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+.discharges-empty h3 {
+
+    margin: 0;
+
+    color: #1f2937;
+
+    font-size: 17px;
+
+}
+
+
+.discharges-empty p {
+
+    max-width: 500px;
+
+    margin: 8px 0 16px;
+
+    color: #7b8494;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+}
+
+
+.discharges-empty-note {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 9px 12px;
+
+    border-radius: 9px;
+
+    background: #f0fdf4;
+
+    color: #15803d;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+/* ============================================================
+   Table
+   ============================================================ */
+
+.discharges-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.discharges-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.discharges-table th {
+
+    padding: 13px 20px;
+
+    background: #f8fafc;
+
+    color: #697386;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+}
+
+
+.discharges-table td {
+
+    padding: 15px 20px;
+
+    border-top: 1px solid #edf0f5;
+
+    color: #374151;
+
+    font-size: 13px;
+
+}
+
+
+.discharge-patient {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.discharge-patient-icon {
+
+    width: 31px;
+
+    height: 31px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+.discharge-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 25px;
+
+    padding: 0 9px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.discharge-status.completed {
+
+    background: #eaf9f0;
+
+    color: #138a55;
+
+}
+
+
+.discharge-status.pending {
+
+    background: #fff7ed;
+
+    color: #c2410c;
+
+}
+
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.discharges-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 16px;
+
+    padding: 13px 16px;
+
+    border: 1px solid #e7ebf2;
+
+    border-radius: 11px;
+
+    background: #f8fafc;
+
+    color: #7b8494;
+
+    font-size: 11px;
+
+}
+
+
+.discharges-footer div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #15945c;
+
+    font-weight: 600;
+
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .discharges-summary-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .discharges-header {
+
+        flex-direction: column;
+
+    }
+
+
+    .discharges-refresh-button {
+
+        width: 100%;
+
+    }
+
+
+    .discharges-toolbar {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .discharges-search {
+
+        width: 100%;
+
+    }
+
+
+    .discharges-filter {
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+    }
+
+
+    .discharges-footer {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+}

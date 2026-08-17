@@ -1,3 +1,4 @@
+
 // ============================================================
 // File: context/AuthContext.jsx
 // Purpose: Global authentication state for HMSPro.
@@ -5,7 +6,6 @@
 
 import {
     createContext,
-    useContext,
     useEffect,
     useState,
 } from "react";
@@ -21,7 +21,12 @@ import {
 } from "../utils/storage.js";
 
 
-const AuthContext = createContext(null);
+// ============================================================
+// Authentication Context
+// ============================================================
+
+export const AuthContext =
+    createContext(null);
 
 
 // ============================================================
@@ -30,9 +35,11 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] =
+        useState(null);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] =
+        useState(true);
 
 
     // ========================================================
@@ -46,18 +53,30 @@ export const AuthProvider = ({ children }) => {
 
         const restoreSession = async () => {
 
-            const token = getToken();
+            const token =
+                getToken();
 
+
+            // ------------------------------------------------
+            // No Token
+            // ------------------------------------------------
 
             if (!token) {
 
                 if (mounted) {
+
                     setLoading(false);
+
                 }
 
                 return;
+
             }
 
+
+            // ------------------------------------------------
+            // Restore User Session
+            // ------------------------------------------------
 
             try {
 
@@ -67,17 +86,23 @@ export const AuthProvider = ({ children }) => {
 
                 if (mounted) {
 
-                    setUser(currentUser);
+                    setUser(
+                        currentUser
+                    );
 
                 }
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 console.warn(
                     "HMSPro session could not be restored."
                 );
 
+
                 logoutUser();
+
 
                 if (mounted) {
 
@@ -85,7 +110,9 @@ export const AuthProvider = ({ children }) => {
 
                 }
 
-            } finally {
+            }
+
+            finally {
 
                 if (mounted) {
 
@@ -101,6 +128,10 @@ export const AuthProvider = ({ children }) => {
         restoreSession();
 
 
+        // ----------------------------------------------------
+        // Cleanup
+        // ----------------------------------------------------
+
         return () => {
 
             mounted = false;
@@ -114,12 +145,20 @@ export const AuthProvider = ({ children }) => {
     // Login
     // ========================================================
 
-    const login = async (credentials) => {
+    const login = async (
+        credentials
+    ) => {
 
         const loggedInUser =
-            await loginUser(credentials);
+            await loginUser(
+                credentials
+            );
 
-        setUser(loggedInUser);
+
+        setUser(
+            loggedInUser
+        );
+
 
         return loggedInUser;
 
@@ -159,9 +198,15 @@ export const AuthProvider = ({ children }) => {
     };
 
 
+    // ========================================================
+    // Provider
+    // ========================================================
+
     return (
 
-        <AuthContext.Provider value={value}>
+        <AuthContext.Provider
+            value={value}
+        >
 
             {children}
 
@@ -173,24 +218,5 @@ export const AuthProvider = ({ children }) => {
 
 
 // ============================================================
-// Custom Hook
+// End of AuthContext.jsx
 // ============================================================
-
-export const useAuthContext = () => {
-
-    const context =
-        useContext(AuthContext);
-
-
-    if (!context) {
-
-        throw new Error(
-            "useAuthContext must be used inside AuthProvider."
-        );
-
-    }
-
-
-    return context;
-
-};

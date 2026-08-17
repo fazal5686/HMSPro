@@ -1,0 +1,461 @@
+
+/* ============================================================
+   File: pages/Settings/Settings.css
+   Purpose: HMSPro Settings page styling.
+   ============================================================ */
+
+
+.settings-page {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-bottom: 32px;
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+
+.settings-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #64748b;
+}
+
+
+.settings-header h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+
+.settings-header p {
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+.settings-header-icon {
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: #eff6ff;
+    color: #2563eb;
+    flex-shrink: 0;
+}
+
+
+/* ============================================================
+   Success Message
+   ============================================================ */
+
+.settings-success {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 16px;
+    margin-bottom: 18px;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    background: #f0fdf4;
+    color: #166534;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   Layout
+   ============================================================ */
+
+.settings-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+
+/* ============================================================
+   Cards
+   ============================================================ */
+
+.settings-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+
+
+.settings-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+
+.settings-card-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+
+.settings-card-icon.blue {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+.settings-card-icon.orange {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+
+.settings-card-icon.purple {
+    background: #faf5ff;
+    color: #9333ea;
+}
+
+
+.settings-card-icon.green {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+
+.settings-card-kicker {
+    display: block;
+    margin-bottom: 4px;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+
+.settings-card h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 18px;
+    font-weight: 750;
+}
+
+
+.settings-card-header p {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   Form Fields
+   ============================================================ */
+
+.settings-form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+
+.settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+
+.settings-field span {
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.settings-field input,
+.settings-field select {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #0f172a;
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+
+.settings-field input:focus,
+.settings-field select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+
+/* ============================================================
+   Toggle Options
+   ============================================================ */
+
+.settings-options {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #f1f5f9;
+}
+
+
+.settings-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+}
+
+
+.settings-toggle:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+
+.settings-toggle:first-child {
+    padding-top: 2px;
+}
+
+
+.settings-toggle div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+
+.settings-toggle strong {
+    color: #1e293b;
+    font-size: 13px;
+}
+
+
+.settings-toggle span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+.settings-toggle input {
+    appearance: none;
+    width: 42px;
+    height: 23px;
+    position: relative;
+    border-radius: 999px;
+    background: #cbd5e1;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+
+.settings-toggle input::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2);
+    transition: transform 0.2s;
+}
+
+
+.settings-toggle input:checked {
+    background: #2563eb;
+}
+
+
+.settings-toggle input:checked::after {
+    transform: translateX(19px);
+}
+
+
+/* ============================================================
+   Security
+   ============================================================ */
+
+.security-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    border: 1px solid #dcfce7;
+    border-radius: 11px;
+    background: #f0fdf4;
+}
+
+
+.security-status-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background: #dcfce7;
+    color: #16a34a;
+    flex-shrink: 0;
+}
+
+
+.security-status div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+
+.security-status strong {
+    color: #166534;
+    font-size: 13px;
+}
+
+
+.security-status span {
+    color: #4d7c5b;
+    font-size: 12px;
+}
+
+
+/* ============================================================
+   Actions
+   ============================================================ */
+
+.settings-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 4px 2px;
+}
+
+
+.settings-actions > span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+.settings-save-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 9px;
+    background: #2563eb;
+    color: #ffffff;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+    transition: transform 0.15s, background 0.2s;
+}
+
+
+.settings-save-button:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 800px) {
+
+    .settings-page {
+        padding: 0 4px 28px;
+    }
+
+
+    .settings-header {
+        align-items: flex-start;
+    }
+
+
+    .settings-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 560px) {
+
+    .settings-header-icon {
+        display: none;
+    }
+
+
+    .settings-header h1 {
+        font-size: 25px;
+    }
+
+
+    .settings-card {
+        padding: 17px;
+    }
+
+
+    .settings-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .settings-save-button {
+        width: 100%;
+    }
+
+}

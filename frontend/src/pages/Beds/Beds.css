@@ -1,0 +1,503 @@
+
+/* ============================================================
+   File: pages/Beds/Beds.css
+   Purpose: HMSPro Beds page styling.
+   ============================================================ */
+
+.beds-page {
+    width: 100%;
+    padding: 28px;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.beds-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.beds-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    opacity: 0.72;
+}
+
+.beds-heading h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+.beds-heading p {
+    margin: 8px 0 0;
+    max-width: 620px;
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.7;
+}
+
+
+/* ============================================================
+   Refresh
+   ============================================================ */
+
+.beds-refresh-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid rgba(100, 116, 139, 0.22);
+    border-radius: 11px;
+    background: var(--card-bg, #ffffff);
+    color: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.beds-refresh-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.beds-refresh-button:disabled {
+    cursor: default;
+    opacity: 0.7;
+}
+
+.beds-spin {
+    animation: beds-spin 0.8s linear infinite;
+}
+
+@keyframes beds-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ============================================================
+   Notice
+   ============================================================ */
+
+.beds-notice {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 15px 18px;
+    margin-bottom: 22px;
+    border: 1px solid rgba(14, 165, 233, 0.18);
+    border-radius: 14px;
+    background: rgba(14, 165, 233, 0.055);
+}
+
+.beds-notice-icon {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(14, 165, 233, 0.1);
+}
+
+.beds-notice div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.beds-notice strong {
+    font-size: 13px;
+}
+
+.beds-notice span {
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: 0.68;
+}
+
+
+/* ============================================================
+   Statistics
+   ============================================================ */
+
+.beds-stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.beds-stat-card {
+    min-height: 128px;
+    padding: 18px;
+    box-sizing: border-box;
+    border: 1px solid rgba(100, 116, 139, 0.14);
+    border-radius: 16px;
+    background: var(--card-bg, #ffffff);
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.045);
+}
+
+.beds-stat-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 13px;
+    border-radius: 11px;
+}
+
+.beds-stat-icon.total {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.beds-stat-icon.occupied {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.beds-stat-icon.available {
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.beds-stat-icon.reserved {
+    background: rgba(168, 85, 247, 0.1);
+}
+
+.beds-stat-icon.maintenance {
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.beds-stat-card span {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 12px;
+    opacity: 0.65;
+}
+
+.beds-stat-card strong {
+    display: block;
+    font-size: 25px;
+    line-height: 1;
+}
+
+
+/* ============================================================
+   Main Card
+   ============================================================ */
+
+.beds-card {
+    overflow: hidden;
+    border: 1px solid rgba(100, 116, 139, 0.14);
+    border-radius: 18px;
+    background: var(--card-bg, #ffffff);
+    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.045);
+}
+
+.beds-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 22px 18px;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.12);
+}
+
+.beds-card-kicker {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    opacity: 0.55;
+}
+
+.beds-card-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+
+/* ============================================================
+   Controls
+   ============================================================ */
+
+.beds-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.beds-search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 210px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid rgba(100, 116, 139, 0.2);
+    border-radius: 10px;
+}
+
+.beds-search-wrapper svg {
+    opacity: 0.55;
+}
+
+.beds-search {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 13px;
+}
+
+.beds-filter {
+    height: 40px;
+    padding: 0 11px;
+    border: 1px solid rgba(100, 116, 139, 0.2);
+    border-radius: 10px;
+    outline: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   Bed Grid
+   ============================================================ */
+
+.beds-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+    padding: 22px;
+}
+
+.bed-item {
+    padding: 17px;
+    border: 1px solid rgba(100, 116, 139, 0.13);
+    border-radius: 14px;
+    background: rgba(248, 250, 252, 0.55);
+    transition: 0.2s ease;
+}
+
+.bed-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 22px rgba(15, 23, 42, 0.07);
+}
+
+.bed-item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.bed-icon {
+    width: 39px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.bed-id {
+    font-size: 10px;
+    font-weight: 700;
+    opacity: 0.5;
+}
+
+.bed-item h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+}
+
+.bed-details {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    opacity: 0.62;
+}
+
+.bed-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    padding: 6px 9px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.bed-status.available {
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.bed-status.occupied {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.bed-status.reserved {
+    background: rgba(168, 85, 247, 0.1);
+}
+
+.bed-status.maintenance {
+    background: rgba(245, 158, 11, 0.1);
+}
+
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.beds-state {
+    min-height: 230px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    padding: 25px;
+    text-align: center;
+}
+
+.beds-state svg {
+    opacity: 0.45;
+}
+
+.beds-state strong {
+    font-size: 14px;
+}
+
+.beds-state span {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.beds-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 18px;
+    padding: 12px 4px;
+    font-size: 12px;
+    opacity: 0.62;
+}
+
+.beds-footer div {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .beds-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .beds-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .beds-page {
+        padding: 20px;
+    }
+
+    .beds-heading,
+    .beds-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .beds-controls {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .beds-search-wrapper {
+        flex: 1;
+    }
+
+    .beds-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 560px) {
+
+    .beds-page {
+        padding: 14px;
+    }
+
+    .beds-stats,
+    .beds-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .beds-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .beds-search-wrapper {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .beds-filter {
+        width: 100%;
+    }
+
+}
+

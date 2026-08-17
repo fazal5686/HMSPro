@@ -8,32 +8,48 @@ import {
 
     createPatient,
 
+    findAllPatients,
+
     findPatientByUserId,
 
-    updatePatient
+    findPatientById,
+
+    updatePatient,
+
+    updatePatientById
 
 } from "../repositories/patientRepository.js";
 
 
 
 
-// Create patient profile
+// ============================================================
+// Create Patient Profile
+// Patient self-service
+// ============================================================
 
 export const createPatientProfileService = async (
+
     userId,
+
     patientData
+
 ) => {
 
-
     const existingPatient =
-        await findPatientByUserId(userId);
+        await findPatientByUserId(
 
+            userId
+
+        );
 
 
     if (existingPatient) {
 
         throw new Error(
+
             "Patient profile already exists."
+
         );
 
     }
@@ -52,22 +68,31 @@ export const createPatientProfileService = async (
 
 
 
-// Get patient profile
+// ============================================================
+// Get Patient Profile
+// Patient self-service
+// ============================================================
 
 export const getPatientProfileService = async (
+
     userId
+
 ) => {
 
-
     const patient =
-        await findPatientByUserId(userId);
+        await findPatientByUserId(
 
+            userId
+
+        );
 
 
     if (!patient) {
 
         throw new Error(
+
             "Patient profile not found."
+
         );
 
     }
@@ -80,17 +105,132 @@ export const getPatientProfileService = async (
 
 
 
-// Update patient profile
+// ============================================================
+// Update Patient Profile
+// Patient self-service
+// ============================================================
 
 export const updatePatientProfileService = async (
+
     userId,
+
     patientData
+
 ) => {
 
+    const patient =
+        await updatePatient(
 
-    return await updatePatient(
-        userId,
-        patientData
-    );
+            userId,
+
+            patientData
+
+        );
+
+
+    if (!patient) {
+
+        throw new Error(
+
+            "Patient profile not found."
+
+        );
+
+    }
+
+
+    return patient;
+
+};
+
+
+
+
+// ============================================================
+// Get All Patients
+// Administrative Patient Directory
+// ============================================================
+
+export const getAllPatientsService = async () => {
+
+    return await findAllPatients();
+
+};
+
+
+
+
+// ============================================================
+// Get Patient By ID
+// Administrative Patient Directory
+// ============================================================
+
+export const getPatientByIdService = async (
+
+    patientId
+
+) => {
+
+    const patient =
+        await findPatientById(
+
+            patientId
+
+        );
+
+
+    if (!patient) {
+
+        throw new Error(
+
+            "Patient not found."
+
+        );
+
+    }
+
+
+    return patient;
+
+};
+
+
+
+
+// ============================================================
+// Update Patient By ID
+// Administrative Patient Directory
+// ============================================================
+
+export const updatePatientByIdService = async (
+
+    patientId,
+
+    patientData
+
+) => {
+
+    const patient =
+        await updatePatientById(
+
+            patientId,
+
+            patientData
+
+        );
+
+
+    if (!patient) {
+
+        throw new Error(
+
+            "Patient not found."
+
+        );
+
+    }
+
+
+    return patient;
 
 };
