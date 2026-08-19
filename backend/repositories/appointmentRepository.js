@@ -173,6 +173,20 @@ export const findAppointmentsByDoctor = async (doctorId) => {
 
     })
 
+    .populate({
+
+        path: "doctorId",
+
+        populate: {
+
+            path: "userId",
+
+            select: "fullName email phone role",
+
+        },
+
+    })
+
     .sort({
 
         appointmentDate: -1,
@@ -180,7 +194,6 @@ export const findAppointmentsByDoctor = async (doctorId) => {
     });
 
 };
-
 
 // ============================================================
 // Update Appointment

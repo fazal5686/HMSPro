@@ -4,13 +4,23 @@
 //
 // Purpose:
 // Administrative Patient Directory for HMSPro.
+//
+// Responsibilities:
+// 1. Load patients from the backend.
+// 2. Search and filter patient records.
+// 3. Display patient statistics.
+// 4. Display patient directory.
+// 5. Navigate to Patient Profile.
+// 6. Provide refresh and error recovery.
 // ============================================================
+
 
 import {
     useEffect,
     useMemo,
     useState,
 } from "react";
+
 
 import {
     Search,
@@ -20,13 +30,31 @@ import {
     Phone,
     MapPin,
     Droplets,
+    Eye,
+    ChevronRight,
 } from "lucide-react";
+
+
+import {
+    useNavigate,
+} from "react-router-dom";
+
 
 import {
     getAllPatients,
 } from "../../services/patientService.js";
 
+
 import "./Patients.css";
+
+
+
+// ============================================================
+// Constants
+// ============================================================
+
+const EMPTY_VALUE = "—";
+
 
 
 // ============================================================
@@ -34,6 +62,14 @@ import "./Patients.css";
 // ============================================================
 
 const Patients = () => {
+
+
+    const navigate = useNavigate();
+
+
+    // ========================================================
+    // State
+    // ========================================================
 
     const [patients, setPatients] = useState([]);
 
@@ -44,6 +80,7 @@ const Patients = () => {
     const [error, setError] = useState("");
 
     const [searchTerm, setSearchTerm] = useState("");
+
 
 
     // ========================================================
@@ -82,7 +119,6 @@ const Patients = () => {
 
             );
 
-
         } catch (err) {
 
             console.error(
@@ -99,7 +135,6 @@ const Patients = () => {
 
             );
 
-
         } finally {
 
             setLoading(false);
@@ -111,6 +146,7 @@ const Patients = () => {
     };
 
 
+
     // ========================================================
     // Initial Load
     // ========================================================
@@ -120,6 +156,7 @@ const Patients = () => {
         loadPatients();
 
     }, []);
+
 
 
     // ========================================================
@@ -185,6 +222,12 @@ const Patients = () => {
                         ?.toLowerCase()
                         .includes(term)
 
+                    ||
+
+                    patient._id
+                        ?.toLowerCase()
+                        .includes(term)
+
                 );
 
             }
@@ -195,9 +238,10 @@ const Patients = () => {
 
         patients,
 
-        searchTerm
+        searchTerm,
 
     ]);
+
 
 
     // ========================================================
@@ -208,12 +252,23 @@ const Patients = () => {
 
         if (!date) {
 
-            return "—";
+            return EMPTY_VALUE;
 
         }
 
 
-        return new Date(date).toLocaleDateString(
+        const parsedDate =
+            new Date(date);
+
+
+        if (Number.isNaN(parsedDate.getTime())) {
+
+            return EMPTY_VALUE;
+
+        }
+
+
+        return parsedDate.toLocaleDateString(
 
             "en-GB",
 
@@ -232,6 +287,30 @@ const Patients = () => {
     };
 
 
+
+    // ========================================================
+    // Open Patient Profile
+    // ========================================================
+
+    const openPatientProfile = (
+        patientId
+    ) => {
+
+        if (!patientId) {
+
+            return;
+
+        }
+
+
+        navigate(
+            `/patients/${patientId}`
+        );
+
+    };
+
+
+
     // ========================================================
     // Render
     // ========================================================
@@ -247,33 +326,35 @@ const Patients = () => {
 
             <div className="patients-header">
 
-                <div>
 
-                    <div className="patients-title-row">
+                <div className="patients-title-row">
 
-                        <div className="patients-title-icon">
 
-                            <Users
-                                size={24}
-                            />
+                    <div className="patients-title-icon">
 
-                        </div>
-
-                        <div>
-
-                            <h1>
-                                Patients
-                            </h1>
-
-                            <p>
-                                Patient Directory
-                            </p>
-
-                        </div>
+                        <Users
+                            size={24}
+                        />
 
                     </div>
 
+
+                    <div>
+
+                        <h1>
+                            Patients
+                        </h1>
+
+
+                        <p>
+                            Patient Directory
+                        </p>
+
+                    </div>
+
+
                 </div>
+
 
 
                 <button
@@ -283,11 +364,10 @@ const Patients = () => {
                         loadPatients(true)
                     }
                     disabled={
-
                         loading ||
                         refreshing
-
                     }
+                    aria-label="Refresh patient list"
                 >
 
                     <RefreshCw
@@ -299,13 +379,16 @@ const Patients = () => {
                         }
                     />
 
+
                     {refreshing
                         ? "Refreshing..."
                         : "Refresh"}
 
                 </button>
 
+
             </div>
+
 
 
             {/* ==================================================
@@ -313,6 +396,7 @@ const Patients = () => {
                 ================================================== */}
 
             <div className="patients-stat-card">
+
 
                 <div className="patients-stat-icon">
 
@@ -322,11 +406,13 @@ const Patients = () => {
 
                 </div>
 
+
                 <div>
 
                     <span>
                         Total Patients
                     </span>
+
 
                     <strong>
                         {patients.length}
@@ -334,7 +420,9 @@ const Patients = () => {
 
                 </div>
 
+
             </div>
+
 
 
             {/* ==================================================
@@ -350,13 +438,17 @@ const Patients = () => {
 
                 <div className="patients-toolbar">
 
+
                     <div>
 
                         <h2>
                             Patient Directory
                         </h2>
 
+
                         <p>
+
+                            Showing{" "}
 
                             {filteredPatients.length}
 
@@ -366,19 +458,27 @@ const Patients = () => {
                                 ? "patient"
                                 : "patients"}
 
+                            {searchTerm
+                                ? ` matching "${searchTerm}"`
+                                : ""}
+
                         </p>
 
                     </div>
 
 
+
                     <div className="patients-search">
+
 
                         <Search
                             size={18}
+                            aria-hidden="true"
                         />
 
+
                         <input
-                            type="text"
+                            type="search"
                             placeholder="Search patients..."
                             value={searchTerm}
                             onChange={(event) =>
@@ -386,11 +486,14 @@ const Patients = () => {
                                     event.target.value
                                 )
                             }
+                            aria-label="Search patients"
                         />
 
                     </div>
 
+
                 </div>
+
 
 
                 {/* ==================================================
@@ -405,9 +508,11 @@ const Patients = () => {
                             Unable to load patients
                         </strong>
 
+
                         <span>
                             {error}
                         </span>
+
 
                         <button
                             type="button"
@@ -423,6 +528,7 @@ const Patients = () => {
                 )}
 
 
+
                 {/* ==================================================
                     Loading
                     ================================================== */}
@@ -433,6 +539,7 @@ const Patients = () => {
 
                         <div className="patients-loader" />
 
+
                         <span>
                             Loading patients...
                         </span>
@@ -440,6 +547,7 @@ const Patients = () => {
                     </div>
 
                 )}
+
 
 
                 {/* ==================================================
@@ -452,13 +560,16 @@ const Patients = () => {
 
                         <div className="patients-empty">
 
+
                             <Users
                                 size={42}
                             />
 
+
                             <h3>
                                 No patients found
                             </h3>
+
 
                             <p>
 
@@ -466,13 +577,30 @@ const Patients = () => {
 
                                     ? "Try changing your search."
 
-                                    : "There are currently no patient records."}
+                                    : "There are currently no patient records."
+
+                                }
 
                             </p>
+
+
+                            {searchTerm && (
+
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setSearchTerm("")
+                                    }
+                                >
+                                    Clear Search
+                                </button>
+
+                            )}
 
                         </div>
 
                     )}
+
 
 
                 {/* ==================================================
@@ -485,7 +613,9 @@ const Patients = () => {
 
                         <div className="patients-table-wrapper">
 
+
                             <table className="patients-table">
+
 
                                 <thead>
 
@@ -495,28 +625,39 @@ const Patients = () => {
                                             Patient
                                         </th>
 
+
                                         <th>
                                             Contact
                                         </th>
+
 
                                         <th>
                                             Date of Birth
                                         </th>
 
+
                                         <th>
                                             Gender
                                         </th>
+
 
                                         <th>
                                             Blood Group
                                         </th>
 
+
                                         <th>
                                             Location
                                         </th>
 
+
                                         <th>
                                             Status
+                                        </th>
+
+
+                                        <th>
+                                            Action
                                         </th>
 
                                     </tr>
@@ -524,14 +665,35 @@ const Patients = () => {
                                 </thead>
 
 
+
                                 <tbody>
+
 
                                     {filteredPatients.map(
 
                                         (patient) => {
 
+
                                             const user =
                                                 patient.userId || {};
+
+
+                                            const patientName =
+                                                user.fullName ||
+                                                "Unknown Patient";
+
+
+                                            const initials =
+                                                patientName
+                                                    .trim()
+                                                    .charAt(0)
+                                                    .toUpperCase() ||
+                                                "P";
+
+
+                                            const isActive =
+                                                user.isActive !== false;
+
 
 
                                             return (
@@ -540,51 +702,66 @@ const Patients = () => {
                                                     key={
                                                         patient._id
                                                     }
+                                                    className="patient-row"
+                                                    onDoubleClick={() =>
+                                                        openPatientProfile(
+                                                            patient._id
+                                                        )
+                                                    }
                                                 >
 
-                                                    {/* Patient */}
+
+                                                    {/* ==========================================
+                                                        Patient
+                                                        ========================================== */}
 
                                                     <td>
 
                                                         <div className="patient-name-cell">
 
+
                                                             <div className="patient-avatar">
 
-                                                                {(user.fullName || "P")
-                                                                    .charAt(0)
-                                                                    .toUpperCase()}
+                                                                {initials}
 
                                                             </div>
+
 
                                                             <div>
 
                                                                 <strong>
 
-                                                                    {user.fullName ||
-                                                                        "Unknown Patient"}
+                                                                    {patientName}
 
                                                                 </strong>
+
 
                                                                 <span>
 
                                                                     ID:{" "}
 
-                                                                    {patient._id}
+                                                                    {patient._id ||
+                                                                        EMPTY_VALUE}
 
                                                                 </span>
 
                                                             </div>
+
 
                                                         </div>
 
                                                     </td>
 
 
-                                                    {/* Contact */}
+
+                                                    {/* ==========================================
+                                                        Contact
+                                                        ========================================== */}
 
                                                     <td>
 
                                                         <div className="patient-contact-cell">
+
 
                                                             <span>
 
@@ -592,47 +769,57 @@ const Patients = () => {
                                                                     size={14}
                                                                 />
 
+
                                                                 {user.phone ||
-                                                                    "—"}
+                                                                    EMPTY_VALUE}
 
                                                             </span>
+
 
                                                             <span>
 
                                                                 {user.email ||
-                                                                    "—"}
+                                                                    EMPTY_VALUE}
 
                                                             </span>
+
 
                                                         </div>
 
                                                     </td>
 
 
-                                                    {/* DOB */}
+
+                                                    {/* ==========================================
+                                                        DOB
+                                                        ========================================== */}
 
                                                     <td>
 
                                                         {formatDate(
-
                                                             patient.dateOfBirth
-
                                                         )}
 
                                                     </td>
 
 
-                                                    {/* Gender */}
+
+                                                    {/* ==========================================
+                                                        Gender
+                                                        ========================================== */}
 
                                                     <td>
 
                                                         {patient.gender ||
-                                                            "—"}
+                                                            EMPTY_VALUE}
 
                                                     </td>
 
 
-                                                    {/* Blood Group */}
+
+                                                    {/* ==========================================
+                                                        Blood Group
+                                                        ========================================== */}
 
                                                     <td>
 
@@ -640,42 +827,54 @@ const Patients = () => {
 
                                                             <span className="blood-group">
 
+
                                                                 <Droplets
                                                                     size={14}
                                                                 />
 
+
                                                                 {patient.bloodGroup}
+
 
                                                             </span>
 
                                                         ) : (
 
-                                                            "—"
+                                                            EMPTY_VALUE
 
                                                         )}
 
                                                     </td>
 
 
-                                                    {/* Location */}
+
+                                                    {/* ==========================================
+                                                        Location
+                                                        ========================================== */}
 
                                                     <td>
 
                                                         <span className="patient-location">
 
+
                                                             <MapPin
                                                                 size={14}
                                                             />
 
+
                                                             {patient.city ||
-                                                                "—"}
+                                                                EMPTY_VALUE}
+
 
                                                         </span>
 
                                                     </td>
 
 
-                                                    {/* Status */}
+
+                                                    {/* ==========================================
+                                                        Status
+                                                        ========================================== */}
 
                                                     <td>
 
@@ -683,7 +882,7 @@ const Patients = () => {
 
                                                             className={
 
-                                                                user.isActive
+                                                                isActive
 
                                                                     ? "patient-status active"
 
@@ -693,13 +892,54 @@ const Patients = () => {
 
                                                         >
 
-                                                            {user.isActive
+                                                            {isActive
                                                                 ? "Active"
                                                                 : "Inactive"}
 
                                                         </span>
 
                                                     </td>
+
+
+
+                                                    {/* ==========================================
+                                                        Action
+                                                        ========================================== */}
+
+                                                    <td>
+
+
+                                                        <button
+                                                            type="button"
+                                                            className="patient-view-button"
+                                                            onClick={() =>
+                                                                openPatientProfile(
+                                                                    patient._id
+                                                                )
+                                                            }
+                                                            aria-label={`View ${patientName}`}
+                                                            title="View patient profile"
+                                                        >
+
+                                                            <Eye
+                                                                size={16}
+                                                            />
+
+
+                                                            <span>
+                                                                View
+                                                            </span>
+
+
+                                                            <ChevronRight
+                                                                size={15}
+                                                            />
+
+                                                        </button>
+
+
+                                                    </td>
+
 
                                                 </tr>
 
@@ -709,15 +949,20 @@ const Patients = () => {
 
                                     )}
 
+
                                 </tbody>
 
+
                             </table>
+
 
                         </div>
 
                     )}
 
+
             </div>
+
 
         </div>
 

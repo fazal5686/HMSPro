@@ -1,11 +1,36 @@
 // ============================================================
-// File: D:\HMSPro\frontend\src\pages\Patients\PatientProfile.jsx
-// Purpose: Patient profile management page.
-// Allows an authenticated Patient to create, view, and update
-// their own patient profile.
+// File:
+// D:\HMSPro\frontend\src\pages\Patients\PatientProfile.jsx
+//
+// Purpose:
+// Professional HMSPro Patient Profile page.
+//
+// Responsibilities:
+// 1. Load authenticated patient's profile.
+// 2. Create a profile for a newly registered Patient.
+// 3. Update an existing patient profile.
+// 4. Present personal and medical information professionally.
+// 5. Preserve existing patientService API integration.
 // ============================================================
 
-import { useEffect, useState } from "react";
+import {
+    useEffect,
+    useState,
+} from "react";
+
+import {
+    CalendarDays,
+    CheckCircle2,
+    Droplets,
+    FileText,
+    HeartPulse,
+    Home,
+    Loader2,
+    MapPin,
+    Phone,
+    Save,
+    UserRound,
+} from "lucide-react";
 
 import {
     createPatientProfile,
@@ -14,29 +39,50 @@ import {
 } from "../../services/patientService.js";
 
 import "./PatientProfile.css";
+
+
 // ============================================================
 // Initial Form State
 // ============================================================
 
 const initialFormData = {
-
     dateOfBirth: "",
-
     gender: "",
-
     bloodGroup: "",
-
     address: "",
-
     city: "",
-
     emergencyContact: "",
-
     medicalHistory: "",
-
     allergies: "",
-
 };
+
+
+// ============================================================
+// Helper
+// ============================================================
+
+const normalizeProfile = (profile = {}) => ({
+    dateOfBirth: profile.dateOfBirth
+        ? profile.dateOfBirth.split("T")[0]
+        : "",
+
+    gender: profile.gender || "",
+
+    bloodGroup: profile.bloodGroup || "",
+
+    address: profile.address || "",
+
+    city: profile.city || "",
+
+    emergencyContact:
+        profile.emergencyContact || "",
+
+    medicalHistory:
+        profile.medicalHistory || "",
+
+    allergies:
+        profile.allergies || "",
+});
 
 
 // ============================================================
@@ -45,30 +91,27 @@ const initialFormData = {
 
 const PatientProfile = () => {
 
+    const [formData, setFormData] =
+        useState(initialFormData);
 
-    const [formData, setFormData] = useState(
-        initialFormData
-    );
+    const [loading, setLoading] =
+        useState(true);
 
+    const [saving, setSaving] =
+        useState(false);
 
-    const [loading, setLoading] = useState(true);
+    const [profileExists, setProfileExists] =
+        useState(false);
 
+    const [message, setMessage] =
+        useState("");
 
-    const [saving, setSaving] = useState(false);
-
-
-    const [profileExists, setProfileExists] = useState(false);
-
-
-    const [message, setMessage] = useState("");
-
-
-    const [error, setError] = useState("");
-
+    const [error, setError] =
+        useState("");
 
 
     // ========================================================
-    // Load Patient Profile
+    // Load Profile
     // ========================================================
 
     useEffect(() => {
@@ -77,60 +120,36 @@ const PatientProfile = () => {
 
             try {
 
+                setLoading(true);
+
+                setError("");
+
                 const profile =
                     await getPatientProfile();
 
-
-                setFormData({
-
-                    dateOfBirth:
-                        profile.dateOfBirth
-                            ? profile.dateOfBirth
-                                .split("T")[0]
-                            : "",
-
-                    gender:
-                        profile.gender || "",
-
-                    bloodGroup:
-                        profile.bloodGroup || "",
-
-                    address:
-                        profile.address || "",
-
-                    city:
-                        profile.city || "",
-
-                    emergencyContact:
-                        profile.emergencyContact || "",
-
-                    medicalHistory:
-                        profile.medicalHistory || "",
-
-                    allergies:
-                        profile.allergies || "",
-
-                });
-
+                setFormData(
+                    normalizeProfile(profile)
+                );
 
                 setProfileExists(true);
 
-
             } catch (err) {
 
-                // A missing profile is expected for a
-                // newly registered Patient.
-
                 if (
-                    err.response?.status === 404
+                    err?.response?.status === 404
                 ) {
 
                     setProfileExists(false);
 
                 } else {
 
+                    console.error(
+                        "Failed to load patient profile:",
+                        err
+                    );
+
                     setError(
-                        err.response?.data?.message ||
+                        err?.response?.data?.message ||
                         "Unable to load patient profile."
                     );
 
@@ -144,45 +163,41 @@ const PatientProfile = () => {
 
         };
 
-
         loadProfile();
 
     }, []);
 
 
-
     // ========================================================
-    // Handle Input Changes
+    // Handle Change
     // ========================================================
 
-    const handleChange = (e) => {
+    const handleChange = (event) => {
 
         const {
             name,
             value,
-        } = e.target;
+        } = event.target;
 
-
-        setFormData((previousData) => ({
-
-            ...previousData,
-
+        setFormData((previous) => ({
+            ...previous,
             [name]: value,
-
         }));
 
-    };
+        setMessage("");
 
+        setError("");
+
+    };
 
 
     // ========================================================
     // Handle Submit
     // ========================================================
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (event) => {
 
-        e.preventDefault();
-
+        event.preventDefault();
 
         setMessage("");
 
@@ -190,11 +205,9 @@ const PatientProfile = () => {
 
         setSaving(true);
 
-
         try {
 
             let profile;
-
 
             if (profileExists) {
 
@@ -202,7 +215,6 @@ const PatientProfile = () => {
                     await updatePatientProfile(
                         formData
                     );
-
 
                 setMessage(
                     "Patient profile updated successfully."
@@ -215,9 +227,7 @@ const PatientProfile = () => {
                         formData
                     );
 
-
                 setProfileExists(true);
-
 
                 setMessage(
                     "Patient profile created successfully."
@@ -225,51 +235,24 @@ const PatientProfile = () => {
 
             }
 
-
             if (profile) {
 
-                setFormData({
-
-                    dateOfBirth:
-                        profile.dateOfBirth
-                            ? profile.dateOfBirth
-                                .split("T")[0]
-                            : "",
-
-                    gender:
-                        profile.gender || "",
-
-                    bloodGroup:
-                        profile.bloodGroup || "",
-
-                    address:
-                        profile.address || "",
-
-                    city:
-                        profile.city || "",
-
-                    emergencyContact:
-                        profile.emergencyContact || "",
-
-                    medicalHistory:
-                        profile.medicalHistory || "",
-
-                    allergies:
-                        profile.allergies || "",
-
-                });
+                setFormData(
+                    normalizeProfile(profile)
+                );
 
             }
 
-
         } catch (err) {
 
+            console.error(
+                "Failed to save patient profile:",
+                err
+            );
+
             setError(
-
-                err.response?.data?.message ||
-
+                err?.response?.data?.message ||
                 "Unable to save patient profile."
-
             );
 
         } finally {
@@ -281,24 +264,32 @@ const PatientProfile = () => {
     };
 
 
-
     // ========================================================
-    // Loading State
+    // Loading
     // ========================================================
 
     if (loading) {
 
         return (
 
-            <div>
+            <div className="patient-profile-page">
 
-                <h2>
-                    Patient Profile
-                </h2>
+                <div className="patient-profile-loading">
 
-                <p>
-                    Loading profile...
-                </p>
+                    <Loader2
+                        size={30}
+                        className="patient-profile-loading-icon"
+                    />
+
+                    <strong>
+                        Loading patient profile...
+                    </strong>
+
+                    <span>
+                        Please wait while your information is retrieved.
+                    </span>
+
+                </div>
 
             </div>
 
@@ -307,284 +298,601 @@ const PatientProfile = () => {
     }
 
 
-
     // ========================================================
-    // Page UI
+    // Render
     // ========================================================
 
     return (
 
         <div className="patient-profile-page">
 
+            {/* ==================================================
+                Page Header
+                ================================================== */}
 
-            <h2>
-                Patient Profile
-            </h2>
+            <div className="patient-profile-header">
+
+                <div className="patient-profile-title-row">
+
+                    <div className="patient-profile-title-icon">
+
+                        <UserRound
+                            size={24}
+                        />
+
+                    </div>
+
+                    <div>
+
+                        <h1>
+                            Patient Profile
+                        </h1>
+
+                        <p>
+                            Manage your personal and medical information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div className="patient-profile-status">
+
+                    <span className="patient-profile-status-dot" />
+
+                    {profileExists
+                        ? "Profile Active"
+                        : "Profile Not Created"}
+
+                </div>
+
+            </div>
 
 
-            <p>
-                Manage your personal and medical information.
-            </p>
-
-
+            {/* ==================================================
+                Success Message
+                ================================================== */}
 
             {message && (
 
-                <p className="success-message">
+                <div className="patient-profile-alert success">
 
-                    {message}
+                    <CheckCircle2
+                        size={18}
+                    />
 
-                </p>
+                    <span>
+                        {message}
+                    </span>
+
+                </div>
 
             )}
 
 
+            {/* ==================================================
+                Error Message
+                ================================================== */}
 
             {error && (
 
-                <p className="error-message">
+                <div className="patient-profile-alert error">
 
-                    {error}
+                    <span>
+                        {error}
+                    </span>
 
-                </p>
+                </div>
 
             )}
 
 
+            {/* ==================================================
+                Profile Form
+                ================================================== */}
 
-            <form onSubmit={handleSubmit}>
+            <form
+                className="patient-profile-form"
+                onSubmit={handleSubmit}
+            >
+
+                {/* ==================================================
+                    Personal Information
+                    ================================================== */}
+
+                <section className="patient-profile-card">
+
+                    <div className="patient-profile-card-header">
+
+                        <div className="patient-profile-section-icon">
+
+                            <UserRound
+                                size={19}
+                            />
+
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Personal Information
+                            </h2>
+
+                            <p>
+                                Basic information about the patient.
+                            </p>
+
+                        </div>
+
+                    </div>
 
 
-                {/* Date of Birth */}
+                    <div className="patient-profile-grid">
 
-                <div className="form-group">
+                        {/* Date of Birth */}
 
-                    <label>
-                        Date of Birth
-                    </label>
+                        <div className="patient-form-group">
 
-                    <input
-                        type="date"
-                        name="dateOfBirth"
-                        value={formData.dateOfBirth}
-                        onChange={handleChange}
-                    />
+                            <label htmlFor="dateOfBirth">
 
-                </div>
+                                Date of Birth
+
+                            </label>
+
+                            <div className="patient-input-wrapper">
+
+                                <CalendarDays
+                                    size={17}
+                                />
+
+                                <input
+                                    id="dateOfBirth"
+                                    type="date"
+                                    name="dateOfBirth"
+                                    value={
+                                        formData.dateOfBirth
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                />
+
+                            </div>
+
+                        </div>
 
 
+                        {/* Gender */}
 
-                {/* Gender */}
+                        <div className="patient-form-group">
 
-                <div className="form-group">
+                            <label htmlFor="gender">
 
-                    <label>
-                        Gender
-                    </label>
+                                Gender
 
-                    <select
-                        name="gender"
-                        value={formData.gender}
-                        onChange={handleChange}
+                            </label>
+
+                            <div className="patient-input-wrapper">
+
+                                <UserRound
+                                    size={17}
+                                />
+
+                                <select
+                                    id="gender"
+                                    name="gender"
+                                    value={
+                                        formData.gender
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                >
+
+                                    <option value="">
+                                        Select Gender
+                                    </option>
+
+                                    <option value="Male">
+                                        Male
+                                    </option>
+
+                                    <option value="Female">
+                                        Female
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        {/* Blood Group */}
+
+                        <div className="patient-form-group">
+
+                            <label htmlFor="bloodGroup">
+
+                                Blood Group
+
+                            </label>
+
+                            <div className="patient-input-wrapper">
+
+                                <Droplets
+                                    size={17}
+                                />
+
+                                <select
+                                    id="bloodGroup"
+                                    name="bloodGroup"
+                                    value={
+                                        formData.bloodGroup
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                >
+
+                                    <option value="">
+                                        Select Blood Group
+                                    </option>
+
+                                    <option value="A+">
+                                        A+
+                                    </option>
+
+                                    <option value="A-">
+                                        A-
+                                    </option>
+
+                                    <option value="B+">
+                                        B+
+                                    </option>
+
+                                    <option value="B-">
+                                        B-
+                                    </option>
+
+                                    <option value="AB+">
+                                        AB+
+                                    </option>
+
+                                    <option value="AB-">
+                                        AB-
+                                    </option>
+
+                                    <option value="O+">
+                                        O+
+                                    </option>
+
+                                    <option value="O-">
+                                        O-
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* ==================================================
+                    Contact & Location
+                    ================================================== */}
+
+                <section className="patient-profile-card">
+
+                    <div className="patient-profile-card-header">
+
+                        <div className="patient-profile-section-icon">
+
+                            <Home
+                                size={19}
+                            />
+
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Contact & Location
+                            </h2>
+
+                            <p>
+                                Contact and residential information.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="patient-profile-grid">
+
+                        {/* Address */}
+
+                        <div className="patient-form-group patient-form-group-wide">
+
+                            <label htmlFor="address">
+
+                                Address
+
+                            </label>
+
+                            <div className="patient-input-wrapper">
+
+                                <Home
+                                    size={17}
+                                />
+
+                                <input
+                                    id="address"
+                                    type="text"
+                                    name="address"
+                                    value={
+                                        formData.address
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                    placeholder="Enter residential address"
+                                />
+
+                            </div>
+
+                        </div>
+
+
+                        {/* City */}
+
+                        <div className="patient-form-group">
+
+                            <label htmlFor="city">
+
+                                City
+
+                            </label>
+
+                            <div className="patient-input-wrapper">
+
+                                <MapPin
+                                    size={17}
+                                />
+
+                                <input
+                                    id="city"
+                                    type="text"
+                                    name="city"
+                                    value={
+                                        formData.city
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                    placeholder="Enter city"
+                                />
+
+                            </div>
+
+                        </div>
+
+
+                        {/* Emergency Contact */}
+
+                        <div className="patient-form-group">
+
+                            <label htmlFor="emergencyContact">
+
+                                Emergency Contact
+
+                            </label>
+
+                            <div className="patient-input-wrapper">
+
+                                <Phone
+                                    size={17}
+                                />
+
+                                <input
+                                    id="emergencyContact"
+                                    type="text"
+                                    name="emergencyContact"
+                                    value={
+                                        formData.emergencyContact
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                    placeholder="Enter emergency contact"
+                                />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* ==================================================
+                    Medical Information
+                    ================================================== */}
+
+                <section className="patient-profile-card">
+
+                    <div className="patient-profile-card-header">
+
+                        <div className="patient-profile-section-icon medical">
+
+                            <HeartPulse
+                                size={19}
+                            />
+
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Medical Information
+                            </h2>
+
+                            <p>
+                                Important medical history and allergy information.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="patient-profile-medical-grid">
+
+                        {/* Medical History */}
+
+                        <div className="patient-form-group">
+
+                            <label htmlFor="medicalHistory">
+
+                                Medical History
+
+                            </label>
+
+                            <div className="patient-textarea-wrapper">
+
+                                <FileText
+                                    size={17}
+                                />
+
+                                <textarea
+                                    id="medicalHistory"
+                                    name="medicalHistory"
+                                    value={
+                                        formData.medicalHistory
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                    placeholder="Enter relevant medical history"
+                                    rows={5}
+                                />
+
+                            </div>
+
+                        </div>
+
+
+                        {/* Allergies */}
+
+                        <div className="patient-form-group">
+
+                            <label htmlFor="allergies">
+
+                                Allergies
+
+                            </label>
+
+                            <div className="patient-textarea-wrapper">
+
+                                <HeartPulse
+                                    size={17}
+                                />
+
+                                <textarea
+                                    id="allergies"
+                                    name="allergies"
+                                    value={
+                                        formData.allergies
+                                    }
+                                    onChange={
+                                        handleChange
+                                    }
+                                    placeholder="Enter known allergies"
+                                    rows={5}
+                                />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* ==================================================
+                    Form Footer
+                    ================================================== */}
+
+                <div className="patient-profile-actions">
+
+                    <div className="patient-profile-help">
+
+                        <span className="patient-profile-help-icon">
+
+                            <CheckCircle2
+                                size={15}
+                            />
+
+                        </span>
+
+                        <span>
+                            Keep your patient information accurate and up to date.
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        className="patient-profile-save-button"
+                        disabled={saving}
                     >
 
-                        <option value="">
-                            Select Gender
-                        </option>
+                        {saving ? (
 
-                        <option value="Male">
-                            Male
-                        </option>
+                            <>
 
-                        <option value="Female">
-                            Female
-                        </option>
+                                <Loader2
+                                    size={17}
+                                    className="patient-profile-loading-icon"
+                                />
 
-                        <option value="Other">
-                            Other
-                        </option>
+                                Saving...
 
-                    </select>
+                            </>
 
-                </div>
+                        ) : (
 
+                            <>
 
+                                <Save
+                                    size={17}
+                                />
 
-                {/* Blood Group */}
+                                {profileExists
+                                    ? "Update Profile"
+                                    : "Create Profile"}
 
-                <div className="form-group">
+                            </>
 
-                    <label>
-                        Blood Group
-                    </label>
+                        )}
 
-                    <select
-                        name="bloodGroup"
-                        value={formData.bloodGroup}
-                        onChange={handleChange}
-                    >
-
-                        <option value="">
-                            Select Blood Group
-                        </option>
-
-                        <option value="A+">
-                            A+
-                        </option>
-
-                        <option value="A-">
-                            A-
-                        </option>
-
-                        <option value="B+">
-                            B+
-                        </option>
-
-                        <option value="B-">
-                            B-
-                        </option>
-
-                        <option value="AB+">
-                            AB+
-                        </option>
-
-                        <option value="AB-">
-                            AB-
-                        </option>
-
-                        <option value="O+">
-                            O+
-                        </option>
-
-                        <option value="O-">
-                            O-
-                        </option>
-
-                    </select>
+                    </button>
 
                 </div>
-
-
-
-                {/* Address */}
-
-                <div className="form-group">
-
-                    <label>
-                        Address
-                    </label>
-
-                    <input
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        placeholder="Enter address"
-                    />
-
-                </div>
-
-
-
-                {/* City */}
-
-                <div className="form-group">
-
-                    <label>
-                        City
-                    </label>
-
-                    <input
-                        type="text"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange}
-                        placeholder="Enter city"
-                    />
-
-                </div>
-
-
-
-                {/* Emergency Contact */}
-
-                <div className="form-group">
-
-                    <label>
-                        Emergency Contact
-                    </label>
-
-                    <input
-                        type="text"
-                        name="emergencyContact"
-                        value={formData.emergencyContact}
-                        onChange={handleChange}
-                        placeholder="Enter emergency contact"
-                    />
-
-                </div>
-
-
-
-                {/* Medical History */}
-
-                <div className="form-group">
-
-                    <label>
-                        Medical History
-                    </label>
-
-                    <textarea
-                        name="medicalHistory"
-                        value={formData.medicalHistory}
-                        onChange={handleChange}
-                        placeholder="Enter medical history"
-                        rows="4"
-                    />
-
-                </div>
-
-
-
-                {/* Allergies */}
-
-                <div className="form-group">
-
-                    <label>
-                        Allergies
-                    </label>
-
-                    <textarea
-                        name="allergies"
-                        value={formData.allergies}
-                        onChange={handleChange}
-                        placeholder="Enter allergies"
-                        rows="4"
-                    />
-
-                </div>
-
-
-
-                {/* Submit */}
-
-                <button
-                    type="submit"
-                    disabled={saving}
-                >
-
-                    {saving
-                        ? "Saving..."
-                        : profileExists
-                            ? "Update Profile"
-                            : "Create Profile"
-                    }
-
-                </button>
-
 
             </form>
-
 
         </div>
 

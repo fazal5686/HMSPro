@@ -1,8 +1,7 @@
-
 // ============================================================
 // File: pages/Appointments/Appointments.jsx
 // Purpose: HMSPro Appointment management page.
-// Phase 1: Appointment list and backend integration.
+// Supports role-based appointment loading.
 // ============================================================
 
 import {
@@ -23,7 +22,14 @@ import {
 
 import {
     getAllAppointments,
+    getDoctorAppointments,
 } from "../../services/appointmentService.js";
+
+import {
+    getMyDoctorProfile,
+} from "../../services/doctorService.js";
+
+import useAuth from "../../hooks/useAuth.js";
 
 import "./Appointments.css";
 
@@ -40,17 +46,14 @@ const formatAppointmentDate = (dateValue) => {
 
     }
 
-
     const date =
         new Date(dateValue);
-
 
     if (Number.isNaN(date.getTime())) {
 
         return "—";
 
     }
-
 
     return date.toLocaleDateString(
         "en-PK",
@@ -76,17 +79,14 @@ const formatAppointmentTime = (dateValue) => {
 
     }
 
-
     const date =
         new Date(dateValue);
-
 
     if (Number.isNaN(date.getTime())) {
 
         return "—";
 
     }
-
 
     return date.toLocaleTimeString(
         "en-PK",
@@ -106,9 +106,13 @@ const formatAppointmentTime = (dateValue) => {
 const getPatientName = (appointment) => {
 
     return (
+
         appointment?.patientId?.userId?.fullName ||
+
         appointment?.patientId?.fullName ||
+
         "Unknown Patient"
+
     );
 
 };
@@ -121,9 +125,13 @@ const getPatientName = (appointment) => {
 const getDoctorName = (appointment) => {
 
     return (
+
         appointment?.doctorId?.userId?.fullName ||
+
         appointment?.doctorId?.fullName ||
+
         "Unknown Doctor"
+
     );
 
 };
@@ -141,13 +149,11 @@ const getPatientInitials = (name) => {
 
     }
 
-
     const words =
         name
             .trim()
             .split(/\s+/)
             .filter(Boolean);
-
 
     if (words.length === 1) {
 
@@ -157,10 +163,12 @@ const getPatientInitials = (name) => {
 
     }
 
-
     return (
+
         words[0][0] +
+
         words[words.length - 1][0]
+
     ).toUpperCase();
 
 };
@@ -171,6 +179,15 @@ const getPatientInitials = (name) => {
 // ============================================================
 
 const Appointments = () => {
+
+    // ========================================================
+    // Authentication
+    // ========================================================
+
+    const {
+        user,
+    } = useAuth();
+
 
     // ========================================================
     // State
@@ -211,14 +228,69 @@ const Appointments = () => {
                 setError("");
 
 
+                // ------------------------------------------------
+                // Doctor
+                // ------------------------------------------------
+                // Doctors cannot access:
+                //
+                // GET /api/appointments
+                //
+                // They must use:
+                //
+                // GET /api/appointments/doctor/:doctorId
+                //
+                // First obtain the logged-in Doctor profile.
+                // ------------------------------------------------
+
+                if (user?.role === "Doctor") {
+
+                    const doctor =
+                        await getMyDoctorProfile();
+
+
+                    if (!doctor?._id) {
+
+                        throw new Error(
+                            "Doctor profile could not be found."
+                        );
+
+                    }
+
+
+                    const data =
+                        await getDoctorAppointments(
+                            doctor._id
+                        );
+
+
+                    setAppointments(
+
+                        Array.isArray(data)
+                            ? data
+                            : []
+
+                    );
+
+
+                    return;
+
+                }
+
+
+                // ------------------------------------------------
+                // Admin / Receptionist
+                // ------------------------------------------------
+
                 const data =
                     await getAllAppointments();
 
 
                 setAppointments(
+
                     Array.isArray(data)
                         ? data
                         : []
+
                 );
 
             }
@@ -231,9 +303,17 @@ const Appointments = () => {
                 );
 
 
+                setAppointments([]);
+
+
                 setError(
-                    requestError.response?.data?.message ||
+
+                    requestError?.response?.data?.message ||
+
+                    requestError?.message ||
+
                     "Unable to load appointments."
+
                 );
 
             }
@@ -245,7 +325,9 @@ const Appointments = () => {
             }
 
         },
-        []
+        [
+            user?.role,
+        ]
     );
 
 
@@ -255,9 +337,18 @@ const Appointments = () => {
 
     useEffect(() => {
 
+        if (!user) {
+
+            return;
+
+        }
+
         loadAppointments();
 
-    }, [loadAppointments]);
+    }, [
+        user,
+        loadAppointments,
+    ]);
 
 
     // ========================================================
@@ -303,9 +394,11 @@ const Appointments = () => {
 
 
                 return searchableText.includes(
+
                     searchTerm
                         .trim()
                         .toLowerCase()
+
                 );
 
             }
@@ -399,6 +492,7 @@ const Appointments = () => {
 
             <section className="appointments-summary">
 
+
                 <article className="appointments-summary-card">
 
                     <div className="appointments-summary-icon teal">
@@ -415,14 +509,17 @@ const Appointments = () => {
                         </span>
 
                         <strong>
+
                             {loading
                                 ? "..."
                                 : appointments.length}
+
                         </strong>
 
                     </div>
 
                 </article>
+
 
 
                 <article className="appointments-summary-card">
@@ -441,6 +538,7 @@ const Appointments = () => {
                         </span>
 
                         <strong>
+
                             {loading
                                 ? "..."
                                 : appointments.filter(
@@ -448,11 +546,13 @@ const Appointments = () => {
                                         appointment.status ===
                                         "Confirmed"
                                 ).length}
+
                         </strong>
 
                     </div>
 
                 </article>
+
 
 
                 <article className="appointments-summary-card">
@@ -471,6 +571,7 @@ const Appointments = () => {
                         </span>
 
                         <strong>
+
                             {loading
                                 ? "..."
                                 : appointments.filter(
@@ -478,11 +579,13 @@ const Appointments = () => {
                                         appointment.status ===
                                         "Pending"
                                 ).length}
+
                         </strong>
 
                     </div>
 
                 </article>
+
 
 
                 <article className="appointments-summary-card">
@@ -501,6 +604,7 @@ const Appointments = () => {
                         </span>
 
                         <strong>
+
                             {loading
                                 ? "..."
                                 : appointments.filter(
@@ -508,11 +612,13 @@ const Appointments = () => {
                                         appointment.status ===
                                         "Completed"
                                 ).length}
+
                         </strong>
 
                     </div>
 
                 </article>
+
 
             </section>
 
@@ -602,9 +708,15 @@ const Appointments = () => {
                             </strong>
 
                             <span>
+
                                 {searchTerm
+
                                     ? "Try a different search term."
-                                    : "There are no appointments available yet."}
+
+                                    : "There are no appointments available yet."
+
+                                }
+
                             </span>
 
                         </div>
@@ -685,8 +797,6 @@ const Appointments = () => {
                                                 >
 
 
-                                                    {/* Patient */}
-
                                                     <td>
 
                                                         <div className="appointment-patient-cell">
@@ -721,7 +831,6 @@ const Appointments = () => {
                                                     </td>
 
 
-                                                    {/* Doctor */}
 
                                                     <td>
 
@@ -732,9 +841,11 @@ const Appointments = () => {
                                                             />
 
                                                             <span>
+
                                                                 {
                                                                     doctorName
                                                                 }
+
                                                             </span>
 
                                                         </div>
@@ -742,7 +853,6 @@ const Appointments = () => {
                                                     </td>
 
 
-                                                    {/* Date */}
 
                                                     <td>
 
@@ -759,7 +869,6 @@ const Appointments = () => {
                                                     </td>
 
 
-                                                    {/* Time */}
 
                                                     <td>
 
@@ -780,7 +889,6 @@ const Appointments = () => {
                                                     </td>
 
 
-                                                    {/* Reason */}
 
                                                     <td>
 
@@ -796,7 +904,6 @@ const Appointments = () => {
                                                     </td>
 
 
-                                                    {/* Status */}
 
                                                     <td>
 
@@ -824,7 +931,6 @@ const Appointments = () => {
                                                     </td>
 
 
-                                                    {/* Action */}
 
                                                     <td>
 
@@ -841,6 +947,7 @@ const Appointments = () => {
                                                         </button>
 
                                                     </td>
+
 
                                                 </tr>
 
@@ -871,9 +978,3 @@ const Appointments = () => {
 // ============================================================
 
 export default Appointments;
-
-
-// ============================================================
-// End of Appointments.jsx
-// ============================================================
-

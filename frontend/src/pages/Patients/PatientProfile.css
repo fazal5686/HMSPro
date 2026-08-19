@@ -1,6 +1,9 @@
 /* ============================================================
-   File: pages/Patients/PatientProfile.css
-   Purpose: HMSPro Patient Profile page styling.
+   File:
+   D:\HMSPro\frontend\src\pages\Patients\PatientProfile.css
+
+   Purpose:
+   Professional HMSPro Patient Profile styling.
    ============================================================ */
 
 
@@ -9,9 +12,15 @@
    ============================================================ */
 
    .patient-profile-page {
+
     width: 100%;
+
     min-height: 100%;
-    padding: 4px 0 32px;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
 }
 
 
@@ -19,80 +28,341 @@
    Header
    ============================================================ */
 
-.patient-profile-page > h2 {
-    margin: 0;
-    font-size: 30px;
-    line-height: 1.2;
-    font-weight: 750;
-    letter-spacing: -0.03em;
-    color: #172033;
-}
+.patient-profile-header {
 
-.patient-profile-page > p {
-    margin: 9px 0 24px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #738096;
-}
-
-
-/* ============================================================
-   Messages
-   ============================================================ */
-
-.success-message,
-.error-message {
-    margin: 0 0 18px;
-    padding: 12px 15px;
-    border-radius: 10px;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.success-message {
-    border: 1px solid #ccefe2;
-    background: #f0fbf6;
-    color: #21845c;
-}
-
-.error-message {
-    border: 1px solid #f2d1d1;
-    background: #fff5f5;
-    color: #c44545;
-}
-
-
-/* ============================================================
-   Form Card
-   ============================================================ */
-
-.patient-profile-page form {
-    width: 100%;
-    max-width: 900px;
-    padding: 26px;
-    box-sizing: border-box;
-    border: 1px solid #e7ecf2;
-    border-radius: 18px;
-    background: #ffffff;
-    box-shadow: 0 8px 26px rgba(31, 48, 73, 0.05);
-}
-
-
-/* ============================================================
-   Form Group
-   ============================================================ */
-
-.form-group {
     display: flex;
-    flex-direction: column;
-    gap: 7px;
-    margin-bottom: 19px;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 22px;
+
 }
 
-.form-group label {
-    font-size: 12px;
+
+.patient-profile-title-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+}
+
+
+.patient-profile-title-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: #2563eb;
+
+    background: #eef4ff;
+
+    border-radius: 12px;
+
+}
+
+
+.patient-profile-title-row h1 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 26px;
+
     font-weight: 700;
-    color: #344054;
+
+    line-height: 1.2;
+
+}
+
+
+.patient-profile-title-row p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+}
+
+
+.patient-profile-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 8px 12px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 999px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.patient-profile-status-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+}
+
+
+/* ============================================================
+   Alerts
+   ============================================================ */
+
+.patient-profile-alert {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 18px;
+
+    padding: 13px 16px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+}
+
+
+.patient-profile-alert.success {
+
+    border: 1px solid #bbf7d0;
+
+    background: #f0fdf4;
+
+    color: #166534;
+
+}
+
+
+.patient-profile-alert.error {
+
+    border: 1px solid #fecaca;
+
+    background: #fef2f2;
+
+    color: #991b1b;
+
+}
+
+
+/* ============================================================
+   Form
+   ============================================================ */
+
+.patient-profile-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+
+/* ============================================================
+   Cards
+   ============================================================ */
+
+.patient-profile-card {
+
+    overflow: hidden;
+
+    border: 1px solid #e5eaf1;
+
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 4px 18px rgba(15, 23, 42, 0.05);
+
+}
+
+
+.patient-profile-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 19px 22px;
+
+    border-bottom: 1px solid #edf1f6;
+
+}
+
+
+.patient-profile-section-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: #2563eb;
+
+    background: #eef4ff;
+
+    border-radius: 10px;
+
+}
+
+
+.patient-profile-section-icon.medical {
+
+    color: #0f766e;
+
+    background: #ecfdf5;
+
+}
+
+
+.patient-profile-card-header h2 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+}
+
+
+.patient-profile-card-header p {
+
+    margin: 3px 0 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+
+/* ============================================================
+   Form Grid
+   ============================================================ */
+
+.patient-profile-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+
+    padding: 22px;
+
+}
+
+
+.patient-profile-medical-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+
+    padding: 22px;
+
+}
+
+
+.patient-form-group {
+
+    min-width: 0;
+
+}
+
+
+.patient-form-group-wide {
+
+    grid-column: 1 / -1;
+
+}
+
+
+/* ============================================================
+   Labels
+   ============================================================ */
+
+.patient-form-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #334155;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+.patient-form-group label::after {
+
+    content: "";
+
 }
 
 
@@ -100,113 +370,342 @@
    Inputs
    ============================================================ */
 
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
+.patient-input-wrapper {
+
+    min-height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 0 12px;
+
     box-sizing: border-box;
-    border: 1px solid #dfe5ec;
-    border-radius: 10px;
-    outline: none;
-    background: #fafbfd;
-    color: #273246;
-    font: inherit;
-    font-size: 13px;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #94a3b8;
+
     transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease,
         background 0.2s ease;
-}
 
-.form-group input,
-.form-group select {
-    height: 43px;
-    padding: 0 12px;
-}
-
-.form-group textarea {
-    min-height: 105px;
-    padding: 11px 12px;
-    resize: vertical;
-    line-height: 1.5;
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-    color: #9aa5b5;
 }
 
 
-/* ============================================================
-   Focus
-   ============================================================ */
+.patient-input-wrapper:focus-within {
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: #0f8f86;
+    border-color: #93c5fd;
+
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(15, 143, 134, 0.09);
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.10);
+
+}
+
+
+.patient-input-wrapper input,
+.patient-input-wrapper select {
+
+    width: 100%;
+
+    min-width: 0;
+
+    height: 41px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #0f172a;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+}
+
+
+.patient-input-wrapper select {
+
+    cursor: pointer;
+
+}
+
+
+.patient-input-wrapper input::placeholder {
+
+    color: #94a3b8;
+
 }
 
 
 /* ============================================================
-   Submit Button
+   Textareas
    ============================================================ */
 
-.patient-profile-page form > button {
-    display: inline-flex;
+.patient-textarea-wrapper {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    padding: 11px 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #94a3b8;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.patient-textarea-wrapper:focus-within {
+
+    border-color: #93c5fd;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.10);
+
+}
+
+
+.patient-textarea-wrapper textarea {
+
+    width: 100%;
+
+    min-width: 0;
+
+    resize: vertical;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #0f172a;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+}
+
+
+.patient-textarea-wrapper textarea::placeholder {
+
+    color: #94a3b8;
+
+}
+
+
+/* ============================================================
+   Actions
+   ============================================================ */
+
+.patient-profile-actions {
+
+    display: flex;
+
     align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 4px 2px 8px;
+
+}
+
+
+.patient-profile-help {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+
+.patient-profile-help-icon {
+
+    display: flex;
+
+    align-items: center;
+
     justify-content: center;
-    min-height: 44px;
-    padding: 0 20px;
-    margin-top: 4px;
-    border: 0;
-    border-radius: 11px;
-    background: #0f8f86;
+
+    color: #16a34a;
+
+}
+
+
+.patient-profile-save-button {
+
+    min-height: 43px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 0 18px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
     color: #ffffff;
+
     font-size: 13px;
+
     font-weight: 700;
+
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(15, 143, 134, 0.18);
+
+    box-shadow:
+        0 5px 14px rgba(37, 99, 235, 0.20);
+
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
         opacity 0.2s ease;
+
 }
 
-.patient-profile-page form > button:hover:not(:disabled) {
+
+.patient-profile-save-button:hover:not(:disabled) {
+
     transform: translateY(-1px);
-    box-shadow: 0 11px 24px rgba(15, 143, 134, 0.24);
+
+    box-shadow:
+        0 7px 18px rgba(37, 99, 235, 0.26);
+
 }
 
-.patient-profile-page form > button:disabled {
-    cursor: default;
+
+.patient-profile-save-button:active:not(:disabled) {
+
+    transform: translateY(0);
+
+}
+
+
+.patient-profile-save-button:disabled {
+
+    cursor: not-allowed;
+
     opacity: 0.65;
+
 }
 
 
 /* ============================================================
-   Loading State
+   Loading
    ============================================================ */
 
-.patient-profile-page > div:not(form) {
-    padding: 28px;
-    border: 1px solid #e7ecf2;
-    border-radius: 18px;
-    background: #ffffff;
-    box-shadow: 0 8px 26px rgba(31, 48, 73, 0.05);
+.patient-profile-loading {
+
+    min-height: 420px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    color: #64748b;
+
 }
 
-.patient-profile-page > div:not(form) h2 {
-    margin: 0 0 8px;
-    color: #172033;
+
+.patient-profile-loading strong {
+
+    margin-top: 5px;
+
+    color: #334155;
+
+    font-size: 15px;
+
 }
 
-.patient-profile-page > div:not(form) p {
-    margin: 0;
-    color: #738096;
-    font-size: 13px;
+
+.patient-profile-loading span {
+
+    font-size: 12px;
+
+}
+
+
+.patient-profile-loading-icon {
+
+    animation:
+        patient-profile-spin
+        0.9s
+        linear
+        infinite;
+
+}
+
+
+@keyframes patient-profile-spin {
+
+    from {
+
+        transform: rotate(0deg);
+
+    }
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+
 }
 
 
@@ -214,40 +713,101 @@
    Responsive
    ============================================================ */
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
 
     .patient-profile-page {
-        padding-bottom: 20px;
+
+        padding: 16px;
+
     }
 
-    .patient-profile-page > h2 {
-        font-size: 26px;
+
+    .patient-profile-grid,
+    .patient-profile-medical-grid {
+
+        grid-template-columns: 1fr;
+
     }
 
-    .patient-profile-page form {
-        padding: 20px;
-        border-radius: 15px;
+
+    .patient-form-group-wide {
+
+        grid-column: auto;
+
+    }
+
+
+    .patient-profile-header {
+
+        align-items: flex-start;
+
     }
 
 }
 
 
-@media (max-width: 500px) {
+@media (max-width: 650px) {
 
-    .patient-profile-page > h2 {
-        font-size: 24px;
+    .patient-profile-header {
+
+        flex-direction: column;
+
     }
 
-    .patient-profile-page > p {
-        font-size: 13px;
+
+    .patient-profile-status {
+
+        align-self: flex-start;
+
     }
 
-    .patient-profile-page form {
-        padding: 17px;
+
+    .patient-profile-card-header {
+
+        padding: 16px;
+
     }
 
-    .patient-profile-page form > button {
+
+    .patient-profile-grid,
+    .patient-profile-medical-grid {
+
+        padding: 16px;
+
+    }
+
+
+    .patient-profile-actions {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .patient-profile-save-button {
+
         width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .patient-profile-page {
+
+        padding: 12px;
+
+    }
+
+
+    .patient-profile-title-row h1 {
+
+        font-size: 22px;
+
     }
 
 }

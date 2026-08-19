@@ -77,7 +77,8 @@ import Beds
 
 import ProtectedRoute
     from "./ProtectedRoute.jsx";
-
+    import Doctors
+    from "../pages/Doctors/Doctors.jsx";
 
 // ============================================================
 // HMSPro Application Routes
@@ -134,7 +135,15 @@ const AppRoutes = () => {
                             <Dashboard />
                         }
                     />
-
+                    {/* ==================================================
+                        Doctor Diretory
+                        ================================================== */}
+                    <Route
+                        path="/doctors"
+                        element={
+                            <Doctors />
+                        }
+                    />
 
                     {/* ==================================================
                     Patients Directory

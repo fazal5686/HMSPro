@@ -7,13 +7,17 @@
 //
 // Responsibilities:
 // 1. Displays HMSPro sidebar navigation.
-// 2. Displays authenticated user's information.
-// 3. Provides Admin/SuperAdmin Users navigation.
-// 4. Provides Sign Out functionality.
-// 5. Provides application header.
-// 6. Renders child pages through Outlet.
+// 2. Provides professional role-based navigation.
+// 3. Displays authenticated user's information.
+// 4. Provides Admin/SuperAdmin Users navigation.
+// 5. Provides Notifications and Profile access.
+// 6. Provides Sign Out functionality.
+// 7. Renders child pages through Outlet.
+//
+// Important:
+// Frontend navigation is for user experience only.
+// Backend authorization remains the final security layer.
 // ============================================================
-
 
 import {
     LayoutDashboard,
@@ -35,8 +39,11 @@ import {
     Hospital,
     ScanLine,
     HeartPulse,
+    UserRound,
+    UserCog,
+    DoorOpen,
+    FileBarChart,
 } from "lucide-react";
-
 
 import {
     NavLink,
@@ -44,48 +51,29 @@ import {
     useNavigate,
 } from "react-router-dom";
 
-
 import useAuth from "../../hooks/useAuth.js";
-
 
 import "./MainLayout.css";
 
 
-
 // ============================================================
 // Navigation Configuration
+// ============================================================
 //
-// Navigation is organized according to the natural HMSPro
-// hospital workflow rather than simply listing modules.
+// Each item contains an allowedRoles array.
+//
+// Backend authorization MUST still protect every API endpoint.
+// These rules only control what appears in the sidebar.
 // ============================================================
 
-const navigationGroups = [
+const navigationSections = [
 
     // ========================================================
-    // MAIN
-    // ========================================================
-
-    {
-        title: "MAIN",
-
-        items: [
-
-            {
-                label: "Dashboard",
-                path: "/",
-                icon: LayoutDashboard,
-            },
-
-        ],
-    },
-
-
-    // ========================================================
-    // PATIENT CARE
+    // Clinical
     // ========================================================
 
     {
-        title: "PATIENT CARE",
+        title: "CLINICAL",
 
         items: [
 
@@ -93,48 +81,128 @@ const navigationGroups = [
                 label: "Patients",
                 path: "/patients",
                 icon: Users,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                    "Receptionist",
+                    "LabTechnician",
+                    "Pharmacist",
+                    "Accountant",
+                ],
             },
 
             {
                 label: "Doctors",
                 path: "/doctors",
                 icon: Stethoscope,
-            },
 
-            {
-                label: "Nurses",
-                path: "/nurses",
-                icon: HeartPulse,
-            },
-
-            {
-                label: "Receptionists",
-                path: "/receptionists",
-                icon: Users,
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                    "Receptionist",
+                ],
             },
 
             {
                 label: "Departments",
                 path: "/departments",
                 icon: Hospital,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                    "Receptionist",
+                ],
             },
+
+            {
+                label: "Nurses",
+                path: "/nurses",
+                icon: HeartPulse,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                ],
+            },
+
+        ],
+    },
+
+
+    // ========================================================
+    // Operations
+    // ========================================================
+
+    {
+        title: "OPERATIONS",
+
+        items: [
 
             {
                 label: "Appointments",
                 path: "/appointments",
                 icon: CalendarDays,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                    "Receptionist",
+                    "Patient",
+                ],
             },
 
             {
                 label: "Admissions",
                 path: "/admissions",
                 icon: ClipboardList,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                    "Receptionist",
+                ],
             },
 
             {
                 label: "Discharges",
                 path: "/discharges",
-                icon: ClipboardList,
+                icon: FileBarChart,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                    "Receptionist",
+                ],
+            },
+
+            {
+                label: "Rooms & Beds",
+                path: "/rooms",
+                icon: BedDouble,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                    "Receptionist",
+                ],
             },
 
         ],
@@ -142,36 +210,53 @@ const navigationGroups = [
 
 
     // ========================================================
-    // HOSPITAL OPERATIONS
+    // Services
     // ========================================================
 
     {
-        title: "HOSPITAL OPERATIONS",
+        title: "SERVICES",
 
         items: [
-
-            {
-                label: "Rooms & Beds",
-                path: "/rooms",
-                icon: BedDouble,
-            },
 
             {
                 label: "Pharmacy",
                 path: "/pharmacy",
                 icon: Pill,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                    "Pharmacist",
+                ],
             },
 
             {
                 label: "Laboratory",
                 path: "/laboratory",
                 icon: FlaskConical,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                    "LabTechnician",
+                ],
             },
 
             {
                 label: "Radiology",
                 path: "/radiology",
                 icon: ScanLine,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Nurse",
+                ],
             },
 
         ],
@@ -179,7 +264,7 @@ const navigationGroups = [
 
 
     // ========================================================
-    // FINANCE & ANALYTICS
+    // Finance & Analytics
     // ========================================================
 
     {
@@ -191,12 +276,26 @@ const navigationGroups = [
                 label: "Billing",
                 path: "/billing",
                 icon: ReceiptText,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Receptionist",
+                    "Accountant",
+                ],
             },
 
             {
                 label: "Reports",
                 path: "/reports",
                 icon: BarChart3,
+
+                allowedRoles: [
+                    "SuperAdmin",
+                    "Admin",
+                    "Doctor",
+                    "Accountant",
+                ],
             },
 
         ],
@@ -205,22 +304,18 @@ const navigationGroups = [
 ];
 
 
-
 // ============================================================
 // Main Layout Component
 // ============================================================
 
 const MainLayout = () => {
 
-
     const navigate = useNavigate();
-
 
     const {
         user,
         logout,
     } = useAuth();
-
 
 
     // ========================================================
@@ -245,20 +340,86 @@ const MainLayout = () => {
         "U";
 
 
-
     // ========================================================
     // Administrative Roles
-    //
-    // These roles can access the Users administration section.
-    //
-    // NOTE:
-    // Actual authorization MUST also be enforced by the backend.
     // ========================================================
 
     const canManageUsers =
-        user?.role === "Admin" ||
-        user?.role === "SuperAdmin";
+        userRole === "Admin" ||
+        userRole === "SuperAdmin";
 
+
+    // ========================================================
+    // Dashboard Access
+    //
+    // All authenticated roles can access their dashboard.
+    // ========================================================
+
+    const dashboardRoles = [
+        "SuperAdmin",
+        "Admin",
+        "Doctor",
+        "Receptionist",
+        "Nurse",
+        "LabTechnician",
+        "Pharmacist",
+        "Accountant",
+        "Patient",
+    ];
+
+
+    const canAccessDashboard =
+        dashboardRoles.includes(userRole);
+
+
+    // ========================================================
+    // Profile Access
+    //
+    // Profile is intentionally available to every authenticated
+    // user. The page itself determines what profile information
+    // is appropriate for the current account.
+    // ========================================================
+
+    const canAccessProfile = true;
+
+
+    // ========================================================
+    // Notification Access
+    // ========================================================
+
+    const canAccessNotifications = true;
+
+
+    // ========================================================
+    // Settings Access
+    // ========================================================
+
+    const canAccessSettings = true;
+
+
+    // ========================================================
+    // Filter Navigation
+    // ========================================================
+
+    const visibleSections =
+        navigationSections
+            .map((section) => ({
+
+                ...section,
+
+                items:
+                    section.items.filter(
+                        (item) =>
+                            item.allowedRoles.includes(
+                                userRole
+                            )
+                    ),
+
+            }))
+            .filter(
+                (section) =>
+                    section.items.length > 0
+            );
 
 
     // ========================================================
@@ -279,24 +440,19 @@ const MainLayout = () => {
     };
 
 
-
     // ========================================================
-    // Navigation Link Renderer
-    //
-    // Keeps all navigation items visually consistent.
+    // Render Navigation Item
     // ========================================================
 
-    const renderNavigationItem = (item) => {
+    const renderNavItem = (item) => {
 
         const Icon = item.icon;
-
 
         return (
 
             <NavLink
                 key={item.path}
                 to={item.path}
-                end={item.path === "/"}
                 className={({ isActive }) =>
                     `hms-nav-item ${
                         isActive
@@ -311,18 +467,15 @@ const MainLayout = () => {
                     strokeWidth={2}
                 />
 
-
                 <span>
                     {item.label}
                 </span>
-
 
             </NavLink>
 
         );
 
     };
-
 
 
     // ========================================================
@@ -347,9 +500,6 @@ const MainLayout = () => {
 
                 <div className="hms-brand">
 
-
-                    {/* HT Monogram */}
-
                     <div className="hms-brand-icon">
 
                         <span className="hms-brand-monogram">
@@ -358,8 +508,6 @@ const MainLayout = () => {
 
                     </div>
 
-
-                    {/* Brand Text */}
 
                     <div className="hms-brand-text">
 
@@ -373,9 +521,7 @@ const MainLayout = () => {
 
                     </div>
 
-
                 </div>
-
 
 
                 {/* ==================================================
@@ -386,27 +532,99 @@ const MainLayout = () => {
 
 
                     {/* ==================================================
-                        Navigation Groups
+                        Main Menu
                         ================================================== */}
 
-                    {navigationGroups.map(
-                        (group) => (
+                    <p className="hms-nav-title">
+                        MAIN MENU
+                    </p>
 
-                            <div
-                                key={group.title}
-                                className="hms-navigation-group"
+
+                    {canAccessDashboard && (
+
+                        <NavLink
+                            to="/"
+                            end
+                            className={({ isActive }) =>
+                                `hms-nav-item ${
+                                    isActive
+                                        ? "active"
+                                        : ""
+                                }`
+                            }
+                        >
+
+                            <LayoutDashboard
+                                size={19}
+                                strokeWidth={2}
+                            />
+
+                            <span>
+                                Dashboard
+                            </span>
+
+                        </NavLink>
+
+                    )}
+
+
+                    {/* ==================================================
+                        Patient Personal Area
+                        ================================================== */}
+
+                    {userRole === "Patient" && (
+
+                        <>
+
+                            <NavLink
+                                to="/profile"
+                                className={({ isActive }) =>
+                                    `hms-nav-item ${
+                                        isActive
+                                            ? "active"
+                                            : ""
+                                    }`
+                                }
                             >
 
+                                <UserRound
+                                    size={19}
+                                    strokeWidth={2}
+                                />
 
-                                <p className="hms-nav-title">
-                                    {group.title}
+                                <span>
+                                    My Profile
+                                </span>
+
+                            </NavLink>
+
+                        </>
+
+                    )}
+
+
+                    {/* ==================================================
+                        Role-Based Sections
+                        ================================================== */}
+
+                    {visibleSections.map(
+                        (section) => (
+
+                            <div
+                                key={section.title}
+                                className="hms-nav-section"
+                            >
+
+                                <p className="hms-nav-title hms-nav-section-title">
+
+                                    {section.title}
+
                                 </p>
 
 
-                                {group.items.map(
-                                    renderNavigationItem
+                                {section.items.map(
+                                    renderNavItem
                                 )}
-
 
                             </div>
 
@@ -414,18 +632,18 @@ const MainLayout = () => {
                     )}
 
 
-
                     {/* ==================================================
-                        Administration Section
+                        Administration
                         ================================================== */}
 
                     {canManageUsers && (
 
-                        <div className="hms-navigation-group">
+                        <div className="hms-nav-section">
 
+                            <p className="hms-nav-title hms-nav-section-title">
 
-                            <p className="hms-nav-title">
                                 ADMINISTRATION
+
                             </p>
 
 
@@ -440,68 +658,91 @@ const MainLayout = () => {
                                 }
                             >
 
-                                <Users
+                                <UserCog
                                     size={19}
                                     strokeWidth={2}
                                 />
-
 
                                 <span>
                                     Users
                                 </span>
 
-
                             </NavLink>
-
 
                         </div>
 
                     )}
 
 
-
                     {/* ==================================================
-                        System Section
+                        System
                         ================================================== */}
 
-                    <div className="hms-navigation-group">
+                    <div className="hms-nav-section">
 
+                        <p className="hms-nav-title hms-nav-section-title">
 
-                        <p className="hms-nav-title">
                             SYSTEM
+
                         </p>
 
 
-                        <NavLink
-                            to="/settings"
-                            className={({ isActive }) =>
-                                `hms-nav-item ${
-                                    isActive
-                                        ? "active"
-                                        : ""
-                                }`
-                            }
-                        >
+                        {canAccessNotifications && (
 
-                            <Settings
-                                size={19}
-                                strokeWidth={2}
-                            />
+                            <NavLink
+                                to="/notifications"
+                                className={({ isActive }) =>
+                                    `hms-nav-item ${
+                                        isActive
+                                            ? "active"
+                                            : ""
+                                    }`
+                                }
+                            >
+
+                                <Bell
+                                    size={19}
+                                    strokeWidth={2}
+                                />
+
+                                <span>
+                                    Notifications
+                                </span>
+
+                            </NavLink>
+
+                        )}
 
 
-                            <span>
-                                Settings
-                            </span>
+                        {canAccessSettings && (
 
+                            <NavLink
+                                to="/settings"
+                                className={({ isActive }) =>
+                                    `hms-nav-item ${
+                                        isActive
+                                            ? "active"
+                                            : ""
+                                    }`
+                                }
+                            >
 
-                        </NavLink>
+                                <Settings
+                                    size={19}
+                                    strokeWidth={2}
+                                />
 
+                                <span>
+                                    Settings
+                                </span>
+
+                            </NavLink>
+
+                        )}
 
                     </div>
 
-
                 </nav>
-
 
 
                 {/* ==================================================
@@ -509,7 +750,6 @@ const MainLayout = () => {
                     ================================================== */}
 
                 <div className="hms-sidebar-footer">
-
 
                     <button
                         type="button"
@@ -521,11 +761,9 @@ const MainLayout = () => {
                             size={18}
                         />
 
-
                         <span>
                             Sign Out
                         </span>
-
 
                     </button>
 
@@ -542,12 +780,9 @@ const MainLayout = () => {
 
                     </div>
 
-
                 </div>
 
-
             </aside>
-
 
 
             {/* ==================================================
@@ -570,7 +805,6 @@ const MainLayout = () => {
 
                     <div className="hms-header-left">
 
-
                         <button
                             type="button"
                             className="hms-menu-button"
@@ -584,14 +818,11 @@ const MainLayout = () => {
                         </button>
 
 
-
                         <div className="hms-search">
-
 
                             <Search
                                 size={18}
                             />
-
 
                             <input
                                 type="search"
@@ -599,9 +830,7 @@ const MainLayout = () => {
                                 aria-label="Search HMSPro"
                             />
 
-
                         </div>
-
 
                     </div>
 
@@ -632,12 +861,9 @@ const MainLayout = () => {
                                 size={20}
                             />
 
-
-                            <span className="hms-notification-dot">
-                            </span>
+                            <span className="hms-notification-dot" />
 
                         </button>
-
 
 
                         {/* ==================================================
@@ -655,9 +881,6 @@ const MainLayout = () => {
                             aria-label="Open user profile"
                         >
 
-
-                            {/* Avatar */}
-
                             <div className="hms-avatar">
 
                                 {userInitial}
@@ -665,22 +888,17 @@ const MainLayout = () => {
                             </div>
 
 
-
-                            {/* User Information */}
-
                             <div className="hms-profile-info">
 
                                 <strong>
                                     {userName}
                                 </strong>
 
-
                                 <span>
                                     {userRole}
                                 </span>
 
                             </div>
-
 
 
                             <ChevronDown
@@ -690,9 +908,7 @@ const MainLayout = () => {
 
                         </button>
 
-
                     </div>
-
 
                 </header>
 
@@ -707,9 +923,7 @@ const MainLayout = () => {
 
                 </main>
 
-
             </div>
-
 
         </div>
 

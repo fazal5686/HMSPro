@@ -203,7 +203,21 @@
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
+/* ============================================================
+   Navigation Sections
+   ============================================================ */
 
+   .hms-nav-section {
+    margin-top: var(--space-5);
+}
+
+.hms-nav-section:first-of-type {
+    margin-top: 0;
+}
+
+.hms-nav-section-title {
+    margin-bottom: var(--space-2);
+}
 /* ============================================================
    Sidebar Footer
    ============================================================ */

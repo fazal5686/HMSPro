@@ -18,6 +18,7 @@ import morgan from "morgan";
 import authRoutes from "./routes/authRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
+import nurseRoutes from "./routes/nurseRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
 import departmentRoutes from "./routes/departmentRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
@@ -128,6 +129,15 @@ app.use(
 );
 
 // ------------------------------------------------------------
+// ------------------------------------------------------------
+// Nurses
+// /api/nurses
+// ------------------------------------------------------------
+
+app.use(
+    "/api/nurses",
+    nurseRoutes
+);
 // Appointments
 // /api/appointments
 // ------------------------------------------------------------

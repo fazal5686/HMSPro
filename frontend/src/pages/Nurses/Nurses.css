@@ -455,3 +455,956 @@
     }
 
 }
+/* ============================================================
+   Refresh Button
+   ============================================================ */
+
+   .nurses-refresh-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+.nurses-refresh-button:hover {
+    background: #f1f5f9;
+    color: #2563eb;
+}
+
+
+/* ============================================================
+   Refresh Animation
+   ============================================================ */
+
+.nurse-refresh-spinning {
+    animation: nurseRefreshSpin 1s linear infinite;
+}
+
+
+@keyframes nurseRefreshSpin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* ============================================================
+   Error Message
+   ============================================================ */
+
+.nurses-error-message {
+    margin: 16px 24px;
+    padding: 12px 16px;
+    border: 1px solid #fecdd3;
+    border-radius: 10px;
+    background: #fff1f2;
+    color: #be123c;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   Table Message
+   ============================================================ */
+
+.nurses-table-message {
+    padding: 40px !important;
+    text-align: center;
+}
+
+
+/* ============================================================
+   Add Nurse Modal Overlay
+   ============================================================ */
+
+.nurses-modal-overlay {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(15, 23, 42, 0.48);
+    backdrop-filter: blur(3px);
+    overflow-y: auto;
+}
+
+
+/* ============================================================
+   Add Nurse Modal
+   ============================================================ */
+
+.nurses-modal {
+    width: 100%;
+    max-width: 720px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+    animation: nursesModalAppear 0.18s ease-out;
+}
+
+
+@keyframes nursesModalAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.99);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* ============================================================
+   Modal Header
+   ============================================================ */
+
+.nurses-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px;
+    border-bottom: 1px solid #eef2f7;
+}
+
+
+.nurses-modal-kicker {
+    display: block;
+    margin-bottom: 5px;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+
+.nurses-modal-header h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+
+.nurses-modal-header p {
+    max-width: 520px;
+    margin: 7px 0 0;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+.nurses-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #64748b;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+.nurses-modal-close:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+
+.nurses-modal-close:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+
+/* ============================================================
+   Modal Form
+   ============================================================ */
+
+.nurses-modal-form {
+    padding: 24px;
+}
+
+
+.nurses-form-section {
+    margin-bottom: 24px;
+}
+
+
+.nurses-form-section:last-of-type {
+    margin-bottom: 0;
+}
+
+
+.nurses-form-section-title {
+    margin-bottom: 14px;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+
+/* ============================================================
+   Form Grid
+   ============================================================ */
+
+.nurses-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+
+.nurses-form-full {
+    grid-column: 1 / -1;
+}
+
+
+/* ============================================================
+   Form Group
+   ============================================================ */
+
+.nurses-form-group {
+    min-width: 0;
+}
+
+
+.nurses-form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.nurses-form-group label span {
+    margin-left: 3px;
+    color: #dc2626;
+}
+
+
+.nurses-form-control {
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 12px;
+    border: 1px solid #dbe3ec;
+    border-radius: 9px;
+    outline: 0;
+    background: #ffffff;
+    color: #334155;
+    font-family: inherit;
+    font-size: 13px;
+    transition: 0.2s ease;
+}
+
+
+.nurses-form-control::placeholder {
+    color: #94a3b8;
+}
+
+
+.nurses-form-control:hover {
+    border-color: #cbd5e1;
+}
+
+
+.nurses-form-control:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.09);
+}
+
+
+.nurses-form-control:disabled {
+    background: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+
+/* ============================================================
+   Loading Field
+   ============================================================ */
+
+.nurses-loading-field {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #dbe3ec;
+    border-radius: 9px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+/* ============================================================
+   Form Hint
+   ============================================================ */
+
+.nurses-form-hint {
+    display: block;
+    margin-top: 7px;
+    color: #94a3b8;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+.nurses-form-hint.warning {
+    padding: 9px 11px;
+    border: 1px solid #fed7aa;
+    border-radius: 8px;
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+
+/* ============================================================
+   Form Error
+   ============================================================ */
+
+.nurses-form-error {
+    margin-top: 7px;
+    color: #be123c;
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   Selected User
+   ============================================================ */
+
+.nurses-selected-user {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-top: 14px;
+    padding: 12px;
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+    background: #f8fbff;
+}
+
+
+.nurses-selected-user-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+
+.nurses-selected-user strong {
+    display: block;
+    color: #334155;
+    font-size: 12px;
+}
+
+
+.nurses-selected-user span {
+    display: block;
+    margin-top: 2px;
+    color: #64748b;
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   File Input
+   ============================================================ */
+
+.nurses-hidden-file {
+    display: none;
+}
+
+
+.nurses-file-input {
+    display: flex !important;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 42px;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 0 12px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 9px;
+    background: #f8fafc;
+    color: #64748b !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+.nurses-file-input:hover {
+    border-color: #93c5fd;
+    background: #f8fbff;
+    color: #2563eb !important;
+}
+
+
+.nurses-file-input span {
+    overflow: hidden;
+    margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.nurses-file-hint {
+    display: block;
+    margin-top: 6px;
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+
+/* ============================================================
+   Modal Messages
+   ============================================================ */
+
+.nurses-modal-error {
+    margin-top: 18px;
+    padding: 11px 13px;
+    border: 1px solid #fecdd3;
+    border-radius: 9px;
+    background: #fff1f2;
+    color: #be123c;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+.nurses-modal-success {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 11px 13px;
+    border: 1px solid #bbf7d0;
+    border-radius: 9px;
+    background: #f0fdf4;
+    color: #15803d;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   Modal Footer
+   ============================================================ */
+
+.nurses-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #eef2f7;
+}
+
+
+.nurses-secondary-button,
+.nurses-submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 40px;
+    padding: 0 15px;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+.nurses-secondary-button {
+    border: 1px solid #dbe3ec;
+    background: #ffffff;
+    color: #475569;
+}
+
+
+.nurses-secondary-button:hover {
+    background: #f8fafc;
+}
+
+
+.nurses-submit-button {
+    border: 1px solid #2563eb;
+    background: #2563eb;
+    color: #ffffff;
+}
+
+
+.nurses-submit-button:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+
+.nurses-secondary-button:disabled,
+.nurses-submit-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+
+/* ============================================================
+   Modal Responsive
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+    .nurses-modal-overlay {
+        align-items: flex-start;
+        padding: 12px;
+    }
+
+
+    .nurses-modal {
+        max-height: calc(100vh - 24px);
+        border-radius: 14px;
+    }
+
+
+    .nurses-modal-header {
+        padding: 18px;
+    }
+
+
+    .nurses-modal-form {
+        padding: 18px;
+    }
+
+
+    .nurses-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .nurses-form-full {
+        grid-column: auto;
+    }
+
+
+    .nurses-modal-footer {
+        flex-direction: column-reverse;
+    }
+
+
+    .nurses-secondary-button,
+    .nurses-submit-button {
+        width: 100%;
+    }
+
+}
+/* ============================================================
+   Add Nurse Modal
+   ============================================================ */
+
+   .nurses-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(15, 23, 42, 0.48);
+
+    backdrop-filter: blur(3px);
+}
+
+
+.nurses-modal {
+    width: 100%;
+    max-width: 720px;
+    max-height: calc(100vh - 48px);
+
+    overflow-y: auto;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 24px 70px rgba(15, 23, 42, 0.20);
+}
+
+
+.nurses-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 24px;
+
+    border-bottom: 1px solid #eef2f7;
+}
+
+
+.nurses-modal-header h2 {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+
+.nurses-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+
+    background: #ffffff;
+    color: #64748b;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.nurses-modal-close:hover {
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+
+.nurses-form {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 17px;
+
+    padding: 24px;
+}
+
+
+.nurses-form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.nurses-form-full {
+    grid-column: 1 / -1;
+}
+
+
+.nurses-form-group label {
+    color: #334155;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.nurses-form-group label span {
+    margin-left: 3px;
+
+    color: #dc2626;
+}
+
+
+.nurses-form-group input,
+.nurses-form-group select {
+    width: 100%;
+    min-height: 42px;
+
+    box-sizing: border-box;
+
+    padding: 0 12px;
+
+    border: 1px solid #dbe3ec;
+    border-radius: 9px;
+
+    outline: none;
+
+    background: #ffffff;
+    color: #334155;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    transition: 0.2s ease;
+}
+
+
+.nurses-form-group input[type="file"] {
+    display: flex;
+    align-items: center;
+
+    padding: 8px 10px;
+}
+
+
+.nurses-form-group input:focus,
+.nurses-form-group select:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+.nurses-form-group input::placeholder {
+    color: #94a3b8;
+}
+
+
+.nurses-form-group input:disabled,
+.nurses-form-group select:disabled {
+    background: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+
+/* ============================================================
+   Form Messages
+   ============================================================ */
+
+.nurses-form-error {
+    grid-column: 1 / -1;
+
+    padding: 11px 13px;
+
+    border: 1px solid #fecdd3;
+    border-radius: 9px;
+
+    background: #fff1f2;
+    color: #be123c;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.nurses-form-success {
+    grid-column: 1 / -1;
+
+    padding: 11px 13px;
+
+    border: 1px solid #bbf7d0;
+    border-radius: 9px;
+
+    background: #f0fdf4;
+    color: #15803d;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   Form Actions
+   ============================================================ */
+
+.nurses-form-actions {
+    grid-column: 1 / -1;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 4px;
+    padding-top: 18px;
+
+    border-top: 1px solid #eef2f7;
+}
+
+
+.nurses-cancel-button,
+.nurses-create-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 40px;
+
+    padding: 0 16px;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.nurses-cancel-button {
+    border: 1px solid #dbe3ec;
+
+    background: #ffffff;
+    color: #475569;
+}
+
+
+.nurses-cancel-button:hover {
+    background: #f8fafc;
+}
+
+
+.nurses-create-button {
+    border: 0;
+
+    background: #2563eb;
+    color: #ffffff;
+}
+
+
+.nurses-create-button:hover {
+    transform: translateY(-1px);
+
+    opacity: 0.94;
+}
+
+
+.nurses-create-button:disabled,
+.nurses-cancel-button:disabled,
+.nurses-modal-close:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* ============================================================
+   Refresh Animation
+   ============================================================ */
+
+.nurse-refresh-spinning {
+    animation: nurseRefreshSpin 0.9s linear infinite;
+}
+
+
+@keyframes nurseRefreshSpin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* ============================================================
+   Modal Responsive
+   ============================================================ */
+
+@media (max-width: 650px) {
+
+    .nurses-modal-overlay {
+        padding: 12px;
+    }
+
+
+    .nurses-modal {
+        max-height: calc(100vh - 24px);
+        border-radius: 14px;
+    }
+
+
+    .nurses-form {
+        grid-template-columns: 1fr;
+        padding: 18px;
+    }
+
+
+    .nurses-form-full {
+        grid-column: auto;
+    }
+
+
+    .nurses-form-actions {
+        grid-column: auto;
+
+        flex-direction: column-reverse;
+    }
+
+
+    .nurses-cancel-button,
+    .nurses-create-button {
+        width: 100%;
+    }
+
+}
