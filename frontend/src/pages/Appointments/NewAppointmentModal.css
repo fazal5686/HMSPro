@@ -1,0 +1,207 @@
+.new-appointment-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(17, 29, 38, 0.48);
+    backdrop-filter: blur(4px);
+}
+
+.new-appointment-modal {
+    width: min(720px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    border: 1px solid #e1e9ec;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 24px 70px rgba(25, 45, 58, 0.22);
+}
+
+.new-appointment-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 24px 24px 20px;
+    border-bottom: 1px solid #edf1f3;
+}
+
+.new-appointment-kicker {
+    display: block;
+    margin-bottom: 6px;
+    color: #0f9f9a;
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 0.13em;
+}
+
+.new-appointment-header h2 {
+    margin: 0;
+    color: #1b2933;
+    font-size: 23px;
+    font-weight: 720;
+}
+
+.new-appointment-header p {
+    margin: 7px 0 0;
+    color: #788791;
+    font-size: 13px;
+}
+
+.new-appointment-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 10px;
+    background: #f4f7f8;
+    color: #687781;
+    cursor: pointer;
+}
+
+.new-appointment-close:hover {
+    background: #eaf1f2;
+    color: #273740;
+}
+
+.new-appointment-form {
+    padding: 22px 24px 24px;
+}
+
+.new-appointment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px;
+}
+
+.new-appointment-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.new-appointment-form label > span {
+    color: #43545e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.new-appointment-form input,
+.new-appointment-form select,
+.new-appointment-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #dce5e9;
+    border-radius: 10px;
+    outline: 0;
+    background: #fbfcfc;
+    color: #273640;
+    font: inherit;
+    font-size: 13px;
+}
+
+.new-appointment-form input,
+.new-appointment-form select {
+    min-height: 42px;
+    padding: 0 12px;
+}
+
+.new-appointment-form textarea {
+    min-height: 98px;
+    resize: vertical;
+    padding: 11px 12px;
+}
+
+.new-appointment-form input:focus,
+.new-appointment-form select:focus,
+.new-appointment-form textarea:focus {
+    border-color: #8ccfcb;
+    box-shadow: 0 0 0 3px rgba(28, 164, 157, 0.08);
+}
+
+.new-appointment-form textarea {
+    margin-top: 17px;
+}
+
+.new-appointment-error {
+    margin: 18px 24px 0;
+    padding: 11px 13px;
+    border: 1px solid #f1caca;
+    border-radius: 10px;
+    background: #fff5f5;
+    color: #a34747;
+    font-size: 12px;
+}
+
+.new-appointment-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #edf1f3;
+}
+
+.new-appointment-cancel,
+.new-appointment-submit {
+    min-height: 42px;
+    padding: 0 16px;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.new-appointment-cancel {
+    border: 1px solid #dce5e9;
+    background: #ffffff;
+    color: #455660;
+}
+
+.new-appointment-cancel:hover {
+    background: #f6f9f9;
+}
+
+.new-appointment-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #109b94;
+    background: #109b94;
+    color: #ffffff;
+}
+
+.new-appointment-submit:hover {
+    background: #0d8983;
+}
+
+.new-appointment-cancel:disabled,
+.new-appointment-submit:disabled,
+.new-appointment-close:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+
+    .new-appointment-overlay {
+        padding: 12px;
+    }
+
+    .new-appointment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .new-appointment-modal {
+        max-height: calc(100vh - 24px);
+    }
+
+}

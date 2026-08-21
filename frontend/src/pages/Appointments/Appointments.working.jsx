@@ -1,8 +1,7 @@
-
 // ============================================================
 // File: pages/Appointments/Appointments.jsx
 // Purpose: HMSPro Appointment management page.
-// Supports role-based appointment loading and appointment creation.
+// Supports role-based appointment loading.
 // ============================================================
 
 import {
@@ -10,7 +9,6 @@ import {
     useEffect,
     useState,
 } from "react";
-
 
 import {
     CalendarCheck2,
@@ -22,26 +20,16 @@ import {
     UserRound,
 } from "lucide-react";
 
-
 import {
     getAllAppointments,
-    getPatientAppointments,
     getDoctorAppointments,
 } from "../../services/appointmentService.js";
 
 import {
     getMyDoctorProfile,
 } from "../../services/doctorService.js";
-import {
-    getPatientProfile,
-} from "../../services/patientService.js";
 
 import useAuth from "../../hooks/useAuth.js";
-
-
-import NewAppointmentModal
-    from "./NewAppointmentModal.jsx";
-
 
 import "./Appointments.css";
 
@@ -58,17 +46,14 @@ const formatAppointmentDate = (dateValue) => {
 
     }
 
-
     const date =
         new Date(dateValue);
-
 
     if (Number.isNaN(date.getTime())) {
 
         return "—";
 
     }
-
 
     return date.toLocaleDateString(
         "en-PK",
@@ -94,17 +79,14 @@ const formatAppointmentTime = (dateValue) => {
 
     }
 
-
     const date =
         new Date(dateValue);
-
 
     if (Number.isNaN(date.getTime())) {
 
         return "—";
 
     }
-
 
     return date.toLocaleTimeString(
         "en-PK",
@@ -167,13 +149,11 @@ const getPatientInitials = (name) => {
 
     }
 
-
     const words =
         name
             .trim()
             .split(/\s+/)
             .filter(Boolean);
-
 
     if (words.length === 1) {
 
@@ -182,7 +162,6 @@ const getPatientInitials = (name) => {
             .toUpperCase();
 
     }
-
 
     return (
 
@@ -211,16 +190,6 @@ const Appointments = () => {
 
 
     // ========================================================
-    // New Appointment Modal
-    // ========================================================
-
-    const [
-        showNewAppointmentModal,
-        setShowNewAppointmentModal,
-    ] = useState(false);
-
-
-    // ========================================================
     // State
     // ========================================================
 
@@ -229,18 +198,15 @@ const Appointments = () => {
         setAppointments,
     ] = useState([]);
 
-
     const [
         loading,
         setLoading,
     ] = useState(true);
 
-
     const [
         error,
         setError,
     ] = useState("");
-
 
     const [
         searchTerm,
@@ -315,60 +281,18 @@ const Appointments = () => {
                 // Admin / Receptionist
                 // ------------------------------------------------
 
-                // ------------------------------------------------
-// Patient
-// ------------------------------------------------
-
-if (user?.role === "Patient") {
-
-    const patient =
-        await getPatientProfile();
+                const data =
+                    await getAllAppointments();
 
 
-    if (!patient?._id) {
+                setAppointments(
 
-        throw new Error(
-            "Patient profile could not be found."
-        );
+                    Array.isArray(data)
+                        ? data
+                        : []
 
-    }
+                );
 
-
-    const data =
-        await getPatientAppointments(
-            patient._id
-        );
-
-
-    setAppointments(
-
-        Array.isArray(data)
-            ? data
-            : []
-
-    );
-
-
-    return;
-
-}
-
-
-// ------------------------------------------------
-// Admin / Receptionist
-// ------------------------------------------------
-
-const data =
-    await getAllAppointments();
-
-
-setAppointments(
-
-    Array.isArray(data)
-        ? data
-        : []
-
-);
             }
 
             catch (requestError) {
@@ -419,7 +343,6 @@ setAppointments(
 
         }
 
-
         loadAppointments();
 
     }, [
@@ -441,17 +364,14 @@ setAppointments(
                         appointment
                     );
 
-
                 const doctorName =
                     getDoctorName(
                         appointment
                     );
 
-
                 const reason =
                     appointment?.reason ||
                     "";
-
 
                 const status =
                     appointment?.status ||
@@ -500,14 +420,11 @@ setAppointments(
 
             <section className="appointments-heading">
 
-
                 <div>
 
                     <div className="appointments-eyebrow">
 
-                        <CalendarCheck2
-                            size={16}
-                        />
+                        <CalendarCheck2 size={16} />
 
                         <span>
                             APPOINTMENT MANAGEMENT
@@ -529,63 +446,27 @@ setAppointments(
                 </div>
 
 
-                <div className="appointments-header-actions">
+                <button
+                    type="button"
+                    className="appointments-refresh-button"
+                    onClick={loadAppointments}
+                    disabled={loading}
+                >
 
+                    <RefreshCw
+                        size={17}
+                        className={
+                            loading
+                                ? "appointments-spin"
+                                : ""
+                        }
+                    />
 
-                    {/* ==================================================
-                        New Appointment
-                        Admin / Receptionist only
-                        ================================================== */}
-
-                    {(
-                        user?.role === "Admin" ||
-                        user?.role === "Receptionist"
-                    ) && (
-
-                        <button
-                            type="button"
-                            className="appointments-new-button"
-                            onClick={() =>
-                                setShowNewAppointmentModal(
-                                    true
-                                )
-                            }
-                        >
-                            + New Appointment
-                        </button>
-
-                    )}
-
-
-                    {/* ==================================================
+                    <span>
                         Refresh
-                        ================================================== */}
+                    </span>
 
-                    <button
-                        type="button"
-                        className="appointments-refresh-button"
-                        onClick={loadAppointments}
-                        disabled={loading}
-                    >
-
-                        <RefreshCw
-                            size={17}
-                            className={
-                                loading
-                                    ? "appointments-spin"
-                                    : ""
-                            }
-                        />
-
-                        <span>
-                            Refresh
-                        </span>
-
-                    </button>
-
-
-                </div>
-
+                </button>
 
             </section>
 
@@ -616,9 +497,7 @@ setAppointments(
 
                     <div className="appointments-summary-icon teal">
 
-                        <CalendarCheck2
-                            size={20}
-                        />
+                        <CalendarCheck2 size={20} />
 
                     </div>
 
@@ -628,7 +507,6 @@ setAppointments(
                         <span>
                             Total Appointments
                         </span>
-
 
                         <strong>
 
@@ -648,9 +526,7 @@ setAppointments(
 
                     <div className="appointments-summary-icon blue">
 
-                        <Clock3
-                            size={20}
-                        />
+                        <Clock3 size={20} />
 
                     </div>
 
@@ -660,7 +536,6 @@ setAppointments(
                         <span>
                             Confirmed
                         </span>
-
 
                         <strong>
 
@@ -684,9 +559,7 @@ setAppointments(
 
                     <div className="appointments-summary-icon purple">
 
-                        <UserRound
-                            size={20}
-                        />
+                        <UserRound size={20} />
 
                     </div>
 
@@ -696,7 +569,6 @@ setAppointments(
                         <span>
                             Pending
                         </span>
-
 
                         <strong>
 
@@ -720,9 +592,7 @@ setAppointments(
 
                     <div className="appointments-summary-icon orange">
 
-                        <Stethoscope
-                            size={20}
-                        />
+                        <Stethoscope size={20} />
 
                     </div>
 
@@ -732,7 +602,6 @@ setAppointments(
                         <span>
                             Completed
                         </span>
-
 
                         <strong>
 
@@ -767,13 +636,11 @@ setAppointments(
 
                 <div className="appointments-card-header">
 
-
                     <div>
 
                         <span className="appointments-card-kicker">
                             SCHEDULE
                         </span>
-
 
                         <h2>
                             Appointment List
@@ -784,10 +651,7 @@ setAppointments(
 
                     <div className="appointments-search">
 
-                        <Search
-                            size={17}
-                        />
-
+                        <Search size={17} />
 
                         <input
                             type="text"
@@ -802,7 +666,6 @@ setAppointments(
                         />
 
                     </div>
-
 
                 </div>
 
@@ -838,15 +701,11 @@ setAppointments(
 
                         <div className="appointments-state">
 
-                            <CalendarCheck2
-                                size={28}
-                            />
-
+                            <CalendarCheck2 size={28} />
 
                             <strong>
                                 No appointments found
                             </strong>
-
 
                             <span>
 
@@ -875,7 +734,6 @@ setAppointments(
                         <div className="appointments-table-wrapper">
 
                             <table className="appointments-table">
-
 
                                 <thead>
 
@@ -924,7 +782,6 @@ setAppointments(
                                                     appointment
                                                 );
 
-
                                             const doctorName =
                                                 getDoctorName(
                                                     appointment
@@ -939,8 +796,6 @@ setAppointments(
                                                     }
                                                 >
 
-
-                                                    {/* Patient */}
 
                                                     <td>
 
@@ -960,13 +815,10 @@ setAppointments(
                                                             <div>
 
                                                                 <strong>
-
                                                                     {
                                                                         patientName
                                                                     }
-
                                                                 </strong>
-
 
                                                                 <span>
                                                                     Patient
@@ -979,8 +831,6 @@ setAppointments(
                                                     </td>
 
 
-
-                                                    {/* Doctor */}
 
                                                     <td>
 
@@ -1004,8 +854,6 @@ setAppointments(
 
 
 
-                                                    {/* Date */}
-
                                                     <td>
 
                                                         <span className="appointment-date">
@@ -1021,8 +869,6 @@ setAppointments(
                                                     </td>
 
 
-
-                                                    {/* Time */}
 
                                                     <td>
 
@@ -1044,8 +890,6 @@ setAppointments(
 
 
 
-                                                    {/* Reason */}
-
                                                     <td>
 
                                                         <span className="appointment-reason">
@@ -1060,8 +904,6 @@ setAppointments(
                                                     </td>
 
 
-
-                                                    {/* Status */}
 
                                                     <td>
 
@@ -1090,8 +932,6 @@ setAppointments(
 
 
 
-                                                    {/* Action */}
-
                                                     <td>
 
                                                         <button
@@ -1118,41 +958,13 @@ setAppointments(
 
                                 </tbody>
 
-
                             </table>
 
                         </div>
 
                     )}
 
-
             </section>
-
-
-            {/* ==================================================
-                New Appointment Modal
-                ================================================== */}
-
-            <NewAppointmentModal
-                isOpen={
-                    showNewAppointmentModal
-                }
-                onClose={() =>
-                    setShowNewAppointmentModal(
-                        false
-                    )
-                }
-                onCreated={async () => {
-
-                    setShowNewAppointmentModal(
-                        false
-                    );
-
-                    await loadAppointments();
-
-                }}
-            />
-
 
         </div>
 
@@ -1166,8 +978,3 @@ setAppointments(
 // ============================================================
 
 export default Appointments;
-
-
-// ============================================================
-// End of Appointments.jsx
-// ============================================================

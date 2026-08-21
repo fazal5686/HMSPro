@@ -79,7 +79,8 @@ import ProtectedRoute
     from "./ProtectedRoute.jsx";
     import Doctors
     from "../pages/Doctors/Doctors.jsx";
-
+    import RoleProtectedRoute
+    from "./RoleProtectedRoute.jsx";
 // ============================================================
 // HMSPro Application Routes
 // ============================================================
@@ -184,12 +185,28 @@ const AppRoutes = () => {
                         Appointments
                         ================================================== */}
 
-                    <Route
-                        path="/appointments"
-                        element={
-                            <Appointments />
-                        }
-                    />
+<Route
+    path="/appointments"
+    element={
+        <RoleProtectedRoute
+            allowedRoles={[
+                "SuperAdmin",
+                "Admin",
+                "Doctor",
+                "Nurse",
+                "Receptionist",
+                "Patient",
+            ]}
+        />
+    }
+>
+    <Route
+        index
+        element={
+            <Appointments />
+        }
+    />
+</Route>
 
 
                     {/* ==================================================
